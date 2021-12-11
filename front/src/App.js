@@ -1,31 +1,18 @@
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
-
+import MainArea from './components/MainArea';
+import StartArea from './components/StartArea';
+import Login from './login/login';
 function App() {
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <a
-          className="App-link"
-          href="http://localhost:8000/admin"
-          target="_blank"
-          rel="xd"
-        >
-          Open admin
-        </a>
-      </header>
+      <StartArea>
+        
+      </StartArea>
+
     </div>
   );
 }
