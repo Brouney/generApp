@@ -105,11 +105,12 @@ dist
 
 
 # Django #
-*.log
-*.pot
-*.pyc
-__pycache__
-db.sqlite3
+back/server/**/*.log
+back/server/**/*.pot
+back/server/**/*.pyc
+back/server/**/__pycache__
+back/server/db.sqlite3
+back/server/**/*.pyc
 media
 
 # Backup files # 
