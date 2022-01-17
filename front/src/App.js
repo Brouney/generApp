@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './App.css';
+import './css/App.css';
 import MainArea from './components/MainArea';
 import StartArea from './components/StartArea';
 import Login from './login/login';

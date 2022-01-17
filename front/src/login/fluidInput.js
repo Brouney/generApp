@@ -1,3 +1,5 @@
+import '../css/App.css';
+
 class FluidInput extends React.Component {
     constructor(props) {
       super(props);

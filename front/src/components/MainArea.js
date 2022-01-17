@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import '../css/App.css';
 
 class MainArea extends Component {
 
@@ -6,11 +7,11 @@ class MainArea extends Component {
         return(
         <div className='mainArea'>
             <div className='listExercisePanel'>
-            <h1>XD</h1>
+            <h1>listExercisePanel</h1>
 
             </div>
             <div className='knowledgePanel'>
-
+            <h1>knowledgePanel</h1>
 
             </div>
         </div>)

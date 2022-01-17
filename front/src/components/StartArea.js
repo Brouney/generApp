@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Login from "../login/login";
 import MainArea from "./MainArea";
+import '../css/App.css';
 
 class StartArea extends Component {
 
@@ -15,7 +16,9 @@ class StartArea extends Component {
     render(){
         return (
         <div className='startArea'>
-            {this.state.token === undefined?<Login userLogin={this.userLogin} area ={this}></Login>:
+            {this.state.token === undefined ? 
+            <Login userLogin={this.userLogin} area ={this}></Login> :
+
             <MainArea>
 
             </MainArea>}
