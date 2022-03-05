@@ -1,19 +1,21 @@
 import React, {Component} from "react";
-import '../css/App.css';
-
+import ListExercisePanel from './templates/ListExercisePanel'
 class MainArea extends Component {
 
+    constructor(props){
+        super(props)
+
+        this.state = {
+            knowledgePanel:<knowledgePanel></knowledgePanel>
+        }
+    }
     render(){
         return(
         <div className='mainArea'>
-            <div className='listExercisePanel'>
-            <h1>listExercisePanel</h1>
-
-            </div>
-            <div className='knowledgePanel'>
-            <h1>knowledgePanel</h1>
-
-            </div>
+            
+            <ListExercisePanel mainArea={this}> </ListExercisePanel>
+            {this.state.knowledgePanel}
+            
         </div>)
     }
 

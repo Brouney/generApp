@@ -8,12 +8,11 @@ function App() {
 
 
   return (
-    <div className="App">
-      <StartArea>
-        
-      </StartArea>
+      <div className="App">
+        <StartArea> 
+        </StartArea>
 
-    </div>
+      </div>
   );
 }
 

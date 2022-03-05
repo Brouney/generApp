@@ -1,6 +1,11 @@
 .App {
   margin: auto;
-  width: 50%;
+  width: 100%;
+}
+
+.mainArea {
+  float:left;
+  width:100%;
 }
 
 .App-logo {

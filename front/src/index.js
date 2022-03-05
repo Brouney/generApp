@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import './css/App.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import StartArea from './components/StartArea';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <StartArea />
   </React.StrictMode>,
   document.getElementById('root')
 );
