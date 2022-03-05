@@ -3,6 +3,8 @@
   width: 100%;
 }
 
+body { padding-bottom: 70px; }
+
 .mainArea {
   float:left;
   width:100%;
