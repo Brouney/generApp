@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import InListButton from "./InListButton";
-
+import Slide_1_T from "../module0/Slide_1_T";
 
 class ListExercisePanel extends Component {
 
@@ -9,18 +9,14 @@ class ListExercisePanel extends Component {
         this.mainArea = props.mainArea
     }
     render(){
-        return(<div className="row">
+        this.firstknowledge = <Slide_1_T></Slide_1_T>
+        return(
         <div className='ListExercisePanel col-3' >
             listExercisePanel
-            <InListButton list={this} mainArea={this.mainArea} text="jeden"></InListButton>
-            <InListButton list={this} mainArea={this.mainArea} text="dwa"></InListButton>
+            <InListButton list={this} mainArea={this.mainArea} text="jeden" knowledgePanel={this.firstknowledge}></InListButton>
+            <InListButton list={this} mainArea={this.mainArea} text="dwa" ></InListButton>
             
-            </div>
-            <div className='knowledgePanel col-3'>
-            knowledgePanel
-
-        </div>
-        </div>)
+        /</div>)
     }
 
 }

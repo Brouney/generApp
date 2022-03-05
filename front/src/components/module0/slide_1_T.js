@@ -1,7 +1,7 @@
 import React, {Component} from "react";
+import Slide_2_Q from "./Slide_2_Q";
 
-
-class slide_1_T extends Component {
+class Slide_1_T extends Component {
 
     constructor(props){
         super(props)
@@ -9,13 +9,15 @@ class slide_1_T extends Component {
         this.prev = null;
         
     }
-    next = <slide_2_Q prev={this}></slide_2_Q>
+    next = <Slide_2_Q prev={this}></Slide_2_Q>
     render(){
         return(
-        <div></div>
+        <div>
+            <h1>T1</h1>
+        </div>
         )
     }
 
 }
 
-export default slide_1_T;
+export default Slide_1_T;

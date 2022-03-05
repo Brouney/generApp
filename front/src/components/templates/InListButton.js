@@ -11,8 +11,8 @@ class InListButton extends Component {
         this.knowledgePanel = props.knowledgePanel?props.knowledgePanel:null;
     }
 
-    onClickMethod =() => {
-        this.panel.setState({})
+    updateMainAreaKnowledgePanel =() => {
+        this.mainArea.setState({knowledgePanel:this.knowledgePanel})
     }
    
     render(){
@@ -20,7 +20,7 @@ class InListButton extends Component {
             <div className='InListButton'>
                 
 
-                <button type="submit" className="btn btn-primary col-3" onClick={console.log("XD")}>{this.text}</button>
+                <button type="submit" className="btn btn-primary col-3" onClick={this.updateMainAreaKnowledgePanel}>{this.text}</button>
             </div>)
     }
 

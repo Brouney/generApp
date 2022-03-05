@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 
 
-class slide_2_Q extends Component {
+class Slide_2_Q extends Component {
 
     constructor(props){
         super(props)
@@ -17,4 +17,4 @@ class slide_2_Q extends Component {
 
 }
 
-export default slide_2_Q;
+export default Slide_2_Q;

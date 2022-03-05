@@ -12,9 +12,15 @@ class MainArea extends Component {
     render(){
         return(
         <div className='mainArea'>
-            
-            <ListExercisePanel mainArea={this}> </ListExercisePanel>
-            {this.state.knowledgePanel}
+            <div className="row">
+                    <ListExercisePanel mainArea={this}> </ListExercisePanel>
+                    
+                    <div className='knowledgePanel col-3'>
+                        knowledgePanel
+                        {this.state.knowledgePanel}
+                    </div>
+            </div>
+
             
         </div>)
     }
