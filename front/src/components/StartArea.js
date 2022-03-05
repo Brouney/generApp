@@ -16,12 +16,10 @@ class StartArea extends Component {
     render(){
         return (
         <div className='startArea'>
-            {this.state.token === undefined ? 
-            <Login userLogin={this.userLogin} area ={this}></Login> :
-
-            <MainArea>
-
-            </MainArea>}
+            {this.state.token === undefined
+                ? <Login userLogin={this.userLogin} area={this}></Login>
+                : <MainArea></MainArea>
+            }
         </div>)
         
     }
