@@ -1,20 +1,21 @@
 import React, {Component} from "react";
 
 
-class Slide_2_Q extends Component {
+class Module_0_Slide_3_A extends Component {
 
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
         this.prev = props.prev;
+        this.next = null;
         
     }
     render(){
         return(
-        <div></div>
+        <div>M03A</div>
         )
     }
 
 }
 
-export default Slide_2_Q;
+export default Module_0_Slide_3_A;
