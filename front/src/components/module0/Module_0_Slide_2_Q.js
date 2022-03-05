@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import Module_0_Slide_3_A from "./Module_0_Slide_3_A";
 import NavigationButtons from "../templates/NavigationButtons";
 import Module_0_Slide_1_T from "./Module_0_Slide_1_T";
+
+
 class Module_0_Slide_2_Q extends Component {
 
     constructor(props){
