@@ -1,12 +1,14 @@
 import React, {Component} from "react";
 import ListExercisePanel from './templates/ListExercisePanel'
+import KnowledgePanel from './templates/KnowledgePanel'
+
 class MainArea extends Component {
 
     constructor(props){
         super(props)
 
         this.state = {
-            knowledgePanel:<knowledgePanel></knowledgePanel>
+            knowledgePanel: <KnowledgePanel></KnowledgePanel>
         }
     }
     render(){
@@ -15,11 +17,10 @@ class MainArea extends Component {
             <div className="row">
                     <ListExercisePanel mainArea={this}> </ListExercisePanel>
 
-                    <div className='knowledgePanel col-3'>
+                    <div className='KnowledgePanel col-9'>
                         {this.state.knowledgePanel}
                     </div>
             </div>
-
             
         </div>)
     }

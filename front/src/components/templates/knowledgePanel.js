@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 
 
-class knowledgePanel extends Component {
+class KnowledgePanel extends Component {
 
     constructor(props){
         super(props)
@@ -9,12 +9,10 @@ class knowledgePanel extends Component {
     }
     render(){
         return(
-            <div className='knowledgePanel' class="col-3">
-            knowledgePanel
-
+            <div className='KnowledgePanel'>
+                <h1>Witamy w GenerApp!</h1>
             </div>)
     }
-
 }
 
-export default knowledgePanel;
+export default KnowledgePanel;
