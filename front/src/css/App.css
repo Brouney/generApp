@@ -8,6 +8,10 @@ body {
   color: white !important;
 }
 
+h1, h4 {
+  color: white !important;
+}
+
 .ant-progress-circle .ant-progress-text{
   color: white !important;
 }
