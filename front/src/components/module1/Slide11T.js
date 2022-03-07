@@ -3,6 +3,8 @@ import Slide12A from "./Slide12A";
 import NavigationButtons from "../templates/NavigationButtons";
 import Slide13T from "./Slide13T";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import {Progress} from 'antd';
+import 'antd/dist/antd.css';
 
 class Slide11T extends Component {
 
@@ -20,6 +22,7 @@ class Slide11T extends Component {
         <div>
             <h1>Moduł 1 Slajd 1</h1>
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}></NavigationButtons>
+            {<Progress type="circle" percent={75} format={percent => `${percent} Days`} />}
         </div>
         )
     }

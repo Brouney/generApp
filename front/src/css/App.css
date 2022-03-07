@@ -3,7 +3,14 @@
   width: 100%;
 }
 
-body { padding-bottom: 70px; }
+body { 
+  padding-bottom: 70px;
+  color: white !important;
+}
+
+.ant-progress-circle .ant-progress-text{
+  color: white !important;
+}
 
 /* .mainArea {
   float:left;
