@@ -16,7 +16,9 @@ class Slide21Q extends Component {
         return(
         <div>
             <h1>Moduł 2 Slajd 1</h1>
-            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_2_SLIDES_COUNT}></NavigationButtons>
+            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
+                               current={this}
+            ></NavigationButtons>
         </div>
         )
     }

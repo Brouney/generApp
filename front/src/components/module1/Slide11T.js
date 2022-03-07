@@ -14,15 +14,21 @@ class Slide11T extends Component {
         this.prev = null;
         this.next = <Slide12A prev={<Slide11T></Slide11T>} next={<Slide13T></Slide13T>} mainArea={this.mainArea}></Slide12A>
 
+        this.state = {
+            percent : 0
+        }
     }
     
+
     render(){
         
         return(
         <div>
             <h1>Moduł 1 Slajd 1</h1>
-            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}></NavigationButtons>
-            {<Progress type="circle" percent={75} format={percent => `${percent} Days`} />}
+            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
+                               current={this}
+            ></NavigationButtons>
+            {<Progress type="circle" percent={this.state.percent} format={percent => `${percent} Days`} />}
         </div>
         )
     }

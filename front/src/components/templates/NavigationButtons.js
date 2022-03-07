@@ -12,6 +12,7 @@ class NavigationButtons extends Component {
         this.mainArea = props.mainArea
         this.prev = props.prev;
         this.next = props.next;
+        this.current = props.current;
 
         this.currentSlideCounter = props.currentSlideCounter;
         this.slidesInModuleCounter = props.slidesInModuleCounter;
@@ -35,14 +36,26 @@ class NavigationButtons extends Component {
         }
     }
 
+    incrementProgressBar() {
+        this.current.setState({percent: this.current.state.percent + 10});
+    }
+
     startStop = () => {
         if (this.simulationIsRunning) {
+            clearInterval(this.timerId);
+
             this.simulationIsRunning = false;
             this.enableNavigationButtons();
             this.startStopButton.innerHTML = PLAY_ICON
             this.startStopButton.style.backgroundColor = GREEN_BOOTSTRAP
         }
         else {
+            if (this.current && this.current.state && (this.current.state.percent != null)) { 
+                this.timerId = setInterval(()=>{
+                    this.current.setState({percent: this.current.state.percent + 10})
+                }, 1000);
+            }
+
             this.simulationIsRunning = true;
             this.disableNavigationButtons()
             this.startStopButton.innerHTML = PAUSE_ICON
@@ -57,7 +70,7 @@ class NavigationButtons extends Component {
         }
     }
 
-    render(){
+    render() {
         return(
         <div className="navbar fixed-bottom">
             {this.prev

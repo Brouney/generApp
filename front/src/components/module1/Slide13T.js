@@ -17,7 +17,9 @@ class Slide13T extends Component {
         return(
         <div>
             <h1>Moduł 1 Slajd 3</h1>
-            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={3} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}></NavigationButtons>
+            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={3} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
+                               current={this}
+            ></NavigationButtons>
         </div>
         )
     }
