@@ -28,7 +28,7 @@ class Slide11T extends Component {
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                                current={this}
             ></NavigationButtons>
-            {<Progress type="circle" percent={this.state.percent} format={percent => `${percent} Days`} />}
+            {<Progress type="circle" percent={this.state.percent} format={percent => `${percent} czas`} />}
         </div>
         )
     }

@@ -52,7 +52,7 @@ class NavigationButtons extends Component {
         else {
             if (this.current && this.current.state && (this.current.state.percent != null)) { 
                 this.timerId = setInterval(()=>{
-                    this.current.setState({percent: this.current.state.percent + 10})
+                    this.incrementProgressBar()
                 }, 1000);
             }
 
