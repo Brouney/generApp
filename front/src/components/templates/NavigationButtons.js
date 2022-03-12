@@ -12,7 +12,6 @@ class NavigationButtons extends Component {
         this.mainArea = props.mainArea
         this.prev = props.prev;
         this.next = props.next;
-        this.current = props.current;
 
         this.currentSlideCounter = props.currentSlideCounter;
         this.slidesInModuleCounter = props.slidesInModuleCounter;
@@ -36,37 +35,30 @@ class NavigationButtons extends Component {
         }
     }
 
-    incrementProgressBar() {
-        this.current.setState({percent: this.current.state.percent + 10});
+    switchToNextSlide = () => {
+        if (this.next != null) {
+            this.mainArea.setState({knowledgePanel: this.next})
+        }
     }
 
-    startStop = () => {
-        if (this.simulationIsRunning) {
-            clearInterval(this.timerId);
+    handleStartStopClick = () => {
+        if (this.props.onStartStop) {
+            this.props.onStartStop(this.simulationIsRunning) // DO NOT CHANGE THIS LINE - calling parent animation start/stop handler
+        }
 
+
+        if (this.simulationIsRunning) {
             this.simulationIsRunning = false;
             this.enableNavigationButtons();
             this.startStopButton.innerHTML = PLAY_ICON
             this.startStopButton.style.backgroundColor = GREEN_BOOTSTRAP
         }
         else {
-            if (this.current && this.current.state && (this.current.state.percent != null)) { 
-                this.timerId = setInterval(()=>{
-                    this.incrementProgressBar()
-                }, 1000);
-            }
-
             this.simulationIsRunning = true;
             this.disableNavigationButtons()
             this.startStopButton.innerHTML = PAUSE_ICON
             this.startStopButton.style.backgroundColor = RED_BOOTSTRAP
             this.startStopButton.disabled = ""
-        }
-    }
-
-    switchToNextSlide = () => {
-        if (this.next != null) {
-            this.mainArea.setState({knowledgePanel: this.next})
         }
     }
 
@@ -81,7 +73,7 @@ class NavigationButtons extends Component {
   <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
 </svg></button>}
              
-             <button ref={ref => this.startStopButton = ref} type="submit" className="btn btn-success col-2" onClick={this.startStop}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
+             <button ref={ref => this.startStopButton = ref} type="submit" className="btn btn-success col-2" onClick={this.handleStartStopClick}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
   <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
 </svg></button>
 
