@@ -7,7 +7,7 @@ class InListButton extends Component {
         super(props)
         this.listExercisePanel   = props.listExercisePanel ? props.listExercisePanel : '';
         this.mainArea            = props.mainArea ? props.mainArea : '';
-        this.text                = props.text ? props.text : '';
+        this.text                = props.text ? props.text.split('\n').map(str => <p>{str}</p>) : '';
         this.knowledgePanel      = props.knowledgePanel ? props.knowledgePanel : null;
     }
 

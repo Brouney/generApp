@@ -5,6 +5,7 @@ import Slide13T from "./Slide13T";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import {Progress} from 'antd';
 import 'antd/dist/antd.css';
+import  PlotlyChart3d from "../common/PlotlyChart3d";
 
 class Slide11T extends Component {
 
@@ -14,11 +15,14 @@ class Slide11T extends Component {
         this.prev = null;
         this.next = <Slide12A prev={<Slide11T></Slide11T>} next={<Slide13T></Slide13T>} mainArea={this.mainArea}></Slide12A>
         this.timerId = null;
+        this.title = 'Tradycyjne metody poszukiwania - metody analityczne'
+
+        this.plotlyChart3d = React.createRef();
 
         this.incrementProgressBar = this.incrementProgressBar.bind(this);
 
         this.state = {
-            percent : 0
+            percent: 0
         }
     }
 
@@ -40,13 +44,29 @@ class Slide11T extends Component {
             }, 1000);
         }
     }
+
+    onClickGenerate = () => {
+        this.plotlyChart3d.current.generateData()
+    };
     
 
     render(){
         
         return(
         <div>
-            <h1>Moduł 1 Slajd 1</h1>
+            <h1>{this.title}</h1>
+
+            <div className="row">
+                <div className='col-2'>
+                    <button type="submit" className="btn btn-success" onClick={this.onClickGenerate}>Losuj funkcję 3D</button>
+                </div>
+
+                <div className='col-10'>
+                    <PlotlyChart3d ref={this.plotlyChart3d} title='Poszukiwanie ekstremum globalnego funkcji'/>
+                </div>
+            </div>
+
+
             <NavigationButtons
                 mainArea={this.mainArea}
                 prev={this.prev}
@@ -55,7 +75,8 @@ class Slide11T extends Component {
                 slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                 onStartStop={this.handleStartStop}
             ></NavigationButtons>
-            {<Progress type="circle" percent={this.state.percent} format={percent => `${percent} czas`} />}
+
+            {/* <Progress type="circle" percent={this.state.percent} format={percent => `${percent} czas`} /> */}
         </div>
         )
     }
