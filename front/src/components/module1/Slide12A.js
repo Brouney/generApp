@@ -5,6 +5,8 @@ import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import MySlider from "../common/MySlider";
 import 'antd/dist/antd.css';
+import DnDReact from "../common/DnDReact";
+import DnDReactLikeKanban from "../common/DnDReactLikeKanban";
 
 class Slide12A extends Component {
 
@@ -58,6 +60,7 @@ class Slide12A extends Component {
             <MySlider min={0.1} max={1} sliderSize={4} step={0.1} ref={this.slider2} text={"Prawdopodobieństwo"} passValueToParent={this.onChangeSlider2}></MySlider>
             <MySlider min={25} max={75} sliderSize={4} step={5} ref={this.slider3} text={"Inna wielkość"} passValueToParent={this.onChangeSlider3}></MySlider>
 
+            <DnDReactLikeKanban></DnDReactLikeKanban>
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={2} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                                current={this}
             ></NavigationButtons>
