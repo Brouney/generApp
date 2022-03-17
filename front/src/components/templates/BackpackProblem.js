@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { Progress } from 'antd'
+import { Progress, message } from 'antd'
 
 const itemsFromBackend = [
     {id:'1', content:'Woda 15', value: 15},
@@ -45,17 +45,26 @@ const onDragEnd = (result, columns, setColumns, parentObj) => {
         const destItems = [...destColumn.items]; //usuwamy jeden element 
         const [removed] = sourceItems.splice(source.index, 1);
         destItems.splice(destination.index, 0, removed); //dodajemy w 2 kolumnie
-        setColumns({
-            ...columns,
-            [source.droppableId]: {
-                ...sourceColumn,
-                items: sourceItems
-            },
-            [destination.droppableId]: {
-                ...destColumn,
-                items: destItems
-            },
-        })
+        let weightsInBackpackSum = 0
+        if(destination.droppableId === "12"){
+            console.log(destItems)
+            for (const e in [...destItems]) {
+                    weightsInBackpackSum += destItems[e].value
+            }
+        }
+        if(weightsInBackpackSum<=100){
+            setColumns({
+                ...columns,
+                [source.droppableId]: {
+                    ...sourceColumn,
+                    items: sourceItems
+                },
+                [destination.droppableId]: {
+                    ...destColumn,
+                    items: destItems
+                },
+            })
+        }
     }
     else { //to jest na przestrzeni jednego
         const column = columns[source.droppableId];
@@ -75,7 +84,6 @@ const onDragEnd = (result, columns, setColumns, parentObj) => {
     for (const e in [...columns['12'].items]) {
         weightsInBackpackSum += columns['12'].items[e].value;
     }
-
     parentObj.parent.setState({backpackCurrentWeight: weightsInBackpackSum})
 }
 
@@ -85,7 +93,7 @@ function BackpackProblem(parent) {
     const parentObj = parent
     useEffect(() => {       
         setBackpackCurrentWeight(columns, parentObj)
-    });
+    }); 
     return (
         <div style={{display:'flex', justifyContent: 'center'}}>
             <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns, parentObj)}>
@@ -105,8 +113,8 @@ function BackpackProblem(parent) {
                                                     background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
                                                     padding: 4,
                                                     width: 250,
-                                                    minHeight: 500
-                                                
+                                                    minHeight: 500,
+                                                    bottom: 20
                                                 }}
                                             >
                                                 
