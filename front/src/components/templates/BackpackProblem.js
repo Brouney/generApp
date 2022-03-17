@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Progress } from 'antd'
 
@@ -83,7 +83,9 @@ const onDragEnd = (result, columns, setColumns, parentObj) => {
 function BackpackProblem(parent) {
     const [columns, setColumns] = useState(columnsFromBackend)
     const parentObj = parent
-
+    useEffect(() => {       
+        setBackpackCurrentWeight(columns, parentObj)
+    });
     return (
         <div style={{display:'flex', justifyContent: 'center'}}>
             <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns, parentObj)}>
