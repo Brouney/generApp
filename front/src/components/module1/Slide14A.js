@@ -11,27 +11,24 @@ class Slide14A extends Component {
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
-        this.prev = <Slide12A mainArea={this.mainArea}></Slide12A>;
-        this.next = null   
-        this.quizTemplate = React.createRef()
+        this.prev = <Slide12A mainArea={this.mainArea}></Slide12A>
+        this.next = null
         this.state = {
-            percent: 0
+            backpackCurrentWeight: 0
         }
     }
-    
-
 
     render(){
         return(
-        <div>
-            <h1>Moduł 1 Slajd 4</h1>
-            
-            <Progress type="circle" percent={this.state.percent} format={percent => `${percent}/100`} />
-            <BackpackProblem parent={this}></BackpackProblem>
-            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={3} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
-                               current={this}
-            ></NavigationButtons>
-        </div>
+            <div>
+                <h1>Moduł 1 Slajd 4</h1>
+                
+                <Progress type="circle" percent={this.state.backpackCurrentWeight} format={backpackCapacity => `${backpackCapacity}/100`} />
+                <BackpackProblem parent={this}></BackpackProblem>
+                <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={3} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
+                                current={this}
+                ></NavigationButtons>
+            </div>
         )
     }
 
