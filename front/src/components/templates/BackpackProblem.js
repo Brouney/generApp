@@ -1,36 +1,44 @@
-import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Progress } from 'antd';
+import React, { useState } from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { Progress } from 'antd'
 
 const itemsFromBackend = [
-    {id:'1', content:'Piwo 20', value: 20},
-    {id:'2', content:'Sok 30', value: 30}
+    {id:'1', content:'Woda 15', value: 15},
+    {id:'2', content:'Sok 20', value: 20},
+    {id:'3', content:'Książka 30', value: 30},
+    {id:'4', content:'Batonik 10', value: 10},
+    {id:'5', content:'Piórnik 15', value: 15},
+    {id:'6', content:'Teczka 20', value: 20},
 ];
 
 const columnsFromBackend = {
-    
-        ["11"]:{
-            name:'Items',
-            items: itemsFromBackend
-        },
-        ["12"]: {
-            name:'Backpack',
-            items: []
-        }
-    };
+    ["11"]:{
+        name:'Przedmioty',
+        items: itemsFromBackend
+    },
+    ["12"]: {
+        name:'Plecak',
+        items: []
+    }
+};
 
-const setPercent = (columns, parentObj) => {
-    let sum_values = 0;
-        for(const e in [...columns['12'].items]){
-            sum_values += columns['12'].items[e].value;
-        }
-        parentObj.parent.setState({percent:sum_values})
+const setBackpackCurrentWeight = (columns, parentObj) => {
+    let weightsInBackpackSum = 0
+
+    for (const e in [...columns['12'].items]) {
+            weightsInBackpackSum += columns['12'].items[e].value
+    }
+    parentObj.parent.setState({backpackCurrentWeight: weightsInBackpackSum})
 }
 
-const onDragEnd = (result, columns, setColumns, parentObj) =>{
-    if(!result.destination) return; //to jest po to, aby jak sie przesunie obok, to nic nie robilo
-    const {source, destination} = result;
-    if(source.droppableId !== destination.droppableId){//na przestrzeni dwoch elementow
+const onDragEnd = (result, columns, setColumns, parentObj) => {
+    if (!result.destination) {  //to jest po to, aby jak sie przesunie obok, to nic nie robilo
+        return
+    }
+
+    const {source, destination} = result
+
+    if (source.droppableId !== destination.droppableId) { //na przestrzeni dwoch elementow
         const sourceColumn = columns[source.droppableId];
         const destColumn = columns[destination.droppableId];
         const sourceItems = [...sourceColumn.items];
@@ -47,13 +55,9 @@ const onDragEnd = (result, columns, setColumns, parentObj) =>{
                 ...destColumn,
                 items: destItems
             },
-        })        
-        let sum_values = 0;
-        for(const e in [...columns['12'].items]){
-            sum_values += columns['12'].items[e].value;
-        }
-        parentObj.parent.setState({percent:sum_values})
-    }else{ //to jest na przestrzeni jednego
+        })
+    }
+    else { //to jest na przestrzeni jednego
         const column = columns[source.droppableId];
         const copiedItems = [...column.items]
         const [removed] = copiedItems.splice(source.index, 1);
@@ -65,24 +69,27 @@ const onDragEnd = (result, columns, setColumns, parentObj) =>{
                 items: copiedItems
             }
         })
-        let sum_values = 0;
-        for(const e in [...columns['12'].items]){
-            sum_values += columns['12'].items[e].value;
-        }
-        parentObj.parent.setState({percent:sum_values})
     }
+
+    let weightsInBackpackSum = 0;
+    for (const e in [...columns['12'].items]) {
+        weightsInBackpackSum += columns['12'].items[e].value;
+    }
+
+    parentObj.parent.setState({backpackCurrentWeight: weightsInBackpackSum})
 }
 
 
-function BackpackProblem(parent){
-    const [columns, setColumns] = useState(columnsFromBackend);
+function BackpackProblem(parent) {
+    const [columns, setColumns] = useState(columnsFromBackend)
     const parentObj = parent
-    return(
+
+    return (
         <div style={{display:'flex', justifyContent: 'center'}}>
             <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns, parentObj)}>
                 {Object.entries(columns).map(([id,column]) => {
                     
-                    return(
+                    return (
                         <div style={{ justifyContent: "center", height: "100%" }}>
                             <h2>{column.name}</h2>
                             <div style={{margin:5}}>
@@ -146,7 +153,6 @@ function BackpackProblem(parent){
 
         </div>
     );
-
-
 }
+
 export default BackpackProblem
