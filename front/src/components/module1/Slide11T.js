@@ -1,9 +1,8 @@
 import React, {Component} from "react";
 import Slide12A from "./Slide12A";
-import NavigationButtons from "../templates/NavigationButtons";
 import Slide13T from "./Slide13T";
+import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
-import {Progress} from 'antd';
 import 'antd/dist/antd.css';
 import  PlotlyChart3d from "../common/PlotlyChart3d";
 

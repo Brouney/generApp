@@ -10,14 +10,18 @@ class Slide13T extends Component {
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
-        this.prev = <Slide12A mainArea={this.mainArea}></Slide12A>;
-        this.next = <Slide14A prev={<Slide13T></Slide13T>} mainArea={this.mainArea}></Slide14A>   
+        this.prev = <Slide12A mainArea={this.mainArea}></Slide12A>
+        this.next = <Slide14A prev={<Slide13T></Slide13T>} mainArea={this.mainArea}></Slide14A>
+        this.title = 'Tradycyjne metody poszukiwania - metody losowe'
+
         this.quizTemplate = React.createRef()
     }
-    render(){
+    
+    render() {
         return(
         <div>
-            <h1>Moduł 1 Slajd 3</h1>
+            <h1>{this.title}</h1>
+            Szablon quizu
             <QuizTemplate ref={this.quizTemplate} slide={this}></QuizTemplate>
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={3} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                                current={this}
