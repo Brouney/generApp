@@ -39,8 +39,8 @@ class Slide11T extends Component {
         }
         else {
             this.timerId = setInterval(() => {
-                this.incrementProgressBar()
-            }, 1000);
+                this.plotlyChart3d.current.moveSquareOnChartTowardsExtremum()
+            }, 300);
         }
     }
 
