@@ -37,18 +37,25 @@ class Slide11T extends Component {
     handleStartStop = (simulationStopped) => { // name = (param) => 
         if (simulationStopped) {
             clearInterval(this.timerId)
-            this.generateFunction.disabled = ""
+            this.generateFunction1.disabled = ""
+            this.generateFunction2.disabled = ""
         }
         else {
-            this.generateFunction.disabled = "disabled"
+            this.generateFunction1.disabled = "disabled"
+            this.generateFunction2.disabled = "disabled"
             this.timerId = setInterval(() => {
                 this.plotlyChart3d.current.moveSquareOnChartTowardsExtremum()
             }, 300);
         }
     }
 
-    onClickGenerate = () => {
-        this.plotlyChart3d.current.generateData()
+    onClickGenerateSaddle = () => {
+        this.plotlyChart3d.current.generateData('saddle')
+        this.plotlyChart3d.current.moveSquareOnChartTowardsExtremum()
+    }
+
+    onClickGenerateParaboloid = () => {
+        this.plotlyChart3d.current.generateData('paraboloid')
         this.plotlyChart3d.current.moveSquareOnChartTowardsExtremum()
     }
 
@@ -65,8 +72,9 @@ class Slide11T extends Component {
             <h1>{this.title}</h1>
 
             <div className="row">
-                <div className='col-2'>
-                <button ref={ref => this.generateFunction = ref} type="submit" className="btn btn-success" onClick={this.onClickGenerate}>Losuj funkcję 3D</button>
+                <div className='col-2' align="center">
+                    <button ref={ref => this.generateFunction1 = ref} type="submit" className="btn btn-success m-1" onClick={this.onClickGenerateSaddle}>Siodło</button> <br/>
+                    <button ref={ref => this.generateFunction2 = ref} type="submit" className="btn btn-success" onClick={this.onClickGenerateParaboloid}>Paraboloida</button>
                 </div>
 
                 <div className='col-10'>

@@ -43,7 +43,7 @@ class PlotlyChart3d extends React.Component {
         this.setDefaultGlobalVariables()
     }
 
-    generateData = () => {
+    generateData = (dataFunction3d = 'saddle') => {
         // let randomNumbers = []
         // for (let i = 0; i < this.GRID_DENSITY; i++) {
         //     // randomNumbers.push(Array(this.GRID_DENSITY).fill().map(() => 1 - i*0.1))  // plaska powierzchnia
@@ -53,12 +53,24 @@ class PlotlyChart3d extends React.Component {
 
         this.setDefaultGlobalVariables()
 
+        let saddleFormula = (x, y) => y*y - x*x
+        let paraboloidFormula = (x, y) => x*x + y*y
+        
+
         var randomNumbers = Array.from(Array(this.GRID_DENSITY), () => [])
         for (let x = 0; x < randomNumbers.length; x++) {
             for (let y = 0; y < this.GRID_DENSITY; y++) {
                 let yyy = y - this.GRID_DENSITY / 2
                 let xxx = x - this.GRID_DENSITY / 2
-                let computedValue = yyy*yyy - xxx*xxx
+                let computedValue
+
+                if (dataFunction3d === 'saddle') {
+                    computedValue = saddleFormula(xxx, yyy)
+                }
+                else if (dataFunction3d === 'paraboloid') {
+                    computedValue = paraboloidFormula(xxx, yyy)
+                }
+
                 randomNumbers[x][y] = computedValue
             }
         }
@@ -166,7 +178,8 @@ class PlotlyChart3d extends React.Component {
             {
                 type: "surface",
                 name: '3D',
-                z: this.state.data
+                z: this.state.data,
+                showscale: false,
             },
             {
                 type: "surface",
@@ -174,7 +187,7 @@ class PlotlyChart3d extends React.Component {
                 x: xOnChart,
                 y: yOnChart,
                 z: this.state.squareArea,
-                colorscale: 'hsv'
+                colorscale: 'hsv',
             },
             ]}
             config={{
