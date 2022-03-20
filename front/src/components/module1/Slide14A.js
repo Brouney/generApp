@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Slide13T from "./Slide13T";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import AGvsTraditional14 from "./AGvsTraditonal14";
 
 class Slide14A extends Component {
 
@@ -18,6 +19,7 @@ class Slide14A extends Component {
         return(
             <div>
                 <h1>{this.title}</h1>
+                <AGvsTraditional14></AGvsTraditional14>
                 <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={4} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                                 current={this}
                 ></NavigationButtons>
