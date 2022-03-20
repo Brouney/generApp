@@ -20,13 +20,20 @@ class NavigationButtons extends Component {
     }
 
     enableNavigationButtons() {
+        this.simulationIsRunning = false;
         this.previousButton.disabled = ""
         this.nextButton.disabled = ""
+        this.startStopButton.innerHTML = PLAY_ICON
+        this.startStopButton.style.backgroundColor = GREEN_BOOTSTRAP
     }
 
     disableNavigationButtons() {
+        this.simulationIsRunning = true;
         this.previousButton.disabled = "disabled"
         this.nextButton.disabled = "disabled"
+        this.startStopButton.innerHTML = PAUSE_ICON
+        this.startStopButton.style.backgroundColor = RED_BOOTSTRAP
+        this.startStopButton.disabled = ""
     }
 
     switchToPreviousSlide = () => {
@@ -48,17 +55,11 @@ class NavigationButtons extends Component {
 
 
         if (this.simulationIsRunning) {
-            this.simulationIsRunning = false;
             this.enableNavigationButtons();
-            this.startStopButton.innerHTML = PLAY_ICON
-            this.startStopButton.style.backgroundColor = GREEN_BOOTSTRAP
+
         }
         else {
-            this.simulationIsRunning = true;
             this.disableNavigationButtons()
-            this.startStopButton.innerHTML = PAUSE_ICON
-            this.startStopButton.style.backgroundColor = RED_BOOTSTRAP
-            this.startStopButton.disabled = ""
         }
     }
 

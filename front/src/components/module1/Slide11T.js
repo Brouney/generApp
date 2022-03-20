@@ -17,6 +17,7 @@ class Slide11T extends Component {
         this.title = 'Tradycyjne metody poszukiwania - metody analityczne'
 
         this.plotlyChart3d = React.createRef();
+        this.navigationButtons = React.createRef();
 
         this.incrementProgressBar = this.incrementProgressBar.bind(this);
 
@@ -35,9 +36,11 @@ class Slide11T extends Component {
 
     handleStartStop = (simulationStopped) => { // name = (param) => 
         if (simulationStopped) {
-            clearInterval(this.timerId);
+            clearInterval(this.timerId)
+            this.generateFunction.disabled = ""
         }
         else {
+            this.generateFunction.disabled = "disabled"
             this.timerId = setInterval(() => {
                 this.plotlyChart3d.current.moveSquareOnChartTowardsExtremum()
             }, 300);
@@ -46,7 +49,13 @@ class Slide11T extends Component {
 
     onClickGenerate = () => {
         this.plotlyChart3d.current.generateData()
-    };
+        this.plotlyChart3d.current.moveSquareOnChartTowardsExtremum()
+    }
+
+    onSimulationEnd = () => {
+        this.handleStartStop(true)
+        this.navigationButtons.current.enableNavigationButtons()
+    }
     
 
     render(){
@@ -57,16 +66,22 @@ class Slide11T extends Component {
 
             <div className="row">
                 <div className='col-2'>
-                    <button type="submit" className="btn btn-success" onClick={this.onClickGenerate}>Losuj funkcję 3D</button>
+                <button ref={ref => this.generateFunction = ref} type="submit" className="btn btn-success" onClick={this.onClickGenerate}>Losuj funkcję 3D</button>
                 </div>
 
                 <div className='col-10'>
-                    <PlotlyChart3d ref={this.plotlyChart3d} title='Poszukiwanie ekstremum globalnego funkcji'/>
+                    <PlotlyChart3d
+                        ref={this.plotlyChart3d}
+                        title='Poszukiwanie ekstremum globalnego funkcji'
+                        onSimulationEnd={this.onSimulationEnd}
+                        gridDensity={20}
+                    />
                 </div>
             </div>
 
 
             <NavigationButtons
+                ref={this.navigationButtons}
                 mainArea={this.mainArea}
                 prev={this.prev}
                 next={this.next}
