@@ -211,6 +211,7 @@ class SimulatedAnnealing13 extends React.Component {
     render() {
         return(
         <div>
+            Symulowane wyżarzanie
             <Sketch setup={this.setup} draw={this.draw} keyPressed={this.keyPressed}/>
         </div>
         )

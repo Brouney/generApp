@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const itemsFromBackend = [
-    {id:'1', content:'first task1', type:1},
-    {id:'2', content:'seccond task1', type:1},
-    {id:'3', content:'seccond task1', type:1},
-    {id:'4', content:'seccond task2', type:2},
-    {id:'5', content:'seccond task2', type:2},
-    {id:'6', content:'seccond task2', type:2}
+    {id:'1', content:'Przetwarzają...', type:1},
+    {id:'2', content:'Działają na...', type:1},
+    {id:'3', content:'Korzystają z...', type:1},
+    {id:'4', content:'Wykorzystują...', type:2},
+    {id:'5', content:'Działają na...', type:2},
+    {id:'6', content:'Przetwarzają...', type:2}
 
 ];
 
