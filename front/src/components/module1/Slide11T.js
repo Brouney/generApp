@@ -105,4 +105,4 @@ class Slide11T extends Component {
 
 }
 
-export default Slide11T;
+export default Slide11T

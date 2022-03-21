@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import Slide12A from "./Slide12A";
 import Slide14A from "./Slide14A";
+import SimulatedAnnealing13 from "./SimulatedAnnealing13";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
-import Sketch from 'react-p5'
 
 class Slide13T extends Component {
 
@@ -13,6 +13,9 @@ class Slide13T extends Component {
         this.prev = <Slide12A mainArea={this.mainArea}></Slide12A>
         this.next = <Slide14A prev={<Slide13T></Slide13T>} mainArea={this.mainArea}></Slide14A>
         this.title = 'Tradycyjne metody poszukiwania - metody losowe'
+
+        this.navigationButtons = React.createRef();
+        this.simulatedAnnealing13 = React.createRef();
     }
 
     y = 0;
@@ -33,15 +36,35 @@ class Slide13T extends Component {
 		if (this.direction === '^') this.y += 8;
 		else this.y -= 4;
 	};
+
+    mouseClicked = (p5) => {
+    }
+
+
+    handleStartStop = (simulationStopped) => { // name = (param) => 
+        if (simulationStopped) {
+            this.simulatedAnnealing13.current.skier.find = false
+        }
+        else {
+            this.simulatedAnnealing13.current.skier.find = true
+        }
+    }
     
     render() {
         return(
         <div>
             <h1>{this.title}</h1>
-            <Sketch setup={this.setup} draw={this.draw} />
 
-            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={3} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
-                               current={this}
+            <SimulatedAnnealing13 ref={this.simulatedAnnealing13}/>
+
+            <NavigationButtons 
+                ref={this.navigationButtons}
+                mainArea={this.mainArea}
+                prev={this.prev}
+                next={this.next}
+                currentSlideCounter={3}
+                slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
+                onStartStop={this.handleStartStop}
             ></NavigationButtons>
         </div>
         )
