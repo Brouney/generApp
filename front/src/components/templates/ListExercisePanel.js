@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import InListButton from "./InListButton";
 import Slide11T from "../module1/Slide11T";
+import Slide13T from "../module1/Slide13T";
 import Slide21Q from "../module2/Slide21Q";
 
 // TODO: increase below globals whenever you add new slides to module

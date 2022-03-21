@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import QuizTemplate from "../templates/QuizTemplate";
 
 class Slide21Q extends Component {
 
@@ -9,6 +10,8 @@ class Slide21Q extends Component {
         this.mainArea = props.mainArea
         this.prev = null;
         this.next = null
+
+        this.quizTemplate = React.createRef()
     }
     
     render(){
@@ -16,6 +19,9 @@ class Slide21Q extends Component {
         return(
         <div>
             <h1>Moduł 2 Slajd 1</h1>
+            Szablon quizu
+            <QuizTemplate ref={this.quizTemplate} slide={this}></QuizTemplate>
+
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
                                current={this}
             ></NavigationButtons>
