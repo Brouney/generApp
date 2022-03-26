@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const itemsFromBackend = [
-    {id:'1', content:'Przetwarzają...', type:1},
-    {id:'2', content:'Działają na...', type:1},
-    {id:'3', content:'Korzystają z...', type:1},
-    {id:'4', content:'Wykorzystują...', type:2},
-    {id:'5', content:'Działają na...', type:2},
-    {id:'6', content:'Przetwarzają...', type:2}
+    {id:'1', content:'Przetwarzają1...', type:1},
+    {id:'2', content:'Działają na 1...', type:1},
+    {id:'3', content:'Korzystają z1...', type:1},
+    {id:'4', content:'Wykorzystują2...', type:2},
+    {id:'5', content:'Działają na2...', type:2},
+    {id:'6', content:'Przetwarzają2...', type:2}
 
 ];
 
@@ -64,30 +64,45 @@ const onDragEnd = (result, columns, setColumns) =>{
     }
 }
 
+let inpropervalues = [false, false]
+let inpropervalue = false
+
 const checkValues = (columns) => {
-    let inpropervalue = false
-    for (const e in [...columns['12'].items]) {
-         if(columns['12'].items[e].type !== 1){
-            inpropervalue = true
-         }
+    inpropervalue = false
+    inpropervalues = [false, false]
+    if(columns['12'].items.length !== 3 || columns['13'].items.length !== 3){
+        inpropervalue = true
+        return
     }
+    for (const e in [...columns['12'].items]) {
+         if( columns['12'].items[e].type !== 1){
+            inpropervalues[0] = true
+        }
+    }
+    
     for (const e in [...columns['13'].items]) {
-        if(columns['12'].items[e].type !== 2){
-           inpropervalue = true
+        if( columns['13'].items[e].type !== 2){
+           inpropervalues[1] = true
         }
    }
-   console.log(inpropervalue)
+   if(inpropervalues[0] || inpropervalues[1]){
+        inpropervalue = true
+   }
     
 }
 function AGvsTraditional14(){
     const [columns, setColumns] = useState(columnsFromBackend);
-    
     return(
         <div>
             <div>
-                {/* <Button onSubmit={checkValues(columns)} >
-                    Sprawdź
-                </Button> */}
+                { inpropervalue ?
+                <Button type="primary" danger onSubmit={checkValues(columns) }style={{marginLeft:"35%"}} >
+                Dopasuj poprawnie
+                </Button>:
+                <Button type="primary"  onSubmit={checkValues(columns)} style={{marginLeft:"35%"}} >
+                    Wszystko poprawnie dopasowane
+                </Button> 
+            }
             </div>
             <div style={{display:'flex', justifyContent: 'center'}}>
                 
@@ -96,7 +111,7 @@ function AGvsTraditional14(){
                         
                         return(
                             <div style={{ justifyContent: "center", height: "100%" }}>
-                                <h2>{column.name}</h2>
+                                <h2 style={{textAlign:"center"}}>{column.name}</h2>
                                 <div style={{margin:5}}>
                                     <Droppable droppableId={id} key={id} >
                                         {(provided, snapshot) => {
