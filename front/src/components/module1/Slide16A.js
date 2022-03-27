@@ -5,9 +5,32 @@ import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import { Wheel } from 'react-custom-roulette'
 
 const data = [
-    { option: '0', style: { backgroundColor: 'red', textColor: 'black' } },
-    { option: '1', style: { backgroundColor: 'green', textColor: 'black' } },
-    { option: '2' },
+    { option: '0', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '1', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '2', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '3', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '4', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '5', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '6', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '7', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '8', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '9', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '10', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '11', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '12', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '13', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '14', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '15', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '16', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '17', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '18', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '19', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '20', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '21', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '22', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '23', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '24', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '25', style: { backgroundColor: 'black', textColor: 'white' } },
   ]
 class Slide16A extends Component {
 
@@ -19,7 +42,10 @@ class Slide16A extends Component {
         this.title = 'Elementarny algorytm genetyczny - ruletka'
         this.state = {
             start_spin: false,
-            wal_win:0, 
+            wal_win:0,
+            przystosowanie:[0,0,0],
+            procent:[0,0,0],
+            obliczony_element: 0
         }
         this.navigationButtons = React.createRef()
         this.wheel = React.createRef()
@@ -30,6 +56,18 @@ class Slide16A extends Component {
         if (simulationStopped) {
             this.navigationButtons.current.enableNavigationButtons()
             this.setState({start_spin:false})
+            let tmp_przystosowanie = this.state.przystosowanie
+            tmp_przystosowanie[this.state.obliczony_element] = this.state.wal_win
+            this.setState({przystosowanie: tmp_przystosowanie})
+            if(this.state.obliczony_element > 1){
+                let suma = this.state.przystosowanie.reduce((partialSum, a) => partialSum + a, 0)
+                let procenty = [0,0,0]
+                for (var i = 0; i < 3; i++) {
+                    procenty[i] = (this.state.przystosowanie[i]/suma)*100
+                 }
+                this.setState({procent: procenty})
+            }
+            this.setState({obliczony_element: this.state.obliczony_element+1})
             
         }
         else {
@@ -59,7 +97,22 @@ class Slide16A extends Component {
                 />
                 
             </div>
-
+            <div>
+                <table style={{textAlign:"center"}}>
+                    <tr>
+                        <td>Obiekt</td> <td>Przystosowanie</td> <td>%</td>
+                    </tr>
+                    <tr>
+                        <td>Obiekt 1  </td> <td>{this.state.przystosowanie[0]}</td> <td>{this.state.procent[0]}</td>
+                    </tr>
+                    <tr>
+                        <td>Obiekt 2  </td> <td>{this.state.przystosowanie[1]}</td> <td>{this.state.procent[1]}</td>
+                    </tr>
+                    <tr>
+                        <td>Obiekt 3  </td> <td>{this.state.przystosowanie[2]}</td> <td>{this.state.procent[2]}</td>
+                    </tr>
+                </table>
+            </div>
             <NavigationButtons 
                 ref={this.navigationButtons}
                 mainArea={this.mainArea}
