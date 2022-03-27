@@ -71,6 +71,11 @@ class Slide16A extends Component {
             
         }
         else {
+            if(this.state.obliczony_element > 2){
+                this.setState({obliczony_element: 0})
+                this.setState({przystosowanie: [0,0,0]})
+                this.setState({procent: [0,0,0]})
+            }
             const newPrizeNumber = Math.floor(Math.random() * data.length)
             console.log(newPrizeNumber)
             this.setState({wal_win: newPrizeNumber})
