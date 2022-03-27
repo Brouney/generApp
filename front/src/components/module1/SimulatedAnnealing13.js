@@ -17,6 +17,8 @@ class BallTemperature {
         this.points = points
         this.prevMax = -SimulatedAnnealing13_HEIGHT
         this.maxFound = true
+
+        this.counterToEndSimulation = 0
     }
     
     lowestPoint(points) {
@@ -45,6 +47,8 @@ class BallTemperature {
     }
     
     updateBallPosition() {
+        let xPrev = this.x
+
         this.temperature = SimulatedAnnealing13_HEIGHT - this.y
         if (this.targetX > this.x) {
             if (this.targetX == this.x + 1) {
@@ -67,6 +71,10 @@ class BallTemperature {
         }
 
         this.y = this.points[this.x]
+
+        if (this.x == xPrev) {
+            this.counterToEndSimulation++
+        }
     }
     
     findHighestPoint() {
@@ -203,6 +211,10 @@ class SimulatedAnnealing13 extends React.Component {
         p5.background('#454b51')
 
         this.temperatureChart.draw(p5)
+
+        if (this.ballTemperature.counterToEndSimulation > 50) { // TODO: workaround na stop symulacji
+            this.props.onStartStop(true)
+        }
 
         if (!this.ballTemperature.maxFound) {
             this.ballTemperature.updateBallPosition(p5)
