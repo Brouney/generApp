@@ -4,20 +4,18 @@ import Sketch from 'react-p5'
 const SimulatedAnnealing13_STEP_MAX = 3
 const SimulatedAnnealing13_STEP_CHANGE = 3
 const SimulatedAnnealing13_WIDTH = 800
-const SimulatedAnnealing13_HEIGHT = 600
+const SimulatedAnnealing13_HEIGHT = 273
+const SimulatedAnnealing13_CANVAS_OFFSET = 150
 
-class Skier {
+
+class BallTemperature {
 
     constructor(points) {
-
         this.x = this.lowestPoint(points)
         this.y = points[this.x]
-        this.points = points
-        this.find = false
 
-        this.temp = 1
-        this.minTemp = 0.0001
-        this.alpha = 0.99
+        this.points = points
+        this.maxFound = true
     }
     
     lowestPoint(points) {
@@ -35,13 +33,13 @@ class Skier {
     draw = (p5) => {
         p5.fill('red')
         p5.stroke('red')
-        p5.ellipse(this.x, this.y-5, 20, 20)
+        p5.ellipse(this.x + SimulatedAnnealing13_CANVAS_OFFSET / 2, this.y-5 + SimulatedAnnealing13_CANVAS_OFFSET / 2, 20, 20)
+        p5.textSize(30)
+        p5.text(Math.round(- this.y * 100) / 100, this.x + SimulatedAnnealing13_CANVAS_OFFSET / 4, this.y + SimulatedAnnealing13_CANVAS_OFFSET / 4) // this.y - aktualna wartosc temperatury kropki na wykresie
     }
     
-    update() {
-        if (!this.find) return
-
-        this.score = SimulatedAnnealing13_HEIGHT - this.y
+    updateBallPosition() {
+        this.temperature = SimulatedAnnealing13_HEIGHT - this.y
         if (this.targetX > this.x) {
             if (this.targetX == this.x + 1) {
                 this.x++
@@ -66,44 +64,28 @@ class Skier {
     }
     
     findHighestPoint() {
-        if (!this.find) {
-            return
-        }
-        if (this.temp < this.minTemp) {
+        if (this.maxFound) {
             return
         }
 
         this.targetX = this.x
         for (let i = -SimulatedAnnealing13_WIDTH; i < SimulatedAnnealing13_WIDTH; i++) {
             let neighbourX = this.targetX + i
-            let newScore = SimulatedAnnealing13_HEIGHT - this.points[neighbourX]
+            let newTemperature = SimulatedAnnealing13_HEIGHT - this.points[neighbourX]
 
-            if (newScore > this.score) {
+            if (newTemperature > this.temperature) {
                 this.targetX = neighbourX
+
+                console.log(this.points[this.targetX])
             }
             else {
-                const prob = Math.exp((this.score - newScore) / this.temp)
+                const prob = Math.exp(this.temperature - newTemperature)
                 if (Math.random(1) >= prob) {
                     this.targetX = neighbourX
+                    console.log(this.points[this.targetX])
                 }
             }
         }
-        this.temp *= this.alpha
-    }
-    
-    simpleAlgorithm() {
-        if (this.points[this.x + 1] < this.y) {
-            this.x++
-        } 
-
-        if (this.points[this.x - 1] < this.y) {
-            this.x--
-        }
-    }
-    
-    restart() {
-        this.x = Math.floor(Math.random(SimulatedAnnealing13_WIDTH))
-        this.y = this.points[this.x]
     }
     
     moveLeft() {
@@ -117,26 +99,26 @@ class Skier {
     } 
 }
 
-class Hill {
+class TemperatureChart {
 
     constructor(props) {
         this.points = []
-        this.createHill()
+        this.create()
     }
 
-    createHill = () => {
+    create = () => {
         // parameters - change to your liking
         const HEIGHT_MAX = SimulatedAnnealing13_HEIGHT
-        const HEIGHT_MIN = 200
+        const HEIGHT_MIN = 0
         
         // starting conditions
-        let hillHeight = Math.random() * HEIGHT_MAX
+        let chartValue = Math.random() * HEIGHT_MAX
         let slope = Math.random() * SimulatedAnnealing13_STEP_MAX * 2 - SimulatedAnnealing13_STEP_MAX
 
         // creating the landscape
         for (let x = 0; x < SimulatedAnnealing13_WIDTH; x++) {
             // change SimulatedAnnealing13_HEIGHT and slope
-            hillHeight += slope
+            chartValue += slope
             slope += Math.random() * SimulatedAnnealing13_STEP_CHANGE * 2 - SimulatedAnnealing13_STEP_CHANGE
 
             // clip SimulatedAnnealing13_HEIGHT and slope to maximum
@@ -147,24 +129,55 @@ class Hill {
                 slope = -SimulatedAnnealing13_STEP_MAX
             }
 
-            if (hillHeight > HEIGHT_MAX) {
-                hillHeight = HEIGHT_MAX
+            if (chartValue > HEIGHT_MAX) {
+                chartValue = HEIGHT_MAX
                 slope *= -1
             }
-            if (hillHeight < HEIGHT_MIN) {
-                hillHeight = HEIGHT_MIN
+            if (chartValue < HEIGHT_MIN) {
+                chartValue = HEIGHT_MIN
                 slope *= -1
             }
 
-            this.points.push(hillHeight)
+            this.points.push(chartValue)
         }
     }
 
     draw = (p5) => {
         for (let i = 0; i < this.points.length; i++) {
             p5.stroke('cyan')
-            p5.line(i, SimulatedAnnealing13_HEIGHT, i, this.points[i])
+            p5.line(i + SimulatedAnnealing13_CANVAS_OFFSET / 2,
+                    SimulatedAnnealing13_HEIGHT + SimulatedAnnealing13_CANVAS_OFFSET / 2,
+                    i + SimulatedAnnealing13_CANVAS_OFFSET / 2,
+                    this.points[i]  + SimulatedAnnealing13_CANVAS_OFFSET / 2)
         }
+
+        //strzalki wykresu
+        p5.stroke('white')
+        p5.line(SimulatedAnnealing13_CANVAS_OFFSET / 4,
+        SimulatedAnnealing13_HEIGHT - SimulatedAnnealing13_CANVAS_OFFSET / 0.6,
+        SimulatedAnnealing13_CANVAS_OFFSET / 4,
+        SimulatedAnnealing13_HEIGHT + SimulatedAnnealing13_CANVAS_OFFSET / 1.5) // pionowa
+
+        p5.line(SimulatedAnnealing13_CANVAS_OFFSET / 4,
+        SimulatedAnnealing13_CANVAS_OFFSET * 2.5,
+        SimulatedAnnealing13_WIDTH + SimulatedAnnealing13_CANVAS_OFFSET / 1.5,
+        SimulatedAnnealing13_CANVAS_OFFSET * 2.5) // pozioma
+
+        //grot strzalki pionowej
+        p5.line(SimulatedAnnealing13_CANVAS_OFFSET / 4, SimulatedAnnealing13_HEIGHT - SimulatedAnnealing13_CANVAS_OFFSET / 0.6, SimulatedAnnealing13_CANVAS_OFFSET/6, SimulatedAnnealing13_CANVAS_OFFSET/3)
+        p5.line(SimulatedAnnealing13_CANVAS_OFFSET / 4, SimulatedAnnealing13_HEIGHT - SimulatedAnnealing13_CANVAS_OFFSET / 0.6, SimulatedAnnealing13_CANVAS_OFFSET/3, SimulatedAnnealing13_CANVAS_OFFSET/3)
+
+        //grot strzalki poziomej
+        p5.line(SimulatedAnnealing13_WIDTH + SimulatedAnnealing13_CANVAS_OFFSET / 1.5, SimulatedAnnealing13_CANVAS_OFFSET * 2.5, SimulatedAnnealing13_WIDTH + SimulatedAnnealing13_CANVAS_OFFSET / 2, SimulatedAnnealing13_HEIGHT + SimulatedAnnealing13_CANVAS_OFFSET / 1.2)
+        p5.line(SimulatedAnnealing13_WIDTH + SimulatedAnnealing13_CANVAS_OFFSET / 1.5,
+        SimulatedAnnealing13_CANVAS_OFFSET * 2.5,
+        SimulatedAnnealing13_WIDTH + SimulatedAnnealing13_CANVAS_OFFSET / 2,
+        SimulatedAnnealing13_HEIGHT + SimulatedAnnealing13_CANVAS_OFFSET / 1.8)
+
+        // podpis osi wykresu
+        p5.fill(255, 255, 255)
+        p5.text('T', SimulatedAnnealing13_CANVAS_OFFSET / 4, SimulatedAnnealing13_HEIGHT - SimulatedAnnealing13_CANVAS_OFFSET / 0.6 + 5) 
+        p5.text('t [s]', SimulatedAnnealing13_WIDTH + SimulatedAnnealing13_CANVAS_OFFSET / 1.5, SimulatedAnnealing13_CANVAS_OFFSET * 2.5)
     }
 }
   
@@ -174,36 +187,40 @@ class SimulatedAnnealing13 extends React.Component {
     constructor(props) {
         super(props)
 
-        this.hill = new Hill()
-        this.skier = new Skier(this.hill.points)
+        this.temperatureChart = new TemperatureChart()
+        this.ballTemperature = new BallTemperature(this.temperatureChart.points)
     }
 
     setup = (p5, parentRef) => {
-		p5.createCanvas(SimulatedAnnealing13_WIDTH, SimulatedAnnealing13_HEIGHT).parent(parentRef)
+		p5.createCanvas(SimulatedAnnealing13_WIDTH + SimulatedAnnealing13_CANVAS_OFFSET, SimulatedAnnealing13_HEIGHT + SimulatedAnnealing13_CANVAS_OFFSET).parent(parentRef)
         p5.frameRate(30)
 	}
 
     draw = (p5) => {
         p5.background('#454b51')
 
-        this.hill.draw(p5)
-        this.skier.update(p5)
-        this.skier.draw(p5)
+        this.temperatureChart.draw(p5)
+
+        if (!this.ballTemperature.maxFound) {
+            this.ballTemperature.updateBallPosition(p5)
+        } else {
+            this.props.onStartStop(true)
+        }
+
+        this.ballTemperature.draw(p5)
     }
 
     keyPressed = (p5) => {
         // console.log(p5.keyCode)
         if (p5.keyCode === 32) { //spacja
-            this.skier.find = !this.skier.find
-        } else if (p5.keyCode === 82) { //r
-            this.skier.restart()
+            this.ballTemperature.maxFound = !this.ballTemperature.maxFound
         } else if (p5.keyCode === 37) { //<-
-            this.skier.moveLeft()
+            this.ballTemperature.moveLeft()
         } else if (p5.keyCode === 39) { //->
-            this.skier.moveRight()
+            this.ballTemperature.moveRight()
         } else if (p5.keyCode === 78) { //n
-            this.hill = new Hill()
-            this.skier = new Skier(this.hill.points)
+            this.temperatureChart = new TemperatureChart()
+            this.ballTemperature = new BallTemperature(this.temperatureChart.points)
         }
     }
 

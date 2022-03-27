@@ -43,11 +43,13 @@ class Slide13T extends Component {
 
     handleStartStop = (simulationStopped) => { // name = (param) => 
         if (simulationStopped) {
-            this.simulatedAnnealing13.current.skier.find = false
+            this.simulatedAnnealing13.current.ballTemperature.maxFound = true
         }
         else {
-            this.simulatedAnnealing13.current.skier.find = true
+            this.simulatedAnnealing13.current.ballTemperature.maxFound = false
         }
+        
+        this.navigationButtons.current.enableNavigationButtons()
     }
     
     render() {
@@ -55,7 +57,7 @@ class Slide13T extends Component {
         <div>
             <h1>{this.title}</h1>
 
-            <SimulatedAnnealing13 ref={this.simulatedAnnealing13}/>
+            <SimulatedAnnealing13 ref={this.simulatedAnnealing13} onStartStop={this.handleStartStop}/>
 
             <NavigationButtons 
                 ref={this.navigationButtons}
