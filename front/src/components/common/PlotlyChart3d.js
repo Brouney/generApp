@@ -10,8 +10,8 @@ const graphData = {
 };
 
 const GRID_DISTANCE_BETWEEN_POINTS = 0.5
-const SQUARE_CENTER_POSITION_DEFAULT = [9.5, 9.5] // chcac miec obszar najpierw na srodku, trzeba to ustawic (props.gridDensity / 2)
-const AREA_POINTS_DEFAULT = [[9,9],[9,10],[10,9],[10,10]]
+const SQUARE_CENTER_POSITION_DEFAULT = [5.5, 5.5] // chcac miec obszar najpierw na srodku, trzeba to ustawic (props.gridDensity / 2)
+const AREA_POINTS_DEFAULT = [[5,5],[5,6],[6,5],[6,6]]
 
 export let squareCenterPosition = SQUARE_CENTER_POSITION_DEFAULT      // punkt X,Y - srodek obszaru, ktory bladzi po wykresie szukajac ekstremum
 export let areaPoints = AREA_POINTS_DEFAULT // obszar, ktory bladzi po wykresie szukajac ekstremum
@@ -34,8 +34,15 @@ class PlotlyChart3d extends React.Component {
     }
 
     setDefaultGlobalVariables() {
-        squareCenterPosition = SQUARE_CENTER_POSITION_DEFAULT
-        areaPoints = AREA_POINTS_DEFAULT
+        let minValue = Math.ceil(2)
+        let maxValue = Math.floor(this.GRID_DENSITY - 1)
+        let randValue = Math.floor(Math.random() * (maxValue - minValue)) + minValue
+
+        // squareCenterPosition = SQUARE_CENTER_POSITION_DEFAULT
+        // areaPoints = AREA_POINTS_DEFAULT
+        // maximum = -9999
+        squareCenterPosition = [randValue + 0.5, randValue + 0.5]
+        areaPoints = [[randValue, randValue],[randValue, randValue+1],[randValue+1, randValue],[randValue+1,randValue+1]]
         maximum = -9999
     }
 
@@ -54,7 +61,7 @@ class PlotlyChart3d extends React.Component {
         this.setDefaultGlobalVariables()
 
         let saddleFormula = (x, y) => y*y - x*x
-        let paraboloidFormula = (x, y) => x*x + y*y
+        let paraboloidFormula = (x, y) => - x*x - y*y
         
 
         var randomNumbers = Array.from(Array(this.GRID_DENSITY), () => [])
@@ -110,12 +117,13 @@ class PlotlyChart3d extends React.Component {
 
     moveSquareOnChartTowardsExtremum = () => {
         const neighborsCenters = this.findNeighborsOfPoint(squareCenterPosition[0], squareCenterPosition[1])
+        let isHigherValueFound = false
 
         for (const neighbor of neighborsCenters) {
             let points = this.findFourPointsOfCenter(neighbor[0], neighbor[1])
             let sumOfPoints = 0
             for (const point of points) {
-                if (typeof this.state.data[point[0]] === 'undefined' || neighborsCenters.length < 8) { // sasiedztwo 8 komorek dookola, dotarlismy do ekstremum
+                if (typeof this.state.data[point[0]] === 'undefined') { // sasiedztwo 8 komorek dookola, dotarlismy do ekstremum
                     this.props.onSimulationEnd()
                     return
                 }
@@ -124,10 +132,18 @@ class PlotlyChart3d extends React.Component {
             }
 
             if (sumOfPoints > maximum) {
+                isHigherValueFound = true
+
                 squareCenterPosition = [neighbor[0], neighbor[1]]
                 areaPoints = [...points]
                 maximum = sumOfPoints
+                console.log(maximum)
             }
+        }
+
+        if (!isHigherValueFound) {
+            this.props.onSimulationEnd()
+            return
         }
 
         // console.log(areaPoints)
