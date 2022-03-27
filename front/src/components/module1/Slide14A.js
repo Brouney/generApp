@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import Slide13T from "./Slide13T";
+import Slide15A from "./Slide15A";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import AGvsTraditional14 from "./AGvsTraditonal14";
@@ -10,7 +11,7 @@ class Slide14A extends Component {
         super(props)
         this.mainArea = props.mainArea
         this.prev = <Slide13T mainArea={this.mainArea}></Slide13T>
-        this.next = null
+        this.next = <Slide15A prev={<Slide14A></Slide14A>} mainArea={this.mainArea}></Slide15A>
         this.title = 'Różnice między AG i metodami tradycyjnymi'
 
     }

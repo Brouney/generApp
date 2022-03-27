@@ -15,7 +15,7 @@ class BallTemperature {
         this.y = points[this.x]
 
         this.points = points
-        this.prevMax = -SimulatedAnnealing13_HEIGHT
+        this.prevMax = SimulatedAnnealing13_HEIGHT
         this.maxFound = true
 
         this.counterToEndSimulation = 0
