@@ -15,6 +15,7 @@ class BallTemperature {
         this.y = points[this.x]
 
         this.points = points
+        this.prevMax = -SimulatedAnnealing13_HEIGHT
         this.maxFound = true
     }
     
@@ -34,7 +35,12 @@ class BallTemperature {
         p5.fill('red')
         p5.stroke('red')
         p5.ellipse(this.x + SimulatedAnnealing13_CANVAS_OFFSET / 2, this.y-5 + SimulatedAnnealing13_CANVAS_OFFSET / 2, 20, 20)
+
         p5.textSize(30)
+        p5.text('Poprzednie maksimum: ' + Math.round(- this.prevMax * 100) / 100,
+        SimulatedAnnealing13_WIDTH / 2,
+        SimulatedAnnealing13_HEIGHT + SimulatedAnnealing13_CANVAS_OFFSET - 10)
+
         p5.text(Math.round(- this.y * 100) / 100, this.x + SimulatedAnnealing13_CANVAS_OFFSET / 4, this.y + SimulatedAnnealing13_CANVAS_OFFSET / 4) // this.y - aktualna wartosc temperatury kropki na wykresie
     }
     
@@ -64,10 +70,6 @@ class BallTemperature {
     }
     
     findHighestPoint() {
-        if (this.maxFound) {
-            return
-        }
-
         this.targetX = this.x
         for (let i = -SimulatedAnnealing13_WIDTH; i < SimulatedAnnealing13_WIDTH; i++) {
             let neighbourX = this.targetX + i
@@ -75,16 +77,17 @@ class BallTemperature {
 
             if (newTemperature > this.temperature) {
                 this.targetX = neighbourX
-
-                console.log(this.points[this.targetX])
             }
             else {
                 const prob = Math.exp(this.temperature - newTemperature)
                 if (Math.random(1) >= prob) {
                     this.targetX = neighbourX
-                    console.log(this.points[this.targetX])
                 }
             }
+        }
+
+        if (this.targetX != this.x) {
+            this.prevMax = this.points[this.targetX]
         }
     }
     
