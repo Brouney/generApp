@@ -3,6 +3,7 @@ import Slide14A from "./Slide14A";
 import SimulatedAnnealing13 from "./SimulatedAnnealing13";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import Slide16A from "./Slide16A";
 
 class Slide15A extends Component {
 
@@ -10,7 +11,7 @@ class Slide15A extends Component {
         super(props)
         this.mainArea = props.mainArea
         this.prev = <Slide14A mainArea={this.mainArea}></Slide14A>
-        this.next = null
+        this.next = <Slide16A mainArea={this.mainArea}></Slide16A>
         this.title = 'Elementarny algorytm genetyczny'
 
         this.navigationButtons = React.createRef()
