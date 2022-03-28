@@ -57,6 +57,7 @@ class Slide16A extends Component {
     handleStartStop = (simulationStopped) => { // name = (param) => 
         if (simulationStopped) {
             this.navigationButtons.current.enableNavigationButtons()
+            this.navigationButtons.current.enableStartStopButton()
             this.setState({start_spin:false})
             let tmp_przystosowanie = this.state.przystosowanie
             tmp_przystosowanie[this.state.obliczony_element] = this.state.wal_win
@@ -73,6 +74,7 @@ class Slide16A extends Component {
             
         }
         else {
+            this.navigationButtons.current.disableAllButtons()
             if(this.state.obliczony_element > 2){
                 this.setState({obliczony_element: 0})
                 this.setState({przystosowanie: [0,0,0]})
@@ -127,7 +129,7 @@ class Slide16A extends Component {
                 next={this.next}
                 currentSlideCounter={6}
                 slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
-                onStartStop={this.handleStartStop}
+                onStartStop={() => {this.handleStartStop(false)}}
             ></NavigationButtons>
         </div>
         )
