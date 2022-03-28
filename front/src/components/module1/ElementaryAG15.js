@@ -31,15 +31,18 @@ const ElementaryAG15_TEXT_OFFSET_X = ElementaryAG15_ALGO_RECTANGLE_WIDTH / 10
 const ElementaryAG15_TEXT_OFFSET_Y = ElementaryAG15_ALGO_RECTANGLE_HEIGHT / 2.5
 const ElementaryAG15_TEXT_ON_ALGO_STEPS = [
     `Wygenerowanie początkowej
-populacji bazowej B0`,
+populacji bazowej B\u2070`,
     `Reprodukcja osobników
-z populacji bazowej Bi
-do populacji tymczasowej Ti`,
-    `Krzyżowanie osobników w Ti
-z prawdopodobieństwem pc`,
-    `Mutacja osobników w Ti
-z prawdopodobieństwem pm`,
-    `Sukcesja Bi+1 := Ti, i := i++`,
+z populacji bazowej B\u2071
+do populacji tymczasowej T\u2071`,
+    `Krzyżowanie osobników w T\u2071
+z prawdopodobieństwem p\u2097`,
+    `Mutacja osobników w T\u2071
+z prawdopodobieństwem p\u2099`,
+    `            Sukcesja
+     B\u2071\u207A\u00B9 := T\u2071, i := i++`,
+
+    // test\u00B9\u2071\u00B3'
 ]
 
 function randomIntFromInterval(min, max) { // min and max included 
@@ -119,7 +122,7 @@ class ElementaryAG15 extends React.Component {
                     ElementaryAG15_ALGO_RECTANGLE_HEIGHT,
                     ElementaryAG15_ALGO_ROUND_CORNER)
             
-            
+            p5.strokeWeight(0)
             p5.stroke(0)
             p5.fill(0)
             p5.textSize(13)
