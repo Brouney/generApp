@@ -42,6 +42,11 @@ z prawdopodobieństwem pm`,
     `Sukcesja Bi+1 := Ti, i := i++`,
 ]
 
+function randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+  
+
 class Individual {
     constructor(x, y, label) {
         this.x = x
@@ -58,6 +63,7 @@ class ElementaryAG15 extends React.Component {
 
         this.isWindowCurrentStepMoving = false
         this.animationStepInPopulationEnded = false
+        this.simulationRunning = false // do komunikacji z guzikami na Slide15A
         
         for (let i = 0; i < ElementaryAG15_ALGO_STEPS_COUNT; ++i) {
             this.rectanglesYCoords[i] = ElementaryAG15_ALGO_RECTANGLE_START_POINT + ElementaryAG15_ALGO_RECTANGLE_HEIGHT * i + ElementaryAG15_ALGO_RECTANGLE_SPACING * i
@@ -67,12 +73,29 @@ class ElementaryAG15 extends React.Component {
 
         this.individuals = []
 
+        let individualNumber = 1
         for (let i = 0; i < ElementaryAG15_INDIVIDUALS_COUNT / 3; ++i) {     // 2 wiersze, 3 kolumny, 6 osobnikow
             for (let j = 0; j < ElementaryAG15_INDIVIDUALS_COUNT / 2; ++j) {
                 let individual = new Individual(ElementaryAG15_INDIVIDUALS_START_X + ElementaryAG15_INDIVIDUALS_WIDTH * j + ElementaryAG15_INDIVIDUALS_START_SPACING * j,
-                                                ElementaryAG15_INDIVIDUALS_START_Y + ElementaryAG15_INDIVIDUALS_HEIGHT * i + ElementaryAG15_INDIVIDUALS_START_SPACING * i,)
+                                                ElementaryAG15_INDIVIDUALS_START_Y + ElementaryAG15_INDIVIDUALS_HEIGHT * i + ElementaryAG15_INDIVIDUALS_START_SPACING * i,
+                                                individualNumber)
                 this.individuals.push(individual)
+                individualNumber++
             }
+        }
+    }
+
+    collissionDetected = (i1, i2) => {
+        if (
+                i1.x == i2.x + ElementaryAG15_INDIVIDUALS_WIDTH ||
+                i2.x == i1.x + ElementaryAG15_INDIVIDUALS_WIDTH ||
+                i1.y == i2.y + ElementaryAG15_INDIVIDUALS_HEIGHT ||
+                i2.y == i1.y + ElementaryAG15_INDIVIDUALS_HEIGHT
+        
+            )
+        {
+            console.log('collision detected!')
+            return true
         }
     }
 
@@ -84,6 +107,7 @@ class ElementaryAG15 extends React.Component {
     draw = (p5) => {
         p5.background('#454b51')
 
+        // zaokraglone prostokaty po lewej stronie bedace krokami algorytmu
         for (let i = 0; i < ElementaryAG15_ALGO_STEPS_COUNT; ++i) {
             p5.strokeWeight(0.5)
             p5.stroke(0)
@@ -95,8 +119,10 @@ class ElementaryAG15 extends React.Component {
                     ElementaryAG15_ALGO_RECTANGLE_HEIGHT,
                     ElementaryAG15_ALGO_ROUND_CORNER)
             
+            
             p5.stroke(0)
             p5.fill(0)
+            p5.textSize(13)
             p5.text(ElementaryAG15_TEXT_ON_ALGO_STEPS[i],
                     ElementaryAG15_ALGO_RECTANGLE_START_POINT + ElementaryAG15_TEXT_OFFSET_X,
                     this.rectanglesYCoords[i] + ElementaryAG15_TEXT_OFFSET_Y)
@@ -113,38 +139,55 @@ class ElementaryAG15 extends React.Component {
                 ElementaryAG15_ALGO_ROUND_CORNER)
 
 
-        if (this.rectanglesYCoords.includes(this.windowCurrentStepY)) { // szukaj od indeksu [1]
+        if (this.simulationRunning) { //jezeli SRODKOWY GUZIK NavigationButtons odpalony (czyli czerwony)
+            if (this.isWindowCurrentStepMoving) {
+                this.windowCurrentStepY += 2
+            }
+            else {
+                if (this.animationStepInPopulationEnded) {
+                    this.isWindowCurrentStepMoving = true
+                    this.windowCurrentStepY += 2
+                }
+                else { // trwa animacja populacji z prawej strony slajdu 2/11
+                    
+                    switch (this.windowCurrentStepY) {
+                        case this.rectanglesYCoords[0]: // 1 krok
+                            this.individuals[0].y++
+                            this.individuals[3].y--
+                            if (this.collissionDetected(this.individuals[0], this.individuals[3])) {
+                                this.animationStepInPopulationEnded = true
+                                this.windowCurrentStepY += 2
+                            }
+                            break
+                        case this.rectanglesYCoords[1]: // 2 krok
+                            this.individuals[0].x++
+                            this.individuals[1].x--
+                            if (this.collissionDetected(this.individuals[0], this.individuals[1])) {
+                                this.animationStepInPopulationEnded = true
+                                this.windowCurrentStepY += 2
+                            }
+                            break
+                        case this.rectanglesYCoords[2]: // 3 krok
+                            break
+                        case this.rectanglesYCoords[3]: // 4 krok
+                            break
+                        case this.rectanglesYCoords[4]: // 5 krok
+                            break
+                }
+
+                // if (false) { // warunek konca animacji kroku
+                //     this.animationStepInPopulationEnded = true
+                // }
+                }
+            }
+        }
+        
+        if (this.rectanglesYCoords.includes(this.windowCurrentStepY, 1)) { // szukaj od indeksu [1]
             this.isWindowCurrentStepMoving = false
             this.animationStepInPopulationEnded = false
         }
 
 
-        if (this.isWindowCurrentStepMoving) {
-            this.windowCurrentStepY++
-        }
-        else {
-            if (this.animationStepInPopulationEnded) {
-                this.isWindowCurrentStepMoving = true
-            }
-            else { // trwa animacja populacji z prawej strony slajdu 2/11
-
-                switch (this.windowCurrentStepY) {
-                    case this.rectanglesYCoords[0]: // 1 krok
-                        break
-                    case this.rectanglesYCoords[1]: // 2 krok
-                        break
-                    case this.rectanglesYCoords[2]: // 3 krok
-                        break
-                    case this.rectanglesYCoords[3]: // 4 krok
-                        break
-                    case this.rectanglesYCoords[4]: // 5 krok
-                        break
-                }
-                if (false) { // warunek konca animacji kroku
-                    this.animationStepInPopulationEnded = true
-                }
-            }
-        }
 
         // rysowanie osobnikow
         for (let i = 0; i < ElementaryAG15_INDIVIDUALS_COUNT; ++i) {
@@ -155,6 +198,14 @@ class ElementaryAG15 extends React.Component {
                     this.individuals[i].y,
                     ElementaryAG15_INDIVIDUALS_WIDTH,
                     ElementaryAG15_INDIVIDUALS_HEIGHT)
+
+            p5.strokeWeight(0)
+            p5.stroke(0)
+            p5.fill(0)
+            p5.textSize(40)
+            p5.text(this.individuals[i].label,
+                    this.individuals[i].x + ElementaryAG15_INDIVIDUALS_WIDTH / 2.5,
+                    this.individuals[i].y + ElementaryAG15_INDIVIDUALS_HEIGHT / 1.5)
         }
 
         p5.strokeWeight(5)

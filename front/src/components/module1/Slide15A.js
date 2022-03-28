@@ -21,10 +21,10 @@ class Slide15A extends Component {
 
     handleStartStop = (simulationStopped) => { // name = (param) => 
         if (simulationStopped) {
-            this.elementaryAG15.current.isWindowCurrentStepMoving = false
+            this.elementaryAG15.current.simulationRunning = false
         }
         else {
-            this.elementaryAG15.current.isWindowCurrentStepMoving = true
+            this.elementaryAG15.current.simulationRunning = true
         }
     }
     
