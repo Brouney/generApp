@@ -31,7 +31,9 @@ const data = [
     { option: '23', style: { backgroundColor: 'black', textColor: 'white' } },
     { option: '24', style: { backgroundColor: 'red', textColor: 'white' } },
     { option: '25', style: { backgroundColor: 'black', textColor: 'white' } },
-  ]
+]
+
+
 class Slide16A extends Component {
 
     constructor(props){
@@ -39,7 +41,7 @@ class Slide16A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide15A mainArea={this.mainArea}></Slide15A>
         this.next = null
-        this.title = 'Elementarny algorytm genetyczny - ruletka'
+        this.title = 'Podstawowe operacje algorytmów - selekcja (ruletkowa)'
         this.state = {
             start_spin: false,
             wal_win:0,
@@ -123,7 +125,7 @@ class Slide16A extends Component {
                 mainArea={this.mainArea}
                 prev={this.prev}
                 next={this.next}
-                currentSlideCounter={5}
+                currentSlideCounter={6}
                 slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                 onStartStop={this.handleStartStop}
             ></NavigationButtons>

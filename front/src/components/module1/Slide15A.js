@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import Slide14A from "./Slide14A";
-import SimulatedAnnealing13 from "./SimulatedAnnealing13";
-import NavigationButtons from "../templates/NavigationButtons";
-import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Slide16A from "./Slide16A";
+import NavigationButtons from "../templates/NavigationButtons";
+import ElementaryAG15 from "./ElementaryAG15";
+import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 
 class Slide15A extends Component {
 
@@ -31,7 +31,7 @@ class Slide15A extends Component {
         return(
         <div>
             <h1>{this.title}</h1>
-            TODO
+            <ElementaryAG15 />
 
             <NavigationButtons 
                 ref={this.navigationButtons}
