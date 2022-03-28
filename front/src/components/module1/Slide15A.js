@@ -15,23 +15,24 @@ class Slide15A extends Component {
         this.title = 'Elementarny algorytm genetyczny'
 
         this.navigationButtons = React.createRef()
+        this.elementaryAG15 = React.createRef()
     }
 
 
     handleStartStop = (simulationStopped) => { // name = (param) => 
         if (simulationStopped) {
-            this.navigationButtons.current.enableNavigationButtons()
+            this.elementaryAG15.current.isWindowCurrentStepMoving = false
         }
         else {
+            this.elementaryAG15.current.isWindowCurrentStepMoving = true
         }
-        
     }
     
     render() {
         return(
         <div>
             <h1>{this.title}</h1>
-            <ElementaryAG15 />
+            <ElementaryAG15 ref={this.elementaryAG15}/>
 
             <NavigationButtons 
                 ref={this.navigationButtons}
