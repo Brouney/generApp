@@ -26,6 +26,7 @@ const ElementaryAG15_INDIVIDUALS_START_Y = ElementaryAG15_ANIMATION_RECT_Y + 120
 const ElementaryAG15_INDIVIDUALS_START_SPACING = 50
 const ElementaryAG15_INDIVIDUALS_WIDTH = 100
 const ElementaryAG15_INDIVIDUALS_HEIGHT = ElementaryAG15_INDIVIDUALS_WIDTH
+let ElementaryAG15_INDIVIDUALS_TEXT_SIZE = 0
 
 const ElementaryAG15_TEXT_OFFSET_X = ElementaryAG15_ALGO_RECTANGLE_WIDTH / 10
 const ElementaryAG15_TEXT_OFFSET_Y = ElementaryAG15_ALGO_RECTANGLE_HEIGHT / 2.5
@@ -52,6 +53,8 @@ function randomIntFromInterval(min, max) { // min and max included
 
 class Individual {
     constructor(x, y, label) {
+        this.defaultX = x
+        this.defaultY = y
         this.x = x
         this.y = y
         this.label = label
@@ -86,6 +89,14 @@ class ElementaryAG15 extends React.Component {
                 individualNumber++
             }
         }
+
+        this.step1isTextIncreasing = true
+        this.textFlashingRepetitions = 0
+        this.step2LabelsReplaced = false
+    }
+
+    componentWillUnmount() { // ustawienie defaultowych zmiennych globalnych po przejsciu na inny slajd
+        ElementaryAG15_INDIVIDUALS_TEXT_SIZE = 0
     }
 
     collissionDetected = (i1, i2) => {
@@ -102,8 +113,47 @@ class ElementaryAG15 extends React.Component {
         }
     }
 
+    flashIndividualsLabels = () => {
+        if (30 <= ElementaryAG15_INDIVIDUALS_TEXT_SIZE && ElementaryAG15_INDIVIDUALS_TEXT_SIZE <= 40) {
+            if (ElementaryAG15_INDIVIDUALS_TEXT_SIZE == 40) {
+                this.step1isTextIncreasing = false
+                this.textFlashingRepetitions++ 
+            } else if (ElementaryAG15_INDIVIDUALS_TEXT_SIZE == 30) {
+                this.step1isTextIncreasing = true
+            }
+
+            if (this.step1isTextIncreasing) ElementaryAG15_INDIVIDUALS_TEXT_SIZE++
+            else ElementaryAG15_INDIVIDUALS_TEXT_SIZE--
+        }
+        else if (0 <= ElementaryAG15_INDIVIDUALS_TEXT_SIZE && ElementaryAG15_INDIVIDUALS_TEXT_SIZE < 40) {
+            ElementaryAG15_INDIVIDUALS_TEXT_SIZE++
+        }
+
+        if (this.textFlashingRepetitions == 3) { // WARUNEK PRZEJSCIA DO KOLEJNEGO KROKU
+            this.animationStepInPopulationEnded = true
+            this.windowCurrentStepY += 2 // zwiekszenie zeby switch wpadl do kolejnej etykiety case: this.rectanglesYCoords[x]
+            this.textFlashingRepetitions = 0
+        }
+    } 
+
+    replaceIndividualsLabels = () => {
+        while (ElementaryAG15_INDIVIDUALS_TEXT_SIZE != 0 && !this.step2LabelsReplaced) {
+            ElementaryAG15_INDIVIDUALS_TEXT_SIZE--
+            return
+        }
+
+        if (ElementaryAG15_INDIVIDUALS_TEXT_SIZE == 0) {
+            this.individuals.map(ind => ind.label = randomIntFromInterval(1, ElementaryAG15_INDIVIDUALS_COUNT))
+            this.step2LabelsReplaced = true
+            ElementaryAG15_INDIVIDUALS_TEXT_SIZE++
+        }
+
+        if (this.step2LabelsReplaced)
+            this.flashIndividualsLabels()
+    }
+
     setup = (p5, parentRef) => {
-		p5.createCanvas(ElementaryAG15_WIDTH, ElementaryAG15_HEIGHT).parent(parentRef)
+		p5.createCanvas(ElementaryAG15_WIDTH, ElementaryAG15_HEIGHT).parent(parentRef)   // WEBGL as 3rd param can be
         p5.frameRate(30)
 	}
 
@@ -155,20 +205,10 @@ class ElementaryAG15 extends React.Component {
                     
                     switch (this.windowCurrentStepY) {
                         case this.rectanglesYCoords[0]: // 1 krok
-                            this.individuals[0].y++
-                            this.individuals[3].y--
-                            if (this.collissionDetected(this.individuals[0], this.individuals[3])) {
-                                this.animationStepInPopulationEnded = true
-                                this.windowCurrentStepY += 2
-                            }
+                            this.flashIndividualsLabels()
                             break
                         case this.rectanglesYCoords[1]: // 2 krok
-                            this.individuals[0].x++
-                            this.individuals[1].x--
-                            if (this.collissionDetected(this.individuals[0], this.individuals[1])) {
-                                this.animationStepInPopulationEnded = true
-                                this.windowCurrentStepY += 2
-                            }
+                            this.replaceIndividualsLabels()
                             break
                         case this.rectanglesYCoords[2]: // 3 krok
                             break
@@ -205,10 +245,13 @@ class ElementaryAG15 extends React.Component {
             p5.strokeWeight(0)
             p5.stroke(0)
             p5.fill(0)
-            p5.textSize(40)
-            p5.text(this.individuals[i].label,
-                    this.individuals[i].x + ElementaryAG15_INDIVIDUALS_WIDTH / 2.5,
-                    this.individuals[i].y + ElementaryAG15_INDIVIDUALS_HEIGHT / 1.5)
+            p5.textSize(ElementaryAG15_INDIVIDUALS_TEXT_SIZE)
+
+            if (ElementaryAG15_INDIVIDUALS_TEXT_SIZE > 0) {
+                p5.text(this.individuals[i].label,
+                        this.individuals[i].x + ElementaryAG15_INDIVIDUALS_WIDTH / 2.5,
+                        this.individuals[i].y + ElementaryAG15_INDIVIDUALS_HEIGHT / 1.5)
+            }
         }
 
         p5.strokeWeight(5)
