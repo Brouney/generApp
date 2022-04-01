@@ -36,6 +36,15 @@ class NavigationButtons extends Component {
         this.startStopButton.disabled = ""
     }
 
+    enableAllButtons() {
+        this.simulationIsRunning = false;
+        this.previousButton.disabled = ""
+        this.nextButton.disabled = ""
+        this.startStopButton.innerHTML = PLAY_ICON
+        this.startStopButton.style.backgroundColor = GREEN_BOOTSTRAP
+        this.startStopButton.disabled = ""
+    }
+
     enableStartStopButton(){
         this.startStopButton.disabled = ""
     }

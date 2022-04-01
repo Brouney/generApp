@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import Slide15A from "./Slide15A";
-import NavigationButtons from "../templates/NavigationButtons";
+import NavigationButtonsAllDisabled from "../templates/NavigationButtonsAllDisabled";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import { Wheel } from 'react-custom-roulette'
 
@@ -56,8 +56,7 @@ class Slide16A extends Component {
 
     handleStartStop = (simulationStopped) => { // name = (param) => 
         if (simulationStopped) {
-            this.navigationButtons.current.enableNavigationButtons()
-            this.navigationButtons.current.enableStartStopButton()
+            this.navigationButtons.current.enableAllButtons()
             this.setState({start_spin:false})
             let tmp_przystosowanie = this.state.przystosowanie
             tmp_przystosowanie[this.state.obliczony_element] = this.state.wal_win
@@ -107,7 +106,7 @@ class Slide16A extends Component {
                 
             </div>
             <div>
-                <table style={{textAlign:"center"}}>
+                <table style={{textAlign:"center"}} class="styled-table" >
                     <tr>
                         <td>Obiekt</td> <td>Przystosowanie</td> <td>%</td>
                     </tr>
@@ -122,7 +121,7 @@ class Slide16A extends Component {
                     </tr>
                 </table>
             </div>
-            <NavigationButtons 
+            <NavigationButtonsAllDisabled 
                 ref={this.navigationButtons}
                 mainArea={this.mainArea}
                 prev={this.prev}
@@ -130,7 +129,7 @@ class Slide16A extends Component {
                 currentSlideCounter={6}
                 slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                 onStartStop={() => {this.handleStartStop(false)}}
-            ></NavigationButtons>
+            ></NavigationButtonsAllDisabled>
         </div>
         )
     }
