@@ -13,6 +13,10 @@ class Slide17A extends Component {
         this.next = null
         this.title = 'Krzyżowanie proste (jednopunktowe) '
         this.navigationButtons = React.createRef()
+
+        this.state = {
+            cross: 3
+        }
     }
 
     handleStartStop = (simulationStopped) => { // name = (param) => 
@@ -25,6 +29,13 @@ class Slide17A extends Component {
         }
         
     }
+
+    changeValueInComponent = (evt) => {
+        let value = evt.target.value;
+        value = isNaN(value) ? 6 : value;
+        this.setState({cross: value});
+    }
+
     render() {
         return(
             <div>
@@ -38,6 +49,43 @@ class Slide17A extends Component {
                 <h2>
                     • Jeśli miejsce krzyżowania to n, wymieniamy miejscami bity od pozycji n+1 do końca ciągu
                 </h2>
+                <input style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_slide17A" value={this.state.cross} onChange={evt =>this.changeValueInComponent(evt)} ></input>
+                <table  >
+                    <tr >
+                        <td style={{fontSize:"50px"}}>A1 =</td> 
+                        <td style={{fontSize:"50px", color:"blueviolet"}}>1</td> 
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
+                    </tr>
+                    <tr>
+                        <td style={{fontSize:"50px"}}>A2 =  </td> 
+                        <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                    </tr>
+                    <tr >
+                        <td style={{fontSize:"50px"}}>A`1=</td>
+                         {this.state.cross >= 1?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                         {this.state.cross >= 2?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                         {this.state.cross >= 3?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                         {this.state.cross >= 4?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                         {this.state.cross >= 5?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                        
+                    </tr>
+                    <tr>
+                        <td style={{fontSize:"50px"}}>A`2=  </td> 
+                        {this.state.cross >= 1?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.cross >= 2?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.cross >= 3?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.cross >= 4?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.cross >= 5?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                         
+                    </tr>
+                </table>
                 <NavigationButtons
                     ref={this.navigationButtons}
                     mainArea={this.mainArea} 
