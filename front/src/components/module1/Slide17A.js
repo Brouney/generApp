@@ -54,35 +54,35 @@ class Slide17A extends Component {
                     <tr >
                         <td style={{fontSize:"50px"}}>A1 =</td> 
                         <td style={{fontSize:"50px", color:"blueviolet"}}>1</td> 
-                         <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
-                         <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>0</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>0</td>
                          <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
                          <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
                     </tr>
                     <tr>
                         <td style={{fontSize:"50px"}}>A2 =  </td> 
                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>1</td>
                          <td style={{fontSize:"50px", color:"coral"}}>0</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>1</td>
                          <td style={{fontSize:"50px", color:"coral"}}>0</td>
                     </tr>
                     <tr >
                         <td style={{fontSize:"50px"}}>A`1=</td>
-                         {this.state.cross >= 1?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
-                         {this.state.cross >= 2?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
-                         {this.state.cross >= 3?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                         {this.state.cross >= 1?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
+                         {this.state.cross >= 2?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                         {this.state.cross >= 3?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
                          {this.state.cross >= 4?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
-                         {this.state.cross >= 5?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                         {this.state.cross >= 5?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
                         
                     </tr>
                     <tr>
                         <td style={{fontSize:"50px"}}>A`2=  </td> 
-                        {this.state.cross >= 1?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
-                        {this.state.cross >= 2?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
-                        {this.state.cross >= 3?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.cross >= 1?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.cross >= 2?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
+                        {this.state.cross >= 3?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
                         {this.state.cross >= 4?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
-                        {this.state.cross >= 5?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.cross >= 5?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
                          
                     </tr>
                 </table>
