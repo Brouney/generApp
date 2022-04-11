@@ -7,31 +7,31 @@ import Slide17A from "./Slide17A";
 
 const data = [
     { option: '0', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '0', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '0', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '0', style: { backgroundColor: 'red', textColor: 'white' } },
+    { option: '0', style: { backgroundColor: 'red', textColor: 'white' } },
     { option: '1', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '2', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '3', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '4', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '5', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '6', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '7', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '8', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '9', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '10', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '11', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '12', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '13', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '14', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '15', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '16', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '17', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '18', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '19', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '20', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '21', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '22', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '23', style: { backgroundColor: 'black', textColor: 'white' } },
-    { option: '24', style: { backgroundColor: 'red', textColor: 'white' } },
-    { option: '25', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '1', style: { backgroundColor: 'black', textColor: 'white' } },
+    { option: '2', style: { backgroundColor: 'crimson', textColor: 'white' } },
+    { option: '3', style: { backgroundColor: 'DarkBlue', textColor: 'white' } },
+    { option: '3', style: { backgroundColor: 'DarkBlue', textColor: 'white' } },
+    { option: '3', style: { backgroundColor: 'DarkBlue', textColor: 'white' } },
+    { option: '4', style: { backgroundColor: 'DarkGreen', textColor: 'white' } },
+    { option: '4', style: { backgroundColor: 'DarkGreen', textColor: 'white' } },
+    { option: '4', style: { backgroundColor: 'DarkGreen', textColor: 'white' } },
+    { option: '4', style: { backgroundColor: 'DarkGreen', textColor: 'white' } },
+    { option: '5', style: { backgroundColor: 'DarkOrchid', textColor: 'white' } },
+    { option: '5', style: { backgroundColor: 'DarkOrchid', textColor: 'white' } },
+    { option: '5', style: { backgroundColor: 'DarkOrchid', textColor: 'white' } },
+    { option: '6', style: { backgroundColor: 'DarkSlateBlue', textColor: 'white' } },
+    { option: '6', style: { backgroundColor: 'DarkSlateBlue', textColor: 'white' } },
+    { option: '7', style: { backgroundColor: 'OrangeRed', textColor: 'white' } },
+    { option: '7', style: { backgroundColor: 'OrangeRed', textColor: 'white' } },
+    { option: '7', style: { backgroundColor: 'OrangeRed', textColor: 'white' } },
+    { option: '7', style: { backgroundColor: 'OrangeRed', textColor: 'white' } },
+    { option: '7', style: { backgroundColor: 'OrangeRed', textColor: 'white' } },
+    { option: '7', style: { backgroundColor: 'OrangeRed', textColor: 'white' } },
 ]
 
 
@@ -46,9 +46,9 @@ class Slide16A extends Component {
         this.state = {
             start_spin: false,
             wal_win:0,
-            przystosowanie:[0,0,0],
-            procent:[0,0,0],
-            obliczony_element: 0
+            przystosowanie:[140,56,28,84,112,82,55,168],
+            procent:[20,8.3,4,12,16,11.7,7.8,24 ],
+            obliczony_element: -1
         }
         this.navigationButtons = React.createRef()
         this.wheel = React.createRef()
@@ -59,27 +59,29 @@ class Slide16A extends Component {
         if (simulationStopped) {
             this.navigationButtons.current.enableAllButtons()
             this.setState({start_spin:false})
-            let tmp_przystosowanie = this.state.przystosowanie
-            tmp_przystosowanie[this.state.obliczony_element] = this.state.wal_win
-            this.setState({przystosowanie: tmp_przystosowanie})
-            if(this.state.obliczony_element > 1){
-                let suma = this.state.przystosowanie.reduce((partialSum, a) => partialSum + a, 0)
-                let procenty = [0,0,0]
-                for (var i = 0; i < 3; i++) {
-                    procenty[i] = (this.state.przystosowanie[i]/suma)*100
-                 }
-                this.setState({procent: procenty})
-            }
-            this.setState({obliczony_element: this.state.obliczony_element+1})
+           this.setState({obliczony_element:this.state.wal_win})
+           console.log(this.state.obliczony_element)
+            // tmp_przystosowanie[this.state.obliczony_element] = this.state.wal_win
+            // this.setState({przystosowanie: tmp_przystosowanie})
+            // if(this.state.obliczony_element > 1){
+            //     let suma = this.state.przystosowanie.reduce((partialSum, a) => partialSum + a, 0)
+            //     let procenty = [0,0,0]
+            //     for (var i = 0; i < 3; i++) {
+            //         procenty[i] = (this.state.przystosowanie[i]/suma)*100
+            //      }
+            //     this.setState({procent: procenty})
+            // }
+            // this.setState({obliczony_element: this.state.obliczony_element+1})
             
         }
         else {
             this.navigationButtons.current.disableAllButtons()
-            if(this.state.obliczony_element > 2){
-                this.setState({obliczony_element: 0})
-                this.setState({przystosowanie: [0,0,0]})
-                this.setState({procent: [0,0,0]})
-            }
+            this.setState({obliczony_element: -1})
+            // if(this.state.obliczony_element > 2){
+            //     this.setState({obliczony_element: 0})
+            //     this.setState({przystosowanie: [0,0,0]})
+            //     this.setState({procent: [0,0,0]})
+            // }
             const newPrizeNumber = Math.floor(Math.random() * data.length)
             console.log(newPrizeNumber)
             this.setState({wal_win: newPrizeNumber})
@@ -111,15 +113,70 @@ class Slide16A extends Component {
                     <tr>
                         <td>Obiekt</td> <td>Przystosowanie</td> <td>%</td>
                     </tr>
+                    {
+                        this.state.obliczony_element>-1 && this.state.obliczony_element<5 ? 
+                        <tr style={{backgroundColor:'red'}}>
+                            <td>Obiekt 0  </td> <td>{this.state.przystosowanie[0]}</td> <td>{this.state.procent[0]}</td>
+                        </tr>:
+                        <tr style={{}}>
+                        <td>Obiekt 0  </td> <td>{this.state.przystosowanie[0]}</td> <td>{this.state.procent[0]}</td>
+                        </tr>
+                    }
+                    {this.state.obliczony_element>=5 && this.state.obliczony_element<7 ? 
+                    <tr style={{backgroundColor:'red'}}>
+                    <td>Obiekt 1  </td> <td>{this.state.przystosowanie[1]}</td> <td>{this.state.procent[1]}</td>
+                    </tr>:
                     <tr>
-                        <td>Obiekt 1  </td> <td>{this.state.przystosowanie[0]}</td> <td>{this.state.procent[0]}</td>
-                    </tr>
+                        <td>Obiekt 1  </td> <td>{this.state.przystosowanie[1]}</td> <td>{this.state.procent[1]}</td>
+                    </tr>}
+
+                    {this.state.obliczony_element>=7 && this.state.obliczony_element<8 ?
+                    <tr style={{backgroundColor:'red'}}>
+                    <td>Obiekt 2  </td> <td>{this.state.przystosowanie[2]}</td> <td>{this.state.procent[2]}</td>
+                    </tr>:
                     <tr>
-                        <td>Obiekt 2  </td> <td>{this.state.przystosowanie[1]}</td> <td>{this.state.procent[1]}</td>
-                    </tr>
+                        <td>Obiekt 2  </td> <td>{this.state.przystosowanie[2]}</td> <td>{this.state.procent[2]}</td>
+                    </tr>}
+
+                    {this.state.obliczony_element>=8 && this.state.obliczony_element<11 ?
+                    <tr style={{backgroundColor:'red'}}>
+                    <td>Obiekt 3  </td> <td>{this.state.przystosowanie[3]}</td> <td>{this.state.procent[3]}</td>
+                    </tr>:
                     <tr>
-                        <td>Obiekt 3  </td> <td>{this.state.przystosowanie[2]}</td> <td>{this.state.procent[2]}</td>
-                    </tr>
+                        <td>Obiekt 3  </td> <td>{this.state.przystosowanie[3]}</td> <td>{this.state.procent[3]}</td>
+                    </tr>}
+
+                    {this.state.obliczony_element>=11 && this.state.obliczony_element<15 ?
+                    <tr style={{backgroundColor:'red'}}>
+                    <td>Obiekt 4  </td> <td>{this.state.przystosowanie[4]}</td> <td>{this.state.procent[4]}</td>
+                    </tr>:
+                    <tr>
+                        <td>Obiekt 4  </td> <td>{this.state.przystosowanie[4]}</td> <td>{this.state.procent[4]}</td>
+                    </tr>}
+
+                    {this.state.obliczony_element>=15 && this.state.obliczony_element<18 ?
+                    <tr style={{backgroundColor:'red'}}>
+                    <td>Obiekt 5  </td> <td>{this.state.przystosowanie[5]}</td> <td>{this.state.procent[5]}</td>
+                    </tr>:
+                    <tr>
+                        <td>Obiekt 5  </td> <td>{this.state.przystosowanie[5]}</td> <td>{this.state.procent[5]}</td>
+                    </tr>}
+
+                    {this.state.obliczony_element>=18 && this.state.obliczony_element<20 ?
+                    <tr style={{backgroundColor:'red'}}>
+                    <td>Obiekt 6  </td> <td>{this.state.przystosowanie[6]}</td> <td>{this.state.procent[6]}</td>
+                    </tr>:
+                    <tr>
+                        <td>Obiekt 6 </td> <td>{this.state.przystosowanie[6]}</td> <td>{this.state.procent[6]}</td>
+                    </tr>}
+
+                    {this.state.obliczony_element>=20 && this.state.obliczony_element<25 ?
+                    <tr style={{backgroundColor:'red'}}>
+                    <td>Obiekt 7  </td> <td>{this.state.przystosowanie[7]}</td> <td>{this.state.procent[7]}</td>
+                    </tr>:
+                    <tr>
+                        <td>Obiekt 7  </td> <td>{this.state.przystosowanie[7]}</td> <td>{this.state.procent[7]}</td>
+                    </tr>}
                 </table>
             </div>
             <NavigationButtonsAllDisabled 
