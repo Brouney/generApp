@@ -58,10 +58,20 @@ class Slide17A extends Component {
                          <td style={{fontSize:"50px", color:"blueviolet"}}>0</td>
                          <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
                          <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>0</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>0</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>0</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
+                         <td style={{fontSize:"50px", color:"blueviolet"}}>1</td>
                     </tr>
                     <tr>
                         <td style={{fontSize:"50px"}}>A2 =  </td> 
                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>1</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>1</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
                          <td style={{fontSize:"50px", color:"coral"}}>1</td>
                          <td style={{fontSize:"50px", color:"coral"}}>0</td>
                          <td style={{fontSize:"50px", color:"coral"}}>1</td>
@@ -74,6 +84,12 @@ class Slide17A extends Component {
                          {this.state.cross >= 3?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
                          {this.state.cross >= 4?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
                          {this.state.cross >= 5?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
+
+                         {this.state.cross >= 6?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
+                         {this.state.cross >= 7?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                         {this.state.cross >= 8?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
+                         {this.state.cross >= 9?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
+                         {this.state.cross >= 10?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
                         
                     </tr>
                     <tr>
@@ -83,6 +99,12 @@ class Slide17A extends Component {
                         {this.state.cross >= 3?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
                         {this.state.cross >= 4?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
                         {this.state.cross >= 5?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+
+                        {this.state.cross >= 6?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
+                        {this.state.cross >= 7?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
+                        {this.state.cross >= 8?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
+                        {this.state.cross >= 9?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.cross >= 10?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
                          
                     </tr>
                 </table>
