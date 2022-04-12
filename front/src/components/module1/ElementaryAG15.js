@@ -1,5 +1,6 @@
 import React from 'react'
 import Sketch from 'react-p5'
+import MySlider from '../common/MySlider'
 
 // slajd 2/11
 
@@ -46,10 +47,33 @@ z prawdopodobieństwem p\u2099`,
     // test\u00B9\u2071\u00B3'
 ]
 
+const ElementaryAG15_POSSIBLE_CROSSOVERS = [
+    [0,1],
+    [0,1,4,5],
+    [0,1,3,4],
+    [0,1,2,5,3,4],
+    [1,2],
+    [1,2,3,4],
+    [0,3,4,5],
+    [1,4],
+    [2,5],
+    [2,5,3,4],
+]
+
+const ElementaryAG15_MUTATION_PROBABILITY = 0.03
+
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
-  
+
+function probability(n) {
+    return !!n && Math.random() <= n;
+}
+
+function sleep(time){
+    return new Promise((resolve)=>setTimeout(resolve,time)
+  )
+}
 
 class Individual {
     constructor(x, y, label) {
@@ -58,6 +82,7 @@ class Individual {
         this.x = x
         this.y = y
         this.label = label
+        this.labelColour = [0,0,0]
     }
 }
 
@@ -93,10 +118,29 @@ class ElementaryAG15 extends React.Component {
         this.step1isTextIncreasing = true
         this.textFlashingRepetitions = 0
         this.step2LabelsReplaced = false
+
+        this.step3moveIndividualsToStartPosition = false
+        this.step3crossoverDrawingTookPlace = false
+        this.step3crossoverChosenOption = false
     }
 
     componentWillUnmount() { // ustawienie defaultowych zmiennych globalnych po przejsciu na inny slajd
         ElementaryAG15_INDIVIDUALS_TEXT_SIZE = 0
+    }
+
+    changeLabelsColours() {
+        for (let i = 0; i < ElementaryAG15_INDIVIDUALS_COUNT; ++i) {
+            if (probability(ElementaryAG15_MUTATION_PROBABILITY)) {
+                this.individuals[i].labelColour[0] = randomIntFromInterval(0, 254)
+                this.individuals[i].labelColour[1] = randomIntFromInterval(0, 254)
+                this.individuals[i].labelColour[2] = randomIntFromInterval(0, 254)
+            }
+
+        }
+        this.animationStepInPopulationEnded = true
+        this.windowCurrentStepY += 2 // zwiekszenie zeby switch wpadl do kolejnej etykiety case: this.rectanglesYCoords[x]
+        this.textFlashingRepetitions = 0
+
     }
 
     collissionDetected = (i1, i2) => {
@@ -110,6 +154,72 @@ class ElementaryAG15 extends React.Component {
         {
             console.log('collision detected!')
             return true
+        }
+    }
+
+    makeCrossover = (idx1, idx2) => {
+        if (this.individuals[idx1].y == this.individuals[idx2].y) { // kolizja w poziomie
+            if (this.collissionDetected(this.individuals[idx1], this.individuals[idx2])) {
+                this.individuals[idx1].label += 1
+                this.individuals[idx1].labelColour = this.individuals[idx2].labelColour
+                this.individuals[idx2].label += 1
+                this.step3moveIndividualsToStartPosition = true;
+            }
+
+            if (this.step3moveIndividualsToStartPosition) {
+                this.individuals[idx1].x--
+                this.individuals[idx2].x++
+            }
+            else {
+                this.individuals[idx1].x++
+                this.individuals[idx2].x--
+            }
+
+            if (this.individuals[idx1].x == this.individuals[idx1].defaultX) { // WARUNEK PRZEJSCIA DO KOLEJNEGO KROKU
+                this.animationStepInPopulationEnded = true
+                this.windowCurrentStepY += 2 // zwiekszenie zeby switch wpadl do kolejnej etykiety case: this.rectanglesYCoords[x]
+                this.textFlashingRepetitions = 0
+                this.step3moveIndividualsToStartPosition = false
+                this.step3crossoverDrawingTookPlace = false
+            }
+        }
+        else if (this.individuals[idx1].x == this.individuals[idx2].x) {// kolizja w pionie
+            if (this.collissionDetected(this.individuals[idx1], this.individuals[idx2])) {
+                this.individuals[idx1].label += 1
+                this.individuals[idx2].labelColour = this.individuals[idx1].labelColour
+                this.individuals[idx2].label += 1
+                this.step3moveIndividualsToStartPosition = true;
+            }
+
+            if (this.step3moveIndividualsToStartPosition) {
+                this.individuals[idx1].y--
+                this.individuals[idx2].y++
+            }
+            else {
+                this.individuals[idx1].y++
+                this.individuals[idx2].y--
+            }
+
+            if (this.individuals[idx1].y == this.individuals[idx1].defaultY) { // WARUNEK PRZEJSCIA DO KOLEJNEGO KROKU
+                this.animationStepInPopulationEnded = true
+                this.windowCurrentStepY += 2 // zwiekszenie zeby switch wpadl do kolejnej etykiety case: this.rectanglesYCoords[x]
+                this.textFlashingRepetitions = 0
+                this.step3moveIndividualsToStartPosition = false
+                this.step3crossoverDrawingTookPlace = false
+            }
+        }
+        else { // w przypadku zawieszenia sie algorytmu przechodzimy do kolejnego kroku
+            this.animationStepInPopulationEnded = true
+            this.windowCurrentStepY += 2 // zwiekszenie zeby switch wpadl do kolejnej etykiety case: this.rectanglesYCoords[x]
+            this.textFlashingRepetitions = 0
+            this.step3moveIndividualsToStartPosition = false
+            this.step3crossoverDrawingTookPlace = false
+
+            //przywrocenie defaultowych pozycji osobnikow
+            for (let i = 0; i < ElementaryAG15_INDIVIDUALS_COUNT; ++i) {
+                this.individuals[i].x = this.individuals[i].defaultX
+                this.individuals[i].y = this.individuals[i].defaultY
+            }
         }
     }
 
@@ -129,7 +239,7 @@ class ElementaryAG15 extends React.Component {
             ElementaryAG15_INDIVIDUALS_TEXT_SIZE++
         }
 
-        if (this.textFlashingRepetitions == 3) { // WARUNEK PRZEJSCIA DO KOLEJNEGO KROKU
+        if (this.textFlashingRepetitions == 1) { // WARUNEK PRZEJSCIA DO KOLEJNEGO KROKU
             this.animationStepInPopulationEnded = true
             this.windowCurrentStepY += 2 // zwiekszenie zeby switch wpadl do kolejnej etykiety case: this.rectanglesYCoords[x]
             this.textFlashingRepetitions = 0
@@ -211,14 +321,54 @@ class ElementaryAG15 extends React.Component {
                             this.replaceIndividualsLabels()
                             break
                         case this.rectanglesYCoords[2]: // 3 krok
+                            if (!this.step3crossoverDrawingTookPlace) {
+                                this.step3crossoverChosenOption = randomIntFromInterval(0, ElementaryAG15_POSSIBLE_CROSSOVERS.length-1)
+                                this.step3crossoverDrawingTookPlace = true
+                            }
+                            switch (ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption].length) {
+                                case 2:
+                                    this.makeCrossover(ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][0],
+                                                       ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][1])
+                                    break
+                                case 4:
+                                    this.makeCrossover(ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][0],
+                                                        ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][1])
+                                    this.makeCrossover(ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][2],
+                                                       ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][3])
+                                    break
+                                case 6:
+                                    this.makeCrossover(ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][0],
+                                                        ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][1])
+                                    this.makeCrossover(ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][2],
+                                        ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][3])
+                                    this.makeCrossover(ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][4],
+                                            ElementaryAG15_POSSIBLE_CROSSOVERS[this.step3crossoverChosenOption][5])
+                                    break
+                            }
                             break
-                        case this.rectanglesYCoords[3]: // 4 krok
+                        case this.rectanglesYCoords[3]: // 4 krok mutacja
+                            // this.changeLabelsColours()
+                            sleep(200).then(()=>{
+                                for (let i = 0; i < ElementaryAG15_INDIVIDUALS_COUNT; ++i) {
+                                    if (probability(ElementaryAG15_MUTATION_PROBABILITY)) {
+                                        this.individuals[i].labelColour[0] = randomIntFromInterval(0, 254)
+                                        this.individuals[i].labelColour[1] = randomIntFromInterval(0, 254)
+                                        this.individuals[i].labelColour[2] = randomIntFromInterval(0, 254)
+                                    }
+                                }
+                                this.animationStepInPopulationEnded = true
+                                this.textFlashingRepetitions = 0
+                            })
+                            if (this.animationStepInPopulationEnded) {
+                                this.windowCurrentStepY += 2 // zwiekszenie zeby switch wpadl do kolejnej etykiety case: this.rectanglesYCoords[x]
+                            }
                             break
-                        case this.rectanglesYCoords[4]: // 5 krok
+                        case this.rectanglesYCoords[4]: // 5 krok - powrot do kroku 2
+                            this.windowCurrentStepY = this.rectanglesYCoords[1]
                             break
                 }
 
-                // if (false) { // warunek konca animacji kroku
+                // if (false) { // warunek konca animacji danego kroku
                 //     this.animationStepInPopulationEnded = true
                 // }
                 }
@@ -244,7 +394,7 @@ class ElementaryAG15 extends React.Component {
 
             p5.strokeWeight(0)
             p5.stroke(0)
-            p5.fill(0)
+            p5.fill(this.individuals[i].labelColour[0], this.individuals[i].labelColour[1], this.individuals[i].labelColour[2])
             p5.textSize(ElementaryAG15_INDIVIDUALS_TEXT_SIZE)
 
             if (ElementaryAG15_INDIVIDUALS_TEXT_SIZE > 0) {
@@ -254,9 +404,10 @@ class ElementaryAG15 extends React.Component {
             }
         }
 
+        // przezroczysty prostokat - zielone okno pokazujace ktory teraz krok algorytmu jest pokazywany
         p5.strokeWeight(5)
         p5.stroke(0, 255, 0)
-        p5.noFill()  // przezroczysty prostokat - zielone okno pokazujace ktory teraz krok algorytmu jest pokazywany
+        p5.noFill()  
         p5.rect(ElementaryAG15_ALGO_RECTANGLE_START_POINT,
             this.windowCurrentStepY,
             ElementaryAG15_ALGO_RECTANGLE_WIDTH,
