@@ -187,8 +187,8 @@ class TemperatureChart {
 
         // podpis osi wykresu
         p5.fill(255, 255, 255)
-        p5.text('T', SimulatedAnnealing13_CANVAS_OFFSET / 4, SimulatedAnnealing13_HEIGHT - SimulatedAnnealing13_CANVAS_OFFSET / 0.6 + 5) 
-        p5.text('t [s]', SimulatedAnnealing13_WIDTH + SimulatedAnnealing13_CANVAS_OFFSET / 1.5, SimulatedAnnealing13_CANVAS_OFFSET * 2.5)
+        p5.text('f(x)', SimulatedAnnealing13_CANVAS_OFFSET / 3.4, SimulatedAnnealing13_HEIGHT - SimulatedAnnealing13_CANVAS_OFFSET / 0.6 + 5) 
+        p5.text('x', SimulatedAnnealing13_WIDTH + SimulatedAnnealing13_CANVAS_OFFSET / 1.4, SimulatedAnnealing13_CANVAS_OFFSET * 2.5)
     }
 }
   
@@ -245,6 +245,8 @@ class SimulatedAnnealing13 extends React.Component {
         <div>
             Symulowane wyżarzanie
             <Sketch setup={this.setup} draw={this.draw} keyPressed={this.keyPressed}/>
+
+            <h1>TODO: opisać algorytm</h1>
         </div>
         )
     }
