@@ -8,6 +8,7 @@ class MySlider extends React.Component {
         super(props)
         this.min = props.min;
         this.max = props.max;
+        this.defaultValue = props.defaultValue ? props.defaultValue : 0
         this.sliderSize = props.sliderSize;
         this.step = props.step;
         this.text = props.text;
@@ -15,7 +16,7 @@ class MySlider extends React.Component {
         this.numberField = React.createRef();
     }
   state = {
-    inputValue: this.min,
+    inputValue: this.min ? this.min : this.defaultValue,
   };
 
   onChange = value => {
@@ -42,6 +43,7 @@ class MySlider extends React.Component {
           <Slider
             min={this.min}
             max={this.max}
+            defaultValue={this.defaultValue}
             onChange={this.onChange}
             value={inputValue}
             step={this.step ? this.step : 1}
@@ -51,6 +53,7 @@ class MySlider extends React.Component {
           <InputNumber
             min={this.min}
             max={this.max}
+            defaultValue={this.defaultValue}
             style={{ margin: '0 16px' }}
             value={typeof inputValue === 'number' ? inputValue : this.state.inputValue}
             onChange={this.onChange}

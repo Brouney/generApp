@@ -1,0 +1,28 @@
+#title {
+text-align: center;
+font-family: arial, sans-serif;
+}
+
+#individuals {
+text-align: center;
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+border-collapse: collapse;
+border: 3px solid #ddd;
+width: 100px;
+}
+
+#individuals td, #individuals th {
+border: 1px solid #ddd;
+padding: 2px;
+}
+
+#individuals tr:nth-child(even){background-color: #144444;}
+
+#individuals th {
+padding-top: 12px;
+padding-bottom: 12px;
+text-align: center;
+background-color: #4CAF50;
+color: white;
+}
+  

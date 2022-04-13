@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { MODULE_1_SLIDES_COUNT } from "../templates/ListExercisePanel";
 import NavigationButtons from "../templates/NavigationButtons";
 import Slide16A from "./Slide16A";
+import Slide18A from "./Slide18A";
 
 
 class Slide17A extends Component {
@@ -10,7 +11,7 @@ class Slide17A extends Component {
         super(props);
         this.mainArea = props.mainArea
         this.prev = <Slide16A mainArea={this.mainArea}></Slide16A>
-        this.next = null
+        this.next = <Slide18A mainArea={this.mainArea}></Slide18A>
         this.title = 'Krzyżowanie proste (jednopunktowe) '
         this.navigationButtons = React.createRef()
 
