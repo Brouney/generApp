@@ -7,7 +7,6 @@ import '../../css/Slide18A.css';
 
 
 // TODO: jak liczyc dostosowanie
-// TODO: handlowanie buttonow operatorow
 // TODO: rysowanie wykresu?
 // TODO: dodac wzory z twierdzenia schematow pod tabelkami
 
@@ -19,6 +18,10 @@ const Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT = 6
 
 function randomBinary(min, max) {
     return Math.floor(min + Math.random() * (max + 1 - min)).toString(2);
+}
+
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
 }
 
 class Slide18A extends Component {
@@ -37,7 +40,13 @@ class Slide18A extends Component {
         this.generateButton = React.createRef(); 
         this.reproductionButton = React.createRef(); 
         this.crossoverButton = React.createRef(); 
-        this.mutationButton = React.createRef(); 
+        this.mutationButton = React.createRef();
+
+        this.crossoverIndividualsIDs1 = React.createRef(); 
+        this.crossoverIndividualsIDs2 = React.createRef(); 
+        this.crosspoint = React.createRef(); 
+        this.mutationBit = React.createRef(); 
+        this.mutationIndividual = React.createRef(); 
 
 
 
@@ -99,6 +108,12 @@ class Slide18A extends Component {
         });
     }
 
+    highlightIndividuals = (e) =>  {
+        this.setState({
+            individuals: this.state.individuals,
+        });
+    }
+
     reproduce = () => {
         let newIndividuals = []
         for (let i = 0; i < this.state.individuals.length; ++i) {
@@ -133,11 +148,117 @@ class Slide18A extends Component {
     }
 
     crossover = () => {
+        let LP1 = this.crossoverIndividualsIDs1.value; // LP w tabeli liczone od jeden, indeksy this.state.individuals liczone od zera
+        let LP2 = this.crossoverIndividualsIDs2.value;
 
+        if (LP1 == LP2) {
+            alert("Nie można skrzyżować osobnika ze samym sobą")
+        }
+
+        let individual_1 = null 
+        let individual_2 = null 
+        let crosspoint = this.crosspoint.value; // TODO check if crosspoint good minus 1
+        let copyIndividuals = [...this.state.individuals]
+
+        for (let i = 0; i < copyIndividuals.length; ++i) {
+            if (LP1 == copyIndividuals[i]['LP']) {
+                individual_1 = copyIndividuals[i]['Osobnik']
+            }
+            if (LP2 == copyIndividuals[i]['LP']) {
+                individual_2 = copyIndividuals[i]['Osobnik']
+            }
+        }
+
+        // console.log(individual_1, individual_2)
+
+        for (let i = 0; i < this.state.sliderCodeLengthValue; i++) {
+			if (i >= crosspoint) {
+				let bit = individual_1[i]
+                individual_1 = individual_1.replaceAt(i, individual_2[i])
+                individual_2 = individual_2.replaceAt(i, bit)
+			}
+			else {
+				// geny takie same jak u rodzicow
+			}
+		}
+
+        // console.log(individual_1, individual_2)
+
+        for (let i = 0; i < copyIndividuals.length; ++i) {
+            if (LP1 == copyIndividuals[i]['LP']) {
+                copyIndividuals[i]['Osobnik'] = individual_1 
+            }
+            if (LP2 == copyIndividuals[i]['LP']) {
+                copyIndividuals[i]['Osobnik'] = individual_2
+            }
+        }
+
+        let sumFitness = 0
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            copyIndividuals[i]['Przystosowanie'] = parseInt(copyIndividuals[i]['Osobnik'], 2) / 2**this.state.sliderCodeLengthValue
+            sumFitness += copyIndividuals[i]['Przystosowanie']
+        }
+
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / 2**this.state.sliderCodeLengthValue  // TODO: czy dobrze policzony % przystosowania
+        }
+
+        this.computeSchemas(copyIndividuals)
+
+        // workaround na usuniecie smieci po poprzedniej populacji
+        let sliderCodeLengthValue = this.state.sliderCodeLengthValue
+        copyIndividuals = copyIndividuals.filter(function(individual) {
+            return individual.Osobnik.length == sliderCodeLengthValue
+        });
+
+        this.setState({individuals: copyIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0))})
     }
 
     mutate = () => {
+        let LP = this.mutationIndividual.value;
+        let mutationBitIndex = this.mutationBit.value -1;
 
+        let individual_1 = null
+        let copyIndividuals = [...this.state.individuals]
+
+        for (let i = 0; i < copyIndividuals.length; ++i) {
+            if (LP == copyIndividuals[i]['LP']) {
+                individual_1 = copyIndividuals[i]['Osobnik']
+            }
+        }
+
+        // mutacja
+        let bitValue = individual_1[mutationBitIndex]
+        individual_1 = individual_1.replaceAt(mutationBitIndex, bitValue === '0' ? '1' : '0')
+        // console.log(individual_1)
+        //koniec mutacji
+
+
+        for (let i = 0; i < copyIndividuals.length; ++i) {
+            if (LP == copyIndividuals[i]['LP']) {
+                copyIndividuals[i]['Osobnik'] = individual_1 
+            }
+        }
+
+        let sumFitness = 0
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            copyIndividuals[i]['Przystosowanie'] = parseInt(copyIndividuals[i]['Osobnik'], 2) / 2**this.state.sliderCodeLengthValue
+            sumFitness += copyIndividuals[i]['Przystosowanie']
+        }
+
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / 2**this.state.sliderCodeLengthValue  // TODO: czy dobrze policzony % przystosowania
+        }
+
+        this.computeSchemas(copyIndividuals)
+
+        // // workaround na usuniecie smieci po poprzedniej populacji
+        // let sliderCodeLengthValue = this.state.sliderCodeLengthValue
+        // copyIndividuals = copyIndividuals.filter(function(individual) {
+        //     return individual.Osobnik.length == sliderCodeLengthValue
+        // });
+
+        this.setState({individuals: copyIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0))})
     }
 
     computeSchemas = (tmpIndividuals) => {
@@ -257,6 +378,33 @@ class Slide18A extends Component {
         this.setState({individuals: tmpIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0)), generation: 0})
     }
 
+    renderCrossoverIDs = () => {
+        return this.state.individuals.map((individual, index) => {
+            const { LP } = individual //destructuring
+            return (
+                <option value={LP}>{LP}</option>
+            )
+        })
+    }
+
+    renderMutationBits = () => {
+        let mutationBits = [...Array(this.state.sliderCodeLengthValue+1).keys()]
+        return mutationBits.slice(1).map((index) => {
+            return (
+                <option value={index}>{index}</option>
+            )
+        })
+    }
+
+    renderCrossoverPoint = () => {
+        let crossoverPoints = [...Array(this.state.sliderCodeLengthValue).keys()]
+        return crossoverPoints.slice(1).map((index) => {
+            return (
+                <option value={index}>{index}</option>
+            )
+        })
+    }
+
     renderTableHeader(array) {
         let header = Object.keys(array[0])
         return header.map((key, index) => {
@@ -270,12 +418,20 @@ class Slide18A extends Component {
         return array.map((individual, index) => {
            const { LP, Osobnik, Przystosowanie, Procent } = individual //destructuring
            return (
-              <tr key={LP}>
-                 <td>{LP}</td>
-                 <td><tt>{Osobnik}</tt></td>
+            (LP == this.crossoverIndividualsIDs1.value || LP == this.crossoverIndividualsIDs2.value ?
+              (<tr key={LP}>
+                  <td style={{backgroundColor: "gray"}}>{LP}</td>
+                <td><tt>{Osobnik}</tt></td>
                  <td><tt>{Przystosowanie}</tt></td>
                  <td><tt>{(Procent * 100).toFixed(3)}</tt></td>
-              </tr>
+              </tr>)
+              :
+                (<tr key={LP}>
+                <td>{LP}</td>
+                <td><tt>{Osobnik}</tt></td>
+                <td><tt>{Przystosowanie}</tt></td>
+                <td><tt>{(Procent * 100).toFixed(3)}</tt></td>
+            </tr>))
            )
         })
      }
@@ -352,7 +508,7 @@ class Slide18A extends Component {
                         </table>
                     </div>
 
-                    <div className="col-3">
+                    <div className="col-5">
                         <div className="row"><button ref={ref => this.reproductionButton = ref}
                                 type="submit"
                                 className="btn btn-primary m-2"
@@ -364,12 +520,49 @@ class Slide18A extends Component {
                                 type="submit"
                                 className="btn btn-primary m-2"
                                 onClick={this.crossover}>Krzyżowanie</button>
+
+                                <label for="crossoverIndividualsIDs1">Osobnik 1</label>
+                                <select name="crossoverIndividualsIDs1"
+                                id="crossoverIndividualsIDs1"
+                                ref = {(ref)=> this.crossoverIndividualsIDs1 = ref}
+                                onChange={this.highlightIndividuals}>
+                                    {this.renderCrossoverIDs()}
+                                </select>
+
+                                <label for="crossoverIndividualsIDs2">Osobnik 2</label>
+                                <select name="crossoverIndividualsIDs2"
+                                id="crossoverIndividualsIDs2"
+                                ref = {(ref)=> this.crossoverIndividualsIDs2 = ref}
+                                onChange={this.highlightIndividuals}>
+                                    {this.renderCrossoverIDs()}
+                                </select>
+
+                                <label for="crossoverPoint">Punkt cięcia</label>
+                                <select name="crossoverPoint" id="crossoverPoint" ref = {(ref)=> this.crosspoint = ref}>
+                                    {this.renderCrossoverPoint()}
+                                </select>
                         </div>
 
                         <div className="row"><button ref={ref => this.mutationButton = ref}
                                 type="submit"
                                 className="btn btn-primary m-2"
                                 onClick={this.mutate}>Mutacja</button>
+
+                                <label for="mutationIndividual">Osobnik</label>
+                                <select name="mutationIndividual"
+                                id="mutationIndividual"
+                                ref = {(ref)=> this.mutationIndividual = ref}
+                                onChange={this.highlightIndividuals}>
+                                    {this.renderCrossoverIDs()}
+                                </select>
+
+                                <label for="mutationBit">Gen mutujący</label>
+                                <select name="mutationBit"
+                                id="mutationBit"
+                                ref = {(ref)=> this.mutationBit = ref}
+                                onChange={this.highlightIndividuals}>
+                                    {this.renderMutationBits()}
+                                </select>
                         </div>
                     </div>
                 </div>

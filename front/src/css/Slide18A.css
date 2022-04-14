@@ -26,5 +26,10 @@ background-color: #4CAF50;
 color: white;
 }
 
+select {
+    background-color: #4CAF50;
+    margin: 5px;
+}
+
 .tableFixHead          { overflow: auto; height: 400px; } /* scrollowane okno */
 .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
