@@ -45,13 +45,23 @@ class Slide18A extends Component {
             sliderPopSizeValue: Slide18A_SLIDER_POPSIZE_MIN_DEFAULT,
             sliderCodeLengthValue: Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT,
             individuals: [
-                { LP: 1, Osobnik: '00000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 1, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 2, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 3, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 4, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 5, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 6, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 7, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 8, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 9, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
+                { LP: 10, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
             ],
             schemas: [
-                { Schemat: '*****', Przystosowanie: 0.0, Reprezentanci: 0, Rozpietosc: 0, Rzad: 0}
+                { Schemat: '111', Przystosowanie: 0.0, Reprezentanci: 0, Rozpietosc: 0, Rzad: 0},
             ],
             schemasOnlyWithAsterisks: [],
-            filterSchemasChecked: false
+            filterSchemasChecked: false,
+            generation: 0
         }
     }
 
@@ -61,20 +71,65 @@ class Slide18A extends Component {
         });
     }
 
+    disableOperatorsButtons() {
+        this.reproductionButton.disabled = "disabled"
+        this.crossoverButton.disabled = "disabled"
+        this.mutationButton.disabled = "disabled"
+    }
+
+    enableOperatorsButtons() {
+        this.reproductionButton.disabled = ""
+        this.crossoverButton.disabled = ""
+        this.mutationButton.disabled = ""
+    }
+
     onChangeSliderPopSize = (v) => {
+        this.disableOperatorsButtons()
+
         this.setState({
             sliderPopSizeValue: v,
         });
     }
 
     onChangeSliderCodeLengthValue = (v) => {
+        this.disableOperatorsButtons()
+
         this.setState({
             sliderCodeLengthValue: v,
         });
     }
 
     reproduce = () => {
-    
+        let newIndividuals = []
+        for (let i = 0; i < this.state.individuals.length; ++i) {
+            if (Math.random() < this.state.individuals[i]['Procent'] / 100) {
+                newIndividuals.push(this.state.individuals[i])
+            }
+            else {
+                newIndividuals.push({ LP: i+1, Osobnik: randomBinary(0, 2**this.state.sliderCodeLengthValue-1), Przystosowanie: 0.0, Procent: 0.0 })
+
+                while(newIndividuals[i]['Osobnik'].length < this.state.sliderCodeLengthValue) {
+                    newIndividuals[i]['Osobnik'] = "0" + newIndividuals[i]['Osobnik'] // dodanie leading zeros
+                }
+            }
+        }
+
+        let sumFitness = 0
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            newIndividuals[i]['Przystosowanie'] = parseInt(newIndividuals[i]['Osobnik'], 2) / 2**this.state.sliderCodeLengthValue
+            sumFitness += newIndividuals[i]['Przystosowanie']
+        }
+
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            newIndividuals[i]['Procent'] = newIndividuals[i]['Przystosowanie'] / 2**this.state.sliderCodeLengthValue  // TODO: czy dobrze policzony % przystosowania
+        }
+
+        this.computeSchemas(newIndividuals)
+
+        this.setState({
+            individuals: newIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0)),
+            generation: ++this.state.generation,
+        });
     }
 
     crossover = () => {
@@ -85,27 +140,7 @@ class Slide18A extends Component {
 
     }
 
-    generatePopulationAndSchemas = () => {
-        let tmpIndividuals = []
-        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            tmpIndividuals.push({ LP: i+1, Osobnik: randomBinary(0, 2**this.state.sliderCodeLengthValue-1), Przystosowanie: 0.0, Procent: 0.0 })
-
-            while(tmpIndividuals[i]['Osobnik'].length < this.state.sliderCodeLengthValue) {
-                tmpIndividuals[i]['Osobnik'] = "0" + tmpIndividuals[i]['Osobnik'] // dodanie leading zeros
-            }
-        }
-
-        let sumFitness = 0
-        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            tmpIndividuals[i]['Przystosowanie'] = parseInt(tmpIndividuals[i]['Osobnik'], 2) / 2**this.state.sliderCodeLengthValue
-            sumFitness += tmpIndividuals[i]['Przystosowanie']
-        }
-
-        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            tmpIndividuals[i]['Procent'] = tmpIndividuals[i]['Przystosowanie'] / sumFitness
-        }
-
-        // SCHEMAS
+    computeSchemas = (tmpIndividuals) => {
         var schema           = '';
         var allPossibleSchemas = [];
         var alphabet       = '01*';
@@ -120,7 +155,6 @@ class Slide18A extends Component {
             
             schema = ''
         }
-
 
         // szukanie ustalonych pozycji z lewej i prawej
         for (let i = 0; i < allPossibleSchemas.length; ++i) {
@@ -185,7 +219,42 @@ class Slide18A extends Component {
             return schema.Schemat.includes('*')  // usuniecie schematu *** samych gwiazdek
         });
 
-        this.setState({individuals: tmpIndividuals, schemas: allPossibleSchemas, schemasOnlyWithAsterisks: tmpschemasOnlyWithAsterisks})
+        this.setState({
+            schemas: allPossibleSchemas,
+            schemasOnlyWithAsterisks: tmpschemasOnlyWithAsterisks})
+    }
+
+    generatePopulationAndSchemas = () => {
+        this.enableOperatorsButtons()
+
+        let tmpIndividuals = []
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            tmpIndividuals.push({ LP: i+1, Osobnik: randomBinary(0, 2**this.state.sliderCodeLengthValue-1), Przystosowanie: 0.0, Procent: 0.0 })
+
+            while(tmpIndividuals[i]['Osobnik'].length < this.state.sliderCodeLengthValue) {
+                tmpIndividuals[i]['Osobnik'] = "0" + tmpIndividuals[i]['Osobnik'] // dodanie leading zeros
+            }
+        }
+
+        let sumFitness = 0
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            tmpIndividuals[i]['Przystosowanie'] = parseInt(tmpIndividuals[i]['Osobnik'], 2) / 2**this.state.sliderCodeLengthValue
+            sumFitness += tmpIndividuals[i]['Przystosowanie']
+        }
+
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            tmpIndividuals[i]['Procent'] = tmpIndividuals[i]['Przystosowanie'] / 2**this.state.sliderCodeLengthValue  // TODO: czy dobrze policzony % przystosowania
+        }
+
+        this.computeSchemas(tmpIndividuals)
+
+        // workaround na usuniecie smieci po poprzedniej populacji
+        let sliderCodeLengthValue = this.state.sliderCodeLengthValue
+        tmpIndividuals = tmpIndividuals.filter(function(individual) {
+            return individual.Osobnik.length == sliderCodeLengthValue
+        });
+
+        this.setState({individuals: tmpIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0)), generation: 0})
     }
 
     renderTableHeader(array) {
@@ -288,6 +357,7 @@ class Slide18A extends Component {
                                 type="submit"
                                 className="btn btn-primary m-2"
                                 onClick={this.reproduce}>Reprodukcja</button>
+                                Pokolenie: {this.state.generation}
                         </div>
                         
                         <div className="row"><button ref={ref => this.crossoverButton = ref}
