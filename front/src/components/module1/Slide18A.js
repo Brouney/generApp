@@ -7,13 +7,15 @@ import '../../css/Slide18A.css';
 
 
 // TODO: jak liczyc dostosowanie
-// TODO: **** rozpietosc minusowa zla
-// TODO: tabela schematow jako scrollowane okno
-// TODO: check if osobnik matchuje schemat, jesli tak to licz dostosowanie
+// TODO: handlowanie buttonow operatorow
+// TODO: rysowanie wykresu?
+// TODO: dodac wzory z twierdzenia schematow pod tabelkami
 
 
-const Slide18A_SLIDER_POPSIZE_DEFAULT = 10
-const Slide18A_SLIDER_CODELENGTH_DEFAULT = 3
+const Slide18A_SLIDER_POPSIZE_MIN_DEFAULT = 10
+const Slide18A_SLIDER_POPSIZE_MAX_DEFAULT = 100
+const Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT = 3
+const Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT = 6
 
 function randomBinary(min, max) {
     return Math.floor(min + Math.random() * (max + 1 - min)).toString(2);
@@ -33,22 +35,30 @@ class Slide18A extends Component {
         this.sliderCodeLength = React.createRef(); 
 
         this.generateButton = React.createRef(); 
-        // this.generateButton = React.createRef(); 
-        // this.generateButton = React.createRef(); 
-        // this.generateButton = React.createRef(); 
+        this.reproductionButton = React.createRef(); 
+        this.crossoverButton = React.createRef(); 
+        this.mutationButton = React.createRef(); 
 
 
 
         this.state = {
-            sliderPopSizeValue: Slide18A_SLIDER_POPSIZE_DEFAULT,
-            sliderCodeLengthValue: Slide18A_SLIDER_CODELENGTH_DEFAULT,
+            sliderPopSizeValue: Slide18A_SLIDER_POPSIZE_MIN_DEFAULT,
+            sliderCodeLengthValue: Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT,
             individuals: [
                 { LP: 1, Osobnik: '00000', Przystosowanie: 0.0, Procent: 0.0 },
             ],
             schemas: [
-                { Schemat: '*****', Przystosowanie: 0.0, Rozpietosc: 0, Rzad: 0}
-            ]
+                { Schemat: '*****', Przystosowanie: 0.0, Reprezentanci: 0, Rozpietosc: 0, Rzad: 0}
+            ],
+            schemasOnlyWithAsterisks: [],
+            filterSchemasChecked: false
         }
+    }
+
+    filterSchemas = () => {
+        this.setState({
+            filterSchemasChecked: !this.state.filterSchemasChecked,
+        });
     }
 
     onChangeSliderPopSize = (v) => {
@@ -61,6 +71,18 @@ class Slide18A extends Component {
         this.setState({
             sliderCodeLengthValue: v,
         });
+    }
+
+    reproduce = () => {
+    
+    }
+
+    crossover = () => {
+
+    }
+
+    mutate = () => {
+
     }
 
     generatePopulationAndSchemas = () => {
@@ -100,6 +122,7 @@ class Slide18A extends Component {
         }
 
 
+        // szukanie ustalonych pozycji z lewej i prawej
         for (let i = 0; i < allPossibleSchemas.length; ++i) {
 
             let leftFound = false
@@ -121,22 +144,56 @@ class Slide18A extends Component {
                     break
             }
 
+            let representantsOfSchemaCount = 0
+            let representantsOfSchemaFitnessSum = 0
+            for (let k = 0; k < tmpIndividuals.length; ++k) {
+                let j = 0
+                let schemaChecked = false
+
+                while (!schemaChecked) {
+                    if (tmpIndividuals[k]['Osobnik'][j] == allPossibleSchemas[i][j] || allPossibleSchemas[i][j] == '*') {
+                        j++
+                    }
+                    else {
+                        schemaChecked = true
+                    }
+                    
+                    if (j == this.state.sliderCodeLengthValue) {
+                        representantsOfSchemaCount++
+                        representantsOfSchemaFitnessSum += tmpIndividuals[k]['Przystosowanie']
+                        schemaChecked = true
+                    }
+                }
+            }
+
 
             allPossibleSchemas[i] = { Schemat: allPossibleSchemas[i],
-                Przystosowanie: 0.0,
+                Przystosowanie: representantsOfSchemaCount == 0 ? 0 : (representantsOfSchemaFitnessSum / representantsOfSchemaCount).toFixed(3),
+                Reprezentanci: representantsOfSchemaCount,
                 Rozpietosc: indexRight - indexLeft, // odległość między skrajnymi ustalonymi pozycjami
                 Rzad: allPossibleSchemas[i].split("0").length - 1 + allPossibleSchemas[i].split("1").length - 1} // liczba ustalonych pozycji (liczba zer lub jedynek)
         }
 
-        allPossibleSchemas.sort((a,b) => (a.Schemat > b.Schemat) ? 1 : ((b.Schemat > a.Schemat) ? -1 : 0))
+        allPossibleSchemas.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0))
 
-        this.setState({individuals: tmpIndividuals, schemas: allPossibleSchemas})
+        let sliderCodeLengthValue = this.state.sliderCodeLengthValue
+        allPossibleSchemas = allPossibleSchemas.filter(function(schema) {
+            return schema.Schemat !== '*'.repeat(sliderCodeLengthValue)  // usuniecie schematu *** samych gwiazdek
+        });
+
+        let tmpschemasOnlyWithAsterisks = allPossibleSchemas.filter(function(schema) {
+            return schema.Schemat.includes('*')  // usuniecie schematu *** samych gwiazdek
+        });
+
+        this.setState({individuals: tmpIndividuals, schemas: allPossibleSchemas, schemasOnlyWithAsterisks: tmpschemasOnlyWithAsterisks})
     }
 
     renderTableHeader(array) {
         let header = Object.keys(array[0])
         return header.map((key, index) => {
-           return key == 'Procent' ? <th key={index}>%</th> : <th key={index}>{key.toUpperCase()}</th>
+           return key == 'Procent' ? 
+           <th key={index}>%</th> : 
+           <th key={index}>{key.toUpperCase()}</th>
         })
      }
 
@@ -148,19 +205,20 @@ class Slide18A extends Component {
                  <td>{LP}</td>
                  <td><tt>{Osobnik}</tt></td>
                  <td><tt>{Przystosowanie}</tt></td>
-                 <td><tt>{Procent.toFixed(3)}</tt></td>
+                 <td><tt>{(Procent * 100).toFixed(3)}</tt></td>
               </tr>
            )
         })
      }
 
      renderSchemasTableData(array) {
-        return array.map((individual, index) => {
-           const { Schemat, Przystosowanie, Rozpietosc, Rzad } = individual //destructuring
+        return array.map((schema, index) => {
+           const { Schemat, Przystosowanie, Reprezentanci, Rozpietosc, Rzad } = schema //destructuring
            return (
               <tr key={Schemat}>
                  <td><tt>{Schemat}</tt></td>
                  <td><tt>{Przystosowanie}</tt></td>
+                 <td>{Reprezentanci}</td>
                  <td>{Rozpietosc}</td>
                  <td>{Rzad}</td>
               </tr>
@@ -183,23 +241,71 @@ class Slide18A extends Component {
         return(
             <div>
                 <h1>{this.title}</h1>
-                <MySlider min={Slide18A_SLIDER_POPSIZE_DEFAULT} max={50} defaultValue={Slide18A_SLIDER_POPSIZE_DEFAULT} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Liczebność populacji"} passValueToParent={this.onChangeSliderPopSize}></MySlider>
-                <MySlider min={Slide18A_SLIDER_CODELENGTH_DEFAULT} max={5} defaultValue={Slide18A_SLIDER_CODELENGTH_DEFAULT} sliderSize={4} step={1} ref={this.sliderCodeLength} text={"Długość ciągu kodowego"} passValueToParent={this.onChangeSliderCodeLengthValue}></MySlider>
+                <div className="row">
+                    <div className="col-8">
+                        <MySlider min={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT} max={Slide18A_SLIDER_POPSIZE_MAX_DEFAULT} defaultValue={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Liczebność populacji"} passValueToParent={this.onChangeSliderPopSize}></MySlider>
+                        <MySlider min={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT} max={Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT} defaultValue={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderCodeLength} text={"Długość ciągu kodowego"} passValueToParent={this.onChangeSliderCodeLengthValue}></MySlider>
+                    </div>
 
-                <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary col-2" onClick={this.generatePopulationAndSchemas}>Wygeneruj populację</button>
-                <table id='individuals'>
-                    <tr>{this.renderTableHeader(this.state.individuals)}</tr>
-                    <tbody>
-                        {this.renderIndividualTableData(this.state.individuals)}
-                    </tbody>
-                </table>
+                    <div className="col-4">
+                        <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generatePopulationAndSchemas}>Wygeneruj populację</button>
+                    </div>
+                </div>
 
-                <table id='individuals'>
-                    <tr>{this.renderTableHeader(this.state.schemas)}</tr>
-                    <tbody>
-                        {this.renderSchemasTableData(this.state.schemas)}
-                    </tbody>
-                </table>
+                <div className="row">
+                    <div className="col-2"><h3 style={{textAlign: "left"}}>POPULACJA</h3></div>
+                    <div className="col-3"><h3 style={{textAlign: "right"}}>SCHEMATY</h3></div>
+                    <input type="checkbox" onChange={this.filterSchemas} name="filterSchemas"/>
+                    <label for="filterSchemas">Pokaż tylko schematy z gwiazdkami</label>
+                </div>
+                <div className="row">
+                    <div className="col-3 tableFixHead">
+                        <table id='individuals'>
+                            <thead>
+                                <tr>{this.renderTableHeader(this.state.individuals)}</tr>
+                            </thead>
+                            <tbody>
+                                {this.renderIndividualTableData(this.state.individuals)}
+                            </tbody>
+                        </table> 
+                    </div>
+
+                    <div className="col-4 tableFixHead">
+                        <table id='individuals'>
+                            <thead>
+                                <tr>{this.renderTableHeader(this.state.schemas)}</tr>
+                            </thead>
+                            <tbody>
+                                {this.state.filterSchemasChecked ? 
+                                this.renderSchemasTableData(this.state.schemasOnlyWithAsterisks) : 
+                                this.renderSchemasTableData(this.state.schemas)}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div className="col-3">
+                        <div className="row"><button ref={ref => this.reproductionButton = ref}
+                                type="submit"
+                                className="btn btn-primary m-2"
+                                onClick={this.reproduce}>Reprodukcja</button>
+                        </div>
+                        
+                        <div className="row"><button ref={ref => this.crossoverButton = ref}
+                                type="submit"
+                                className="btn btn-primary m-2"
+                                onClick={this.crossover}>Krzyżowanie</button>
+                        </div>
+
+                        <div className="row"><button ref={ref => this.mutationButton = ref}
+                                type="submit"
+                                className="btn btn-primary m-2"
+                                onClick={this.mutate}>Mutacja</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
 
                 <NavigationButtons
                     ref={this.navigationButtons}
