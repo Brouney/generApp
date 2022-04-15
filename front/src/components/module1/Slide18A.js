@@ -3,11 +3,16 @@ import { MODULE_1_SLIDES_COUNT } from "../templates/ListExercisePanel";
 import NavigationButtons from "../templates/NavigationButtons";
 import Slide17A from "./Slide17A";
 import MySlider from "../common/MySlider";
+import Plot from "react-plotly.js";
 import '../../css/Slide18A.css';
 
 
 // TODO: jak liczyc dostosowanie
-// TODO: rysowanie wykresu?
+
+// TODO: osie wykresu
+// TODO: wymiary wykresu
+// TODO: update wykresu po mutacji i krzyzowaniu
+
 // TODO: dodac wzory z twierdzenia schematow pod tabelkami
 
 
@@ -15,6 +20,9 @@ const Slide18A_SLIDER_POPSIZE_MIN_DEFAULT = 10
 const Slide18A_SLIDER_POPSIZE_MAX_DEFAULT = 100
 const Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT = 3
 const Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT = 6
+
+var Slide18A_allPossibleSchemasStrings = [];
+var Slide18A_plotData = [];
 
 function randomBinary(min, max) {
     return Math.floor(min + Math.random() * (max + 1 - min)).toString(2);
@@ -66,14 +74,36 @@ class Slide18A extends Component {
                 { LP: 10, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
             ],
             schemas: [
-                { Schemat: '111', Przystosowanie: 0.0, Reprezentanci: 0, Rozpietosc: 0, Rzad: 0},
+                { Schemat: '111', Przystosowanie: 0.0, Reprezentanci: [], Rozpietosc: 0, Rzad: 0},
             ],
-            schemasOnlyWithAsterisks: [],
+            schemasOnlyWithAsterisks: [
+                { Schemat: '1*1', Przystosowanie: 0.0, Reprezentanci: [], Rozpietosc: 0, Rzad: 0},
+            ],
             filterSchemasChecked: false,
             generation: 0
         }
+
+
+        this.generateAllPossibleSchemasStrings()
     }
 
+    generateAllPossibleSchemasStrings() {
+        var schema           = '';
+        var alphabet       = '01*';
+        Slide18A_allPossibleSchemasStrings = [];
+        
+        while (Slide18A_allPossibleSchemasStrings.length != 3**this.state.sliderCodeLengthValue) {
+            for ( var i = 0; i < this.state.sliderCodeLengthValue; i++ ) {
+                schema += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            }
+            if (!Slide18A_allPossibleSchemasStrings.includes(schema)) {
+                Slide18A_allPossibleSchemasStrings.push(schema)
+            }
+            
+            schema = ''
+        }
+    }
+        
     filterSchemas = () => {
         this.setState({
             filterSchemasChecked: !this.state.filterSchemasChecked,
@@ -140,6 +170,11 @@ class Slide18A extends Component {
         }
 
         this.computeSchemas(newIndividuals)
+
+        let sliderCodeLengthValue = this.state.sliderCodeLengthValue
+        newIndividuals = newIndividuals.filter(function(individual) {
+            return individual.Osobnik.length == sliderCodeLengthValue
+        });
 
         this.setState({
             individuals: newIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0)),
@@ -253,49 +288,36 @@ class Slide18A extends Component {
         this.computeSchemas(copyIndividuals)
 
         // // workaround na usuniecie smieci po poprzedniej populacji
-        // let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-        // copyIndividuals = copyIndividuals.filter(function(individual) {
-        //     return individual.Osobnik.length == sliderCodeLengthValue
-        // });
+        let sliderCodeLengthValue = this.state.sliderCodeLengthValue
+        copyIndividuals = copyIndividuals.filter(function(individual) {
+            return individual.Osobnik.length == sliderCodeLengthValue
+        });
 
         this.setState({individuals: copyIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0))})
     }
 
     computeSchemas = (tmpIndividuals) => {
-        var schema           = '';
-        var allPossibleSchemas = [];
-        var alphabet       = '01*';
-
-        while (allPossibleSchemas.length != 3**this.state.sliderCodeLengthValue) {
-            for ( var i = 0; i < this.state.sliderCodeLengthValue; i++ ) {
-                schema += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-            }
-            if (!allPossibleSchemas.includes(schema)) {
-                allPossibleSchemas.push(schema)
-            }
-            
-            schema = ''
-        }
+        let newSchemas = []
 
         // szukanie ustalonych pozycji z lewej i prawej
-        for (let i = 0; i < allPossibleSchemas.length; ++i) {
+        for (let i = 0; i < Slide18A_allPossibleSchemasStrings.length; ++i) {
 
             let leftFound = false
             let rightFound = false
             let indexLeft = 0
-            let indexRight = allPossibleSchemas[i].length - 1
+            let indexRight = Slide18A_allPossibleSchemasStrings[i].length - 1
             while (!leftFound || !rightFound) {
-                if (allPossibleSchemas[i][indexLeft] == '*')
+                if (Slide18A_allPossibleSchemasStrings[i][indexLeft] == '*')
                     indexLeft++
                 else
                     leftFound=true
 
-                if (allPossibleSchemas[i][indexRight] == '*')
+                if (Slide18A_allPossibleSchemasStrings[i][indexRight] == '*')
                     indexRight--
                 else
                     rightFound=true
 
-                if (indexLeft > allPossibleSchemas[i].length - 1)
+                if (indexLeft > Slide18A_allPossibleSchemasStrings[i].length - 1)
                     break
             }
 
@@ -306,7 +328,7 @@ class Slide18A extends Component {
                 let schemaChecked = false
 
                 while (!schemaChecked) {
-                    if (tmpIndividuals[k]['Osobnik'][j] == allPossibleSchemas[i][j] || allPossibleSchemas[i][j] == '*') {
+                    if (tmpIndividuals[k]['Osobnik'][j] == Slide18A_allPossibleSchemasStrings[i][j] || Slide18A_allPossibleSchemasStrings[i][j] == '*') {
                         j++
                     }
                     else {
@@ -321,31 +343,55 @@ class Slide18A extends Component {
                 }
             }
 
+            let representants = null
+            if (this.state.schemas[i] != undefined) {
+                let tmpListRepresentants = this.state.schemas[i]['Reprezentanci']
+                tmpListRepresentants.push(representantsOfSchemaCount)
+                representants = tmpListRepresentants
+            }
+            else {
+                representants = [representantsOfSchemaCount]
+            }
 
-            allPossibleSchemas[i] = { Schemat: allPossibleSchemas[i],
+            newSchemas.push({Schemat: Slide18A_allPossibleSchemasStrings[i],
                 Przystosowanie: representantsOfSchemaCount == 0 ? 0 : (representantsOfSchemaFitnessSum / representantsOfSchemaCount).toFixed(3),
-                Reprezentanci: representantsOfSchemaCount,
+                Reprezentanci: representants,
                 Rozpietosc: indexRight - indexLeft, // odległość między skrajnymi ustalonymi pozycjami
-                Rzad: allPossibleSchemas[i].split("0").length - 1 + allPossibleSchemas[i].split("1").length - 1} // liczba ustalonych pozycji (liczba zer lub jedynek)
+                Rzad: Slide18A_allPossibleSchemasStrings[i].split("0").length - 1 + Slide18A_allPossibleSchemasStrings[i].split("1").length - 1}) // liczba ustalonych pozycji (liczba zer lub jedynek)
         }
 
-        allPossibleSchemas.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0))
+        // console.log(newSchemas)
+        // newSchemas.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0))
 
         let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-        allPossibleSchemas = allPossibleSchemas.filter(function(schema) {
+        newSchemas = newSchemas.filter(function(schema) {
             return schema.Schemat !== '*'.repeat(sliderCodeLengthValue)  // usuniecie schematu *** samych gwiazdek
         });
 
-        let tmpschemasOnlyWithAsterisks = allPossibleSchemas.filter(function(schema) {
+        let tmpschemasOnlyWithAsterisks = newSchemas.filter(function(schema) {
             return schema.Schemat.includes('*')  // usuniecie schematu *** samych gwiazdek
         });
 
+        // console.log(tmpschemasOnlyWithAsterisks)
+
         this.setState({
-            schemas: allPossibleSchemas,
+            schemas: newSchemas,
             schemasOnlyWithAsterisks: tmpschemasOnlyWithAsterisks})
     }
 
+    clearRepresentants = () => {
+        let schemasWithOneElementInRepresentantsList = [...this.state.schemas]
+
+        for (let i = 0; i < schemasWithOneElementInRepresentantsList.length; ++i) { 
+            schemasWithOneElementInRepresentantsList[i]['Reprezentanci'] = []
+        }
+
+        this.setState({
+            schemas: schemasWithOneElementInRepresentantsList,})
+    }
+
     generatePopulationAndSchemas = () => {
+        this.generateAllPossibleSchemasStrings()
         this.enableOperatorsButtons()
 
         let tmpIndividuals = []
@@ -368,6 +414,7 @@ class Slide18A extends Component {
         }
 
         this.computeSchemas(tmpIndividuals)
+        this.clearRepresentants()
 
         // workaround na usuniecie smieci po poprzedniej populacji
         let sliderCodeLengthValue = this.state.sliderCodeLengthValue
@@ -443,7 +490,7 @@ class Slide18A extends Component {
               <tr key={Schemat}>
                  <td><tt>{Schemat}</tt></td>
                  <td><tt>{Przystosowanie}</tt></td>
-                 <td>{Reprezentanci}</td>
+                 <td>{Reprezentanci[Reprezentanci.length - 1]}</td>
                  <td>{Rozpietosc}</td>
                  <td>{Rzad}</td>
               </tr>
@@ -462,7 +509,24 @@ class Slide18A extends Component {
         
     }
 
+    computePlotData = () => {
+        Slide18A_plotData = []
+
+        for (let i = 0; i < this.state.schemasOnlyWithAsterisks.length; ++i) {
+            Slide18A_plotData.push({
+                type: "scatter",
+                name: this.state.schemasOnlyWithAsterisks[i]['Schemat'],
+                x: [...Array(this.state.generation).keys()],
+                y: this.state.schemasOnlyWithAsterisks[i]['Reprezentanci'],
+                colorscale: 'hsv',
+            },)
+        }
+    }
+
     render() {
+        this.computePlotData()
+
+        
         return(
             <div>
                 <h1>{this.title}</h1>
@@ -563,6 +627,41 @@ class Slide18A extends Component {
                                 onChange={this.highlightIndividuals}>
                                     {this.renderMutationBits()}
                                 </select>
+                        </div>
+
+
+                        <div className="row-3">
+                            <Plot
+                                data={Slide18A_plotData}
+                                config={{
+                                    'displayModeBar': false, // wylaczenie kontrolek Plotly
+                                    "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
+                                }}
+                                layout={{
+                                    width: '100%',
+                                    height: '100%',
+                                    title: "Liczba reprezentantów schematu",
+                                    paper_bgcolor: '#d3d3d3',
+                                    plot_bgcolor: '#343a40',
+                                    xaxis: {
+                                        showgrid: false,
+                                        title: "Liczba reprezentantów schematu",
+                                        visible: false,
+                                    },
+                                    yaxis: {
+                                        showgrid: false,
+                                        visible: false
+                                    },
+                                    scene: {
+                                    xaxis: {
+                                        title: "Liczba reprezentantów schematu",
+                                    },
+                                    yaxis: {
+                                        title: "Liczba reprezentantów schematu",
+                                    },
+                                }
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
