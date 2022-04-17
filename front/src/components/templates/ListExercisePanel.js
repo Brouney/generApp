@@ -5,7 +5,7 @@ import Slide18A from "../module1/Slide18A";
 import Slide21Q from "../module2/Slide21Q";
 
 // TODO: increase below globals whenever you add new slides to module
-export let MODULE_1_SLIDES_COUNT = 8;
+export let MODULE_1_SLIDES_COUNT = 9;
 export let MODULE_2_SLIDES_COUNT = 1;
 export let MODULE_3_SLIDES_COUNT = 1;
 export let MODULE_4_SLIDES_COUNT = 1;
