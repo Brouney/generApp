@@ -8,12 +8,8 @@ import '../../css/Slide18A.css';
 
 
 // TODO: jak liczyc dostosowanie
-
-// TODO: osie wykresu
-// TODO: wymiary wykresu
 // TODO: update wykresu po mutacji i krzyzowaniu
-
-// TODO: dodac wzory z twierdzenia schematow pod tabelkami
+// TODO: (niekoniecznie) dodac wzory z twierdzenia schematow pod tabelkami
 
 
 const Slide18A_SLIDER_POPSIZE_MIN_DEFAULT = 10
@@ -489,28 +485,33 @@ class Slide19A extends Component {
                                     "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
                                 }}
                                 layout={{
-                                    width: '100%',
-                                    height: '100%',
+                                    width: 500,
+                                    height: 400,
+                                    margin: {
+                                        l: 50,
+                                        r: 20,
+                                        b: 60,
+                                        t: 60,
+                                        pad: 4
+                                      },
                                     title: "Liczba reprezentantów schematu",
-                                    paper_bgcolor: '#d3d3d3',
-                                    plot_bgcolor: '#343a40',
+                                    // paper_bgcolor: '#d3d3d3',
+                                    // plot_bgcolor: '#343a40',
                                     xaxis: {
-                                        showgrid: false,
-                                        title: "Liczba reprezentantów schematu",
-                                        visible: false,
+                                        // showgrid: false,
+                                        // visible: false,
+                                        title: {
+                                            text: 't'
+                                        },
+                                        tickmode: "linear",
+                                        tick0: 1,
+                                        dtick: 3
                                     },
                                     yaxis: {
-                                        showgrid: false,
-                                        visible: false
+                                        title: "m(H, t)",
+                                        // showgrid: false,
+                                        // visible: false
                                     },
-                                    scene: {
-                                    xaxis: {
-                                        title: "Liczba reprezentantów schematu",
-                                    },
-                                    yaxis: {
-                                        title: "Liczba reprezentantów schematu",
-                                    },
-                                }
                                 }}
                             />
                         </div>
