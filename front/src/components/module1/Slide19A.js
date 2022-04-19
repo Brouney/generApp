@@ -283,6 +283,9 @@ class Slide19A extends Component {
     }
 
     generatePopulationAndSchemas = () => {
+        if (this.state.inputValue ===''){
+            return;
+        }
         this.generateAllPossibleSchemasStrings()
         this.enableOperatorsButtons()
         let sliderCodeLengthValue = this.state.sliderCodeLengthValue
@@ -416,9 +419,13 @@ class Slide19A extends Component {
     changeValueInComponent = (evt) => {
         // console.log(Slide18A_allPossibleSchemasStrings)
         let value = evt.target.value;
-        value = value==='' || value.length < 2 ? '01*' : value;
+        // value = value==='' || value.length < 2 ? '01*' : value;
+        value = [...new Set(value)].join('');
         this.setState({inputValue:value})
-        this.generateAllPossibleSchemasStrings()
+        if (value !=='')
+        {
+            this.generateAllPossibleSchemasStrings()
+        }
     }
 
     render() {
@@ -477,7 +484,7 @@ class Slide19A extends Component {
                         
 
 
-                        <div className="row-3">
+                        {/* <div className="row-3">
                             <Plot
                                 data={Slide18A_plotData}
                                 config={{
@@ -514,7 +521,7 @@ class Slide19A extends Component {
                                     },
                                 }}
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
