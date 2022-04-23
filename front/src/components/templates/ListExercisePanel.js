@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import InListButton from "./InListButton";
 import Slide11T from "../module1/Slide11T";
-import Slide18A from "../module1/Slide18A";
+import Slide110A from "../module1/Slide110A";
 import Slide21Q from "../module2/Slide21Q";
 
 // TODO: increase below globals whenever you add new slides to module
-export let MODULE_1_SLIDES_COUNT = 9;
+export let MODULE_1_SLIDES_COUNT = 10;
 export let MODULE_2_SLIDES_COUNT = 1;
 export let MODULE_3_SLIDES_COUNT = 1;
 export let MODULE_4_SLIDES_COUNT = 1;
@@ -18,7 +18,7 @@ class ListExercisePanel extends Component {
         this.mainArea = props.mainArea
     }
     render(){
-        this.module1 = <Slide11T mainArea={this.mainArea}></Slide11T>
+        this.module1 = <Slide110A mainArea={this.mainArea}></Slide110A>
         this.module2 = <Slide21Q mainArea={this.mainArea}></Slide21Q>
         this.module3 = <Slide21Q mainArea={this.mainArea}></Slide21Q> // TODO: proper slides to initialize module
         this.module4 = <Slide21Q mainArea={this.mainArea}></Slide21Q>

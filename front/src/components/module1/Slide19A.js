@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { MODULE_1_SLIDES_COUNT } from "../templates/ListExercisePanel";
 import NavigationButtons from "../templates/NavigationButtons";
 import Slide18A from "./Slide18A";
+import Slide110A from "./Slide110A";
 import MySlider from "../common/MySlider";
 import Plot from "react-plotly.js";
 import '../../css/Slide18A.css';
@@ -69,7 +70,7 @@ class Slide19A extends Component {
         super(props)
         this.mainArea = props.mainArea
         this.prev = <Slide18A mainArea={this.mainArea}></Slide18A>
-        this.next = null
+        this.next = <Slide110A mainArea={this.mainArea}></Slide110A>
         this.title = 'Wpływ operatorów genetycznych na schematy'
         this.navigationButtons = React.createRef()
 
