@@ -76,6 +76,12 @@ class Slide18A extends Component {
             schemasOnlyWithAsterisks: [
                 { Schemat: '1*1', Przystosowanie: 0.0, Reprezentanci: [], Rozpietosc: 0, Rzad: 0},
             ],
+            schemasSorted: [
+                { Schemat: '111', Przystosowanie: 0.0, Reprezentanci: [], Rozpietosc: 0, Rzad: 0},
+            ],
+            schemasOnlyWithAsterisksSorted: [
+                { Schemat: '1*1', Przystosowanie: 0.0, Reprezentanci: [], Rozpietosc: 0, Rzad: 0},
+            ],
             filterSchemasChecked: false,
             generation: 0
         }
@@ -143,8 +149,10 @@ class Slide18A extends Component {
 
     reproduce = () => {
         let newIndividuals = []
-        for (let i = 0; i < this.state.individuals.length; ++i) {
-            if (Math.random() < this.state.individuals[i]['Procent'] / 100) {
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            let randomNumberForReproduction = Math.random()
+            if (randomNumberForReproduction < this.state.individuals[i]['Procent']) {
+                // console.log(randomNumberForReproduction, this.state.individuals[i]['Procent'])
                 newIndividuals.push(this.state.individuals[i])
             }
             else {
@@ -163,7 +171,7 @@ class Slide18A extends Component {
         }
 
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            newIndividuals[i]['Procent'] = newIndividuals[i]['Przystosowanie'] / 2**this.state.sliderCodeLengthValue  // TODO: czy dobrze policzony % przystosowania
+            newIndividuals[i]['Procent'] = newIndividuals[i]['Przystosowanie'] / sumFitness  // TODO: czy dobrze policzony % przystosowania
         }
 
         this.computeSchemas(newIndividuals)
@@ -232,7 +240,7 @@ class Slide18A extends Component {
         }
 
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / 2**this.state.sliderCodeLengthValue  // TODO: czy dobrze policzony % przystosowania
+            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / sumFitness // TODO: czy dobrze policzony % przystosowania
         }
 
         this.computeSchemas(copyIndividuals)
@@ -279,12 +287,12 @@ class Slide18A extends Component {
         }
 
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / 2**this.state.sliderCodeLengthValue  // TODO: czy dobrze policzony % przystosowania
+            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / sumFitness  // TODO: czy dobrze policzony % przystosowania
         }
 
         this.computeSchemas(copyIndividuals)
 
-        // // workaround na usuniecie smieci po poprzedniej populacji
+        // workaround na usuniecie smieci po poprzedniej populacji
         let sliderCodeLengthValue = this.state.sliderCodeLengthValue
         copyIndividuals = copyIndividuals.filter(function(individual) {
             return individual.Osobnik.length == sliderCodeLengthValue
@@ -371,9 +379,18 @@ class Slide18A extends Component {
 
         // console.log(tmpschemasOnlyWithAsterisks)
 
+        let newSchemasSorted = [...newSchemas]
+        let tmpschemasOnlyWithAsterisksSorted = [...tmpschemasOnlyWithAsterisks]
+
+        newSchemasSorted.sort((a,b) => (a.Reprezentanci[a.Reprezentanci.length-1] < b.Reprezentanci[b.Reprezentanci.length-1]) ? 1 : ((b.Reprezentanci[b.Reprezentanci.length-1] < a.Reprezentanci[a.Reprezentanci.length-1]) ? -1 : 0))
+        tmpschemasOnlyWithAsterisksSorted.sort((a,b) => (a.Reprezentanci[a.Reprezentanci.length-1] < b.Reprezentanci[b.Reprezentanci.length-1]) ? 1 : ((b.Reprezentanci[b.Reprezentanci.length-1] < a.Reprezentanci[a.Reprezentanci.length-1]) ? -1 : 0))
+
+
         this.setState({
             schemas: newSchemas,
-            schemasOnlyWithAsterisks: tmpschemasOnlyWithAsterisks},
+            schemasSorted: newSchemasSorted,
+            schemasOnlyWithAsterisks: tmpschemasOnlyWithAsterisks,
+            schemasOnlyWithAsterisksSorted: tmpschemasOnlyWithAsterisksSorted},
             () => {
                 this.computePlotData();
               })
@@ -387,7 +404,7 @@ class Slide18A extends Component {
         }
 
         this.setState({
-            schemas: schemasWithOneElementInRepresentantsList,})
+            schemas: schemasWithOneElementInRepresentantsList})
     }
 
     generatePopulationAndSchemas = () => {
@@ -410,19 +427,20 @@ class Slide18A extends Component {
         }
 
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            tmpIndividuals[i]['Procent'] = tmpIndividuals[i]['Przystosowanie'] / 2**this.state.sliderCodeLengthValue  // TODO: czy dobrze policzony % przystosowania
+            tmpIndividuals[i]['Procent'] = tmpIndividuals[i]['Przystosowanie'] / sumFitness  // TODO: czy dobrze policzony % przystosowania
         }
 
         this.computeSchemas(tmpIndividuals)
         this.clearRepresentants()
 
         // workaround na usuniecie smieci po poprzedniej populacji
-        let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-        tmpIndividuals = tmpIndividuals.filter(function(individual) {
-            return individual.Osobnik.length == sliderCodeLengthValue
-        });
+        // let sliderCodeLengthValue = this.state.sliderCodeLengthValue
+        // tmpIndividuals = tmpIndividuals.filter(function(individual) {
+        //     return individual.Osobnik.length == sliderCodeLengthValue
+        // });
 
-        this.setState({individuals: tmpIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0)), generation: 0})
+        this.setState({individuals: tmpIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0)),
+            generation: 0})
     }
 
     renderCrossoverIDs = () => {
@@ -456,8 +474,8 @@ class Slide18A extends Component {
         let header = Object.keys(array[0])
         return header.map((key, index) => {
            return key == 'Procent' ? 
-           <th key={index}>%</th> : 
-           <th key={index}>{key.toUpperCase()}</th>
+           <th>%</th> : 
+           <th>{key.toUpperCase()}</th>
         })
      }
 
@@ -466,14 +484,14 @@ class Slide18A extends Component {
            const { LP, Osobnik, Przystosowanie, Procent } = individual //destructuring
            return (
             (LP == this.crossoverIndividualsIDs1.value || LP == this.crossoverIndividualsIDs2.value ?
-              (<tr key={LP}>
+              (<tr>
                   <td style={{backgroundColor: "gray"}}>{LP}</td>
                 <td><tt>{Osobnik}</tt></td>
                  <td><tt>{Przystosowanie}</tt></td>
                  <td><tt>{(Procent * 100).toFixed(3)}</tt></td>
               </tr>)
               :
-                (<tr key={LP}>
+                (<tr>
                 <td>{LP}</td>
                 <td><tt>{Osobnik}</tt></td>
                 <td><tt>{Przystosowanie}</tt></td>
@@ -487,7 +505,7 @@ class Slide18A extends Component {
         return array.map((schema, index) => {
            const { Schemat, Przystosowanie, Reprezentanci, Rozpietosc, Rzad } = schema //destructuring
            return (
-              <tr key={Schemat}>
+              <tr>
                  <td><tt>{Schemat}</tt></td>
                  <td><tt>{Przystosowanie}</tt></td>
                  <td>{Reprezentanci[Reprezentanci.length - 1]}</td>
@@ -562,12 +580,12 @@ class Slide18A extends Component {
                     <div className="col-4 tableFixHead">
                         <table id='individuals'>
                             <thead>
-                                <tr>{this.renderTableHeader(this.state.schemas)}</tr>
+                                <tr>{this.renderTableHeader(this.state.schemasSorted)}</tr>
                             </thead>
                             <tbody>
                                 {this.state.filterSchemasChecked ? 
-                                this.renderSchemasTableData(this.state.schemasOnlyWithAsterisks) : 
-                                this.renderSchemasTableData(this.state.schemas)}
+                                this.renderSchemasTableData(this.state.schemasOnlyWithAsterisksSorted) : 
+                                this.renderSchemasTableData(this.state.schemasSorted)}
                             </tbody>
                         </table>
                     </div>
