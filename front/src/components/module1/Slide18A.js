@@ -8,7 +8,6 @@ import Plot from "react-plotly.js";
 import '../../css/Slide18A.css';
 
 
-// TODO: jak liczyc dostosowanie
 // TODO: poprawny update wykresu po mutacji i krzyzowaniu
 // TODO: (niekoniecznie) dodac wzory z twierdzenia schematow pod tabelkami
 
@@ -171,7 +170,7 @@ class Slide18A extends Component {
         }
 
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            newIndividuals[i]['Procent'] = newIndividuals[i]['Przystosowanie'] / sumFitness  // TODO: czy dobrze policzony % przystosowania
+            newIndividuals[i]['Procent'] = newIndividuals[i]['Przystosowanie'] / sumFitness
         }
 
         this.computeSchemas(newIndividuals)
@@ -240,7 +239,7 @@ class Slide18A extends Component {
         }
 
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / sumFitness // TODO: czy dobrze policzony % przystosowania
+            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / sumFitness
         }
 
         this.computeSchemas(copyIndividuals)
@@ -287,7 +286,7 @@ class Slide18A extends Component {
         }
 
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / sumFitness  // TODO: czy dobrze policzony % przystosowania
+            copyIndividuals[i]['Procent'] = copyIndividuals[i]['Przystosowanie'] / sumFitness
         }
 
         this.computeSchemas(copyIndividuals)
@@ -427,7 +426,7 @@ class Slide18A extends Component {
         }
 
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            tmpIndividuals[i]['Procent'] = tmpIndividuals[i]['Przystosowanie'] / sumFitness  // TODO: czy dobrze policzony % przystosowania
+            tmpIndividuals[i]['Procent'] = tmpIndividuals[i]['Przystosowanie'] / sumFitness
         }
 
         this.computeSchemas(tmpIndividuals)
@@ -687,6 +686,9 @@ class Slide18A extends Component {
                             />
                         </div>
                     </div>
+                </div>
+                <div>
+                    <h4>Twierdzenie o schematach: Wąskie, niskiego rzędu i dobrze dostosowane schematy rozprzestrzeniają się w kolejnych pokoleniach zgodnie z wykładniczym prawem wzrostu</h4>
                 </div>
 
 
