@@ -3,6 +3,7 @@ import Slide19A from "./Slide19A";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Plot from "react-plotly.js";
+import Slide111A from "./Slide111A"; 
 
 //TODO: (opcjonalnie) lepiej zaznaczyc powierzchnie i krawedzie
 
@@ -41,7 +42,7 @@ class Slide110A extends Component {
         this.mainArea = props.mainArea
         this.title = 'Schematy jako wycinki przestrzeni rozwiązań'
         this.prev = <Slide19A mainArea={this.mainArea}></Slide19A>
-        this.next = null
+        this.next = <Slide111A prev={<Slide110A></Slide110A>} mainArea={this.mainArea}></Slide111A>
 
         this.plotlyChart3d = React.createRef();
         this.generateCube = this.generateCube.bind(this);
@@ -246,7 +247,7 @@ class Slide110A extends Component {
         • Schemat rzędu 0 (***): <b>cała przestrzeń</b><br></br>
         • Schematy rzędu 1: <b>płaszczyzny</b><br></br>
         • Schematy rzędu 2: <b>proste</b><br></br>
-        • W >3D schematy to <b>hiperpłaszczyzny</b>
+        • W &gt;3D schematy to <b>hiperpłaszczyzny</b>
         o różnych wymiarach
     </h3>
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={10} slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
