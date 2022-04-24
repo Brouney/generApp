@@ -188,7 +188,7 @@ class Slide19A extends Component {
         // Slide18A_allPossibleSchemasStrings = [...new Set(Slide18A_allPossibleSchemasStrings)]
         let newSchemas = []
         let replacement = ''
-        console.log(tmpIndividuals)
+        // console.log(tmpIndividuals)
         // szukanie ustalonych pozycji z lewej i prawej
         for (let i = 0; i < tmpIndividuals.length; ++i) {
             replacement = ''
@@ -207,7 +207,7 @@ class Slide19A extends Component {
             
         }
         newSchemas = [...new Set(newSchemas)]
-        console.log(newSchemas)
+        // console.log(newSchemas)
         Slide18A_allPossibleSchemasStrings = newSchemas
         // console.log(newSchemas)
         // newSchemas.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0))
@@ -230,8 +230,8 @@ class Slide19A extends Component {
             //     tmpIndividuals[i]['Osobnik'] = "0" + tmpIndividuals[i]['Osobnik'] // dodanie leading zeros
             // }
         }
-        console.log("tmpnewschema")
-        console.log(tmpnewschema)
+        // console.log("tmpnewschema")
+        // console.log(tmpnewschema)
         this.setState({
             schemas: tmpnewschema,
             schemasOnlyWithAsterisks: tmpschemasOnlyWithAsterisks})
@@ -259,7 +259,7 @@ class Slide19A extends Component {
             return !schema.includes('*')  // usuniecie schematu *** samych gwiazdek
         });
         
-        console.log(filteredwithoutstar)
+        // console.log(filteredwithoutstar)
         
         let tmpIndividuals = []
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
@@ -342,7 +342,7 @@ class Slide19A extends Component {
      }
 
      renderSchemasTableData(array) {
-         console.log(array)
+        //  console.log(array)
         return array.map((schema, index) => {
            const { Schemat, Reprezentanci, Rozpietosc, Rzad } = schema //destructuring
            return (
