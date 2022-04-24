@@ -18,7 +18,7 @@ class ListExercisePanel extends Component {
         this.mainArea = props.mainArea
     }
     render(){
-        this.module1 = <Slide110A mainArea={this.mainArea}></Slide110A>
+        this.module1 = <Slide11T mainArea={this.mainArea}></Slide11T>
         this.module2 = <Slide21Q mainArea={this.mainArea}></Slide21Q>
         this.module3 = <Slide21Q mainArea={this.mainArea}></Slide21Q> // TODO: proper slides to initialize module
         this.module4 = <Slide21Q mainArea={this.mainArea}></Slide21Q>
