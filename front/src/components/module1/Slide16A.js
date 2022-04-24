@@ -100,6 +100,7 @@ class Slide16A extends Component {
                 mustStartSpinning={this.state.start_spin}
                 prizeNumber={this.state.wal_win}
                 data={data}
+                radiusLineWidth={0}
                 backgroundColors={['#3e3e3e', '#df3428']}
                 textColors={['#ffffff']}
                 onStopSpinning={() => {

@@ -71,7 +71,7 @@ class Slide19A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide18A mainArea={this.mainArea}></Slide18A>
         this.next = <Slide110A mainArea={this.mainArea}></Slide110A>
-        this.title = 'Wpływ operatorów genetycznych na schematy'
+        this.title = 'Konwencja zapisu i terminologia'
         this.navigationButtons = React.createRef()
 
         this.sliderPopSize = React.createRef(); 
@@ -91,7 +91,7 @@ class Slide19A extends Component {
         this.inputString = React.createRef();
 
         this.state = {
-            inputValue:'01*',
+            inputValue:'01',
             sliderPopSizeValue: Slide18A_SLIDER_POPSIZE_MIN_DEFAULT,
             sliderCodeLengthValue: Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT,
             individuals: [
@@ -128,6 +128,7 @@ class Slide19A extends Component {
         Slide18A_allPossibleSchemasStrings = [];
         printAllKLength(alphabet,this.state.sliderCodeLengthValue)
         Slide18A_allPossibleSchemasStrings = [...new Set(Slide18A_allPossibleSchemasStrings)]
+
         // let maxcodelen = (this.state.inputValue.length + 1)**this.state.sliderCodeLengthValue
         // while (Slide18A_allPossibleSchemasStrings.length != maxcodelen) {
         //     for ( var i = 0; i < this.state.sliderCodeLengthValue; i++ ) {
@@ -181,83 +182,46 @@ class Slide19A extends Component {
 
 
     computeSchemas = (tmpIndividuals) => {
-        let newSchemas = Slide18A_allPossibleSchemasStrings
 
+        // let newSchemas = Slide18A_allPossibleSchemasStrings
+        // printAllKLength(alphabet,this.state.sliderCodeLengthValue)
+        // Slide18A_allPossibleSchemasStrings = [...new Set(Slide18A_allPossibleSchemasStrings)]
+        let newSchemas = []
+        let replacement = ''
+        console.log(tmpIndividuals)
         // szukanie ustalonych pozycji z lewej i prawej
-        for (let i = 0; i < Slide18A_allPossibleSchemasStrings.length; ++i) {
-            
-            // let leftFound = false
-            // let rightFound = false
-            // let indexLeft = 0
-            // let indexRight = Slide18A_allPossibleSchemasStrings[i].length - 1
-            // while (!leftFound || !rightFound) {
-            //     if (Slide18A_allPossibleSchemasStrings[i][indexLeft] == '*')
-            //         indexLeft++
-            //     else
-            //         leftFound=true
-
-            //     if (Slide18A_allPossibleSchemasStrings[i][indexRight] == '*')
-            //         indexRight--
-            //     else
-            //         rightFound=true
-
-            //     if (indexLeft > Slide18A_allPossibleSchemasStrings[i].length - 1)
-            //         break
-            // }
-
-            // let representantsOfSchemaCount = 0
-            // let representantsOfSchemaFitnessSum = 0
-            // for (let k = 0; k < tmpIndividuals.length; ++k) {
-            //     let j = 0
-            //     let schemaChecked = false
-
-            //     while (!schemaChecked) {
-            //         if (tmpIndividuals[k]['Osobnik'][j] == Slide18A_allPossibleSchemasStrings[i][j] || Slide18A_allPossibleSchemasStrings[i][j] == '*') {
-            //             j++
-            //         }
-            //         else {
-            //             schemaChecked = true
-            //         }
+        for (let i = 0; i < tmpIndividuals.length; ++i) {
+            replacement = ''
+            if (tmpIndividuals[i] && tmpIndividuals[i]['Osobnik'] && tmpIndividuals[i]['Osobnik'].length){
+                for(let lengthofstar = 1; lengthofstar <= tmpIndividuals[i]['Osobnik'].length; ++lengthofstar ){
+                    replacement += '*'
+                    for(let charatof = 0; charatof < tmpIndividuals[i]['Osobnik'].length; ++charatof ){
+                        if(charatof + lengthofstar <= tmpIndividuals[i]['Osobnik'].length){
+                            newSchemas.push(tmpIndividuals[i]['Osobnik'].replaceAt(charatof, replacement));
+                        }
+                        // console.log(newSchemas)
+                    }
                     
-            //         if (j == this.state.sliderCodeLengthValue) {
-            //             representantsOfSchemaCount++
-            //             representantsOfSchemaFitnessSum += tmpIndividuals[k]['Przystosowanie']
-            //             schemaChecked = true
-            //         }
-            //     }
-            // }
-
-            // let representants = null
-            // if (this.state.schemas[i] != undefined) {
-            //     let tmpListRepresentants = this.state.schemas[i]['Reprezentanci']
-            //     tmpListRepresentants.push(representantsOfSchemaCount)
-            //     representants = tmpListRepresentants
-            // }
-            // else {
-            //     representants = [representantsOfSchemaCount]
-            // }
-
-            // newSchemas.push({Schemat: Slide18A_allPossibleSchemasStrings[i],
-            //     Przystosowanie: representantsOfSchemaCount == 0 ? 0 : (representantsOfSchemaFitnessSum / representantsOfSchemaCount).toFixed(3)
-            // })
-                // Reprezentanci: representants,
-                // Rozpietosc: indexRight - indexLeft, // odległość między skrajnymi ustalonymi pozycjami
-                // Rzad: Slide18A_allPossibleSchemasStrings[i].split("0").length - 1 + Slide18A_allPossibleSchemasStrings[i].split("1").length - 1}) // liczba ustalonych pozycji (liczba zer lub jedynek)
+                }
+            }
+            
         }
-
+        newSchemas = [...new Set(newSchemas)]
+        console.log(newSchemas)
+        Slide18A_allPossibleSchemasStrings = newSchemas
         // console.log(newSchemas)
         // newSchemas.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0))
 
         let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-        newSchemas = newSchemas.filter(function(schema) {
-            return schema !== '*'.repeat(sliderCodeLengthValue)  // usuniecie schematu *** samych gwiazdek
-        });
 
         let tmpschemasOnlyWithAsterisks = newSchemas.filter(function(schema) {
             return schema.includes('*')  // usuniecie schematu *** samych gwiazdek
         });
 
-       
+        // newSchemas = newSchemas.filter(function(schema) {
+        //     return schema !== '*'.repeat(sliderCodeLengthValue)  // usuniecie schematu *** samych gwiazdek
+        // });
+
         let tmpnewschema = []
         for (let i = 0; i <newSchemas.length; ++i) {
             tmpnewschema.push({ LP: i+1, Schemat: newSchemas[i] })
@@ -266,6 +230,7 @@ class Slide19A extends Component {
             //     tmpIndividuals[i]['Osobnik'] = "0" + tmpIndividuals[i]['Osobnik'] // dodanie leading zeros
             // }
         }
+        console.log("tmpnewschema")
         console.log(tmpnewschema)
         this.setState({
             schemas: tmpnewschema,
