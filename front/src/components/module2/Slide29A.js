@@ -2,15 +2,16 @@ import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import QuizTemplate from "../templates/QuizTemplate";
-import Slide22A from "./Slide22A";
+import Slide28A from "./Slide28A";
+import Slide210A from "./Slide210A";
 
-class Slide21Q extends Component {
+class Slide29A extends Component {
 
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
-        this.prev = null;
-        this.next = <Slide22A mainArea={this.mainArea}></Slide22A>;
+        this.prev = <Slide28A mainArea={this.mainArea}></Slide28A>;
+        this.next = <Slide210A prev={<Slide29A></Slide29A>} mainArea={this.mainArea}></Slide210A>
 
         this.quizTemplate = React.createRef()
     }
@@ -21,9 +22,8 @@ class Slide21Q extends Component {
         <div>
             <h1>Moduł 2 Slajd 1</h1>
             Szablon quizu
-            <QuizTemplate ref={this.quizTemplate} slide={this}></QuizTemplate>
 
-            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
+            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={9} slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
                                current={this}
             ></NavigationButtons>
         </div>
@@ -32,4 +32,4 @@ class Slide21Q extends Component {
 
 }
 
-export default Slide21Q;
+export default Slide29A;
