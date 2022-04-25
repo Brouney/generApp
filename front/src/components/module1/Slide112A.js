@@ -11,9 +11,8 @@ class Slide112A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide111A mainArea={this.mainArea}></Slide111A>
         this.next = <Slide113A prev={<Slide112A></Slide112A>} mainArea={this.mainArea}></Slide113A>
-        this.title = 'tytul'
+        this.title = 'Metoda kar'
         this.state = {
-            backpackCurrentWeight: 0
         }
     }
 
