@@ -12,15 +12,19 @@ class Slide22A extends Component {
         this.prev = <Slide21Q mainArea={this.mainArea}></Slide21Q>;
         this.next = <Slide23A prev={<Slide22A></Slide22A>} mainArea={this.mainArea}></Slide23A>
         this.state = {
+            level : 0,
             parameters : [
-
-            ]
+                <ParameterComponent22A main={this} level={0}></ParameterComponent22A>
+            ],
+            
         }
+        
         this.quizTemplate = React.createRef()
     }
     onClickAddParameter = () => {
         this.setState(prevState => ({
-            parameters: [...prevState.parameters, <ParameterComponent22A />]
+            parameters: [...prevState.parameters, <ParameterComponent22A main={this} level={this.state.level + 1}/>],
+            level: this.state.level + 1
         }))
     }
 
@@ -29,7 +33,9 @@ class Slide22A extends Component {
         var lastElement = parametersAfterDeletion.length-1
 
         parametersAfterDeletion.splice(parametersAfterDeletion[lastElement], 1);
-        this.setState({parameters: parametersAfterDeletion});
+        this.setState({parameters: parametersAfterDeletion,
+                       level: this.state.level - 1
+        });
     }
     render(){
         
