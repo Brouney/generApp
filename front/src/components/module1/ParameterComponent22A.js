@@ -24,18 +24,30 @@ class ParameterComponent22A extends Component {
     }
 
     changeEonEoffBefore = (f,ft) => {
+        this.main.setState({
+            main_eon: [],
+            main_eoff: []
+        })
         // console.log(this.main.table[0].current.state.f)
         let sumF = 0;
         let sumFt = 0;
         for (let i = 0; i<this.mylevel-1; ++i){
             sumF += this.main.state.references[i].current.state.f;
             sumFt += this.main.state.references[i].current.state.ft;
+            this.main.setState(prevState =>({
+                main_eon: [...prevState.main_eon, this.main.state.references[i].current.state.eon],
+                main_eoff: [...prevState.main_eoff, this.main.state.references[i].current.state.eoff]
+            }))
         }
         console.log(sumF)
         this.setState({
             eon : (sumF + f)/this.mylevel,
             eoff : (sumFt + ft)/this.mylevel,
         })
+        this.main.setState(prevState =>({
+            main_eon: [...prevState.main_eon, (sumF + f)/this.mylevel],
+            main_eoff: [...prevState.main_eoff, (sumFt + ft)/this.mylevel]
+        }))
     }
     changeEonEoffWithoutBefore = (f,ft) => {
         // console.log(this.main.table[0].current.state.f)
@@ -57,6 +69,10 @@ class ParameterComponent22A extends Component {
         // console.log(this.main.table[0].current.state.f)
         for (let i = this.mylevel; i<this.main.state.parameters.length; ++i){
             this.main.state.references[i].current.changeEonEoffWithoutBefore(f,ft)
+            this.main.setState(prevState =>({
+                main_eon: [...prevState.main_eon, this.main.state.references[i].current.state.eon],
+                main_eoff: [...prevState.main_eoff, this.main.state.references[i].current.state.eoff]
+            }))
         }
 
     }

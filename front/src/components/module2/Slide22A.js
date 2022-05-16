@@ -46,11 +46,16 @@ class Slide22A extends Component {
         });
     }
     render(){
-        let eonData = []
-        let eoffData = []
-        // for(let i = 0; i < this.state.parameters.length; ++i ){
-
-        // }
+        let x = Array.from(Array(this.state.parameters.length).keys())
+        let plotData = [{
+            x : x,
+            y : this.state.main_eon,
+            type: 'scatter'
+        },{
+            x : x,
+            y : this.state.main_eoff,
+            type: 'scatter'
+        }]
         return(
         <div>
             <h1>Kryteria oceny algorytmu genetycznego</h1>
@@ -63,9 +68,9 @@ class Slide22A extends Component {
                     {this.state.parameters.map(component => component)}
                 </ol>
             
-                {/* <div className="row-3">
+                <div className="row-3">
                             <Plot
-                                data={Slide18A_plotData}
+                                data={plotData}
                                 config={{
                                     'displayModeBar': false, // wylaczenie kontrolek Plotly
                                     "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
@@ -100,7 +105,7 @@ class Slide22A extends Component {
                                     },
                                 }}
                             />
-                        </div> */}
+                        </div>
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={2} slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
                                current={this}
             ></NavigationButtons>
