@@ -15,60 +15,107 @@ class ParameterComponent22A extends Component {
             n5: props.n5 ? props.n5 : 1,
             f: props.f ? props.f : 1,
             ft: props.ft ? props.ft : 1,
-            eon: props.eon ? props.eon : 0,
-            eoff: props.eoff ? props.eoff : 0,
+            eon: props.eon ? props.eon : 1,
+            eoff: props.eoff ? props.eoff : 1,
             
         }
-        this.mylevel = props.level ? props.level : 0;
+        this.mylevel = props.level ? props.level : 1;
         this.main = props.main;
     }
 
+    changeEonEoffBefore = (f,ft) => {
+        // console.log(this.main.table[0].current.state.f)
+        let sumF = 0;
+        let sumFt = 0;
+        for (let i = 0; i<this.mylevel-1; ++i){
+            sumF += this.main.state.references[i].current.state.f;
+            sumFt += this.main.state.references[i].current.state.ft;
+        }
+        console.log(sumF)
+        this.setState({
+            eon : (sumF + f)/this.mylevel,
+            eoff : (sumFt + ft)/this.mylevel,
+        })
+    }
+    changeEonEoffWithoutBefore = (f,ft) => {
+        // console.log(this.main.table[0].current.state.f)
+        let sumF = f;
+        let sumFt = ft;
+        for (let i = 0; i<this.mylevel-2; ++i){
+            sumF += this.main.state.references[i].current.state.f;
+            sumFt += this.main.state.references[i].current.state.ft;
+        }
+        sumF += this.state.f;
+        sumFt += this.state.ft;
+        // console.log(sumF)
+        this.setState({
+            eon : (sumF)/this.mylevel,
+            eoff : (sumFt)/this.mylevel,
+        })
+    }
+    changeEonEoffAfter = (f,ft) => {
+        // console.log(this.main.table[0].current.state.f)
+        for (let i = this.mylevel; i<this.main.state.parameters.length; ++i){
+            this.main.state.references[i].current.changeEonEoffWithoutBefore(f,ft)
+        }
+
+    }
     handleChange_n1 = value => {
         if (value == null) {
             value = 0
         }
         value = Number.isInteger(value) ? value : Math.floor(value)
-
+        let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
+        let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
         this.setState({
             n1: value,
         });
         this.setState({
-            f: ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5),
-            ft: Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5),
+            f: f_,
+            ft: ft_,
             
         });
-        
+
+        this.changeEonEoffBefore(f_,ft_);
+        this.changeEonEoffAfter(f_,ft_);
     };
     handleChange_n2 = value => {
         if (value == null) {
             value = 0
         }
         value = Number.isInteger(value) ? value : Math.floor(value)
-
+        let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
+        let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
         this.setState({
             n2: value,
         });
         this.setState({
-            f: ((this.state.n1 + value + this.state.n3 + this.state.n4 + this.state.n5) / 5),
-            ft: Math.max(this.state.n1, value, this.state.n3, this.state.n4, this.state.n5),
+            f: f_,
+            ft: ft_,
             
         });
-        
+
+        this.changeEonEoffBefore(f_,ft_);
+        this.changeEonEoffAfter(f_,ft_);
     };
     handleChange_n3 = value => {
         if (value == null) {
             value = 0
         }
         value = Number.isInteger(value) ? value : Math.floor(value)
-
+        let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
+        let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
         this.setState({
             n3: value,
         });
         this.setState({
-            f: ((this.state.n1 + this.state.n2 + value + this.state.n4 + this.state.n5) / 5),
-            ft: Math.max(this.state.n1, this.state.n2, value, this.state.n4, this.state.n5),
+            f: f_,
+            ft: ft_,
             
         });
+
+        this.changeEonEoffBefore(f_,ft_);
+        this.changeEonEoffAfter(f_,ft_);
         
     };
     handleChange_n4 = value => {
@@ -76,32 +123,38 @@ class ParameterComponent22A extends Component {
             value = 0
         }
         value = Number.isInteger(value) ? value : Math.floor(value)
-
+        let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
+        let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
         this.setState({
             n4: value,
         });
         this.setState({
-            f: ((this.state.n1 + this.state.n2 + this.state.n3 + value + this.state.n5) / 5),
-            ft: Math.max(this.state.n1, this.state.n2, this.state.n3, value, this.state.n5),
+            f: f_,
+            ft: ft_,
             
         });
-        
+
+        this.changeEonEoffBefore(f_,ft_);
+        this.changeEonEoffAfter(f_,ft_);
     };
     handleChange_n5 = value => {
         if (value == null) {
             value = 0
         }
         value = Number.isInteger(value) ? value : Math.floor(value)
-
+        let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
+        let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
         this.setState({
             n5: value,
         });
         this.setState({
-            f: ((this.state.n1 + this.state.n2 + this.state.n3 + this.state.n4 + value) / 5),
-            ft: Math.max(this.state.n1, this.state.n2, this.state.n3, this.state.n4, value),
+            f: f_,
+            ft: ft_,
             
         });
-        
+
+        this.changeEonEoffBefore(f_,ft_);
+        this.changeEonEoffAfter(f_,ft_);
     };
 
 
