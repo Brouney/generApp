@@ -248,7 +248,7 @@ class ParameterComponent22A extends Component {
                     />
                 </label>
                 <label>
-                    f
+                    {'<f>'}
                     <InputNumber
                         min={0}
                         max={1023}
@@ -259,7 +259,7 @@ class ParameterComponent22A extends Component {
                     />
                 </label>
                 <label>
-                    ft
+                    {'f*(t)'}
                     <InputNumber
                         min={0}
                         max={1023}
@@ -270,7 +270,8 @@ class ParameterComponent22A extends Component {
                     />
                 </label>
                 <label>
-                    eon
+                    e
+                    <Latex>{"$${_{on}}$$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
@@ -281,7 +282,8 @@ class ParameterComponent22A extends Component {
                     />
                 </label>
                 <label>
-                    eoff
+                    e
+                    <Latex>{"$${_{off}}$$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
