@@ -43,7 +43,7 @@ function printAllKLengthRec(set,prefix,n,k)
 }
 const Slide18A_SLIDER_POPSIZE_MIN_DEFAULT = 10
 const Slide18A_SLIDER_POPSIZE_MAX_DEFAULT = 100
-const Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT = 3
+const Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT = 4
 const Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT = 6
 
 var Slide18A_allPossibleSchemasStrings = [];
@@ -75,26 +75,21 @@ class Slide31A extends Component {
         this.inputString = React.createRef();
 
         this.state = {
-            inputValue:'01',
+            inputValue:'013',
             sliderPopSizeValue: Slide18A_SLIDER_POPSIZE_MIN_DEFAULT,
             sliderCodeLengthValue: Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT,
             individuals: [
-                { LP: 1, Osobnik: '000' },
-                { LP: 2, Osobnik: '001'},
-                { LP: 3, Osobnik: '011' },
-                { LP: 4, Osobnik: '010' },
-                { LP: 5, Osobnik: '011'},
-                { LP: 6, Osobnik: '100' },
-                { LP: 7, Osobnik: '101'},
-                { LP: 8, Osobnik: '110' },
-                { LP: 9, Osobnik: '111'},
-                { LP: 10, Osobnik: '000' },
+                { LP: 1, Osobnik: '0000' },
+               
             ],
             schemas: [
-                { Schemat: '111'},
+                { LP: 1, Osobnik: '0000' },
             ],
             schemasOnlyWithAsterisks: [
-                { Schemat: '1*1'},
+                { LP: 1, Osobnik: '****' },
+            ],
+            schemasFinal: [
+                { LP: 1, Osobnik: '****' },
             ],
             filterSchemasChecked: false,
             generation: 0
@@ -106,23 +101,13 @@ class Slide31A extends Component {
     
     generateAllPossibleSchemasStrings() {
         var schema           = '';
-        var alphabet       = this.state.inputValue + '*';
+        var alphabet       = this.state.inputValue;
 
         Slide18A_allPossibleSchemasStrings = [];
         printAllKLength(alphabet,this.state.sliderCodeLengthValue)
         Slide18A_allPossibleSchemasStrings = [...new Set(Slide18A_allPossibleSchemasStrings)]
 
-        // let maxcodelen = (this.state.inputValue.length + 1)**this.state.sliderCodeLengthValue
-        // while (Slide18A_allPossibleSchemasStrings.length != maxcodelen) {
-        //     for ( var i = 0; i < this.state.sliderCodeLengthValue; i++ ) {
-        //         schema += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-        //     }
-        //     if (!Slide18A_allPossibleSchemasStrings.includes(schema)) {
-        //         Slide18A_allPossibleSchemasStrings.push(schema)
-        //     }
-            
-        //     schema = ''
-        // }
+
     }
         
     filterSchemas = () => {
@@ -166,12 +151,9 @@ class Slide31A extends Component {
 
     computeSchemas = (tmpIndividuals) => {
 
-        // let newSchemas = Slide18A_allPossibleSchemasStrings
-        // printAllKLength(alphabet,this.state.sliderCodeLengthValue)
-        // Slide18A_allPossibleSchemasStrings = [...new Set(Slide18A_allPossibleSchemasStrings)]
         let newSchemas = []
         let replacement = ''
-        // console.log(tmpIndividuals)
+        console.log(tmpIndividuals.length)
         // szukanie ustalonych pozycji z lewej i prawej
         for (let i = 0; i < tmpIndividuals.length; ++i) {
             replacement = ''
@@ -190,34 +172,28 @@ class Slide31A extends Component {
             
         }
         newSchemas = [...new Set(newSchemas)]
-        // console.log(newSchemas)
         Slide18A_allPossibleSchemasStrings = newSchemas
-        // console.log(newSchemas)
-        // newSchemas.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0))
 
         let sliderCodeLengthValue = this.state.sliderCodeLengthValue
 
         let tmpschemasOnlyWithAsterisks = newSchemas.filter(function(schema) {
             return schema.includes('*')  // usuniecie schematu *** samych gwiazdek
         });
-
-        // newSchemas = newSchemas.filter(function(schema) {
-        //     return schema !== '*'.repeat(sliderCodeLengthValue)  // usuniecie schematu *** samych gwiazdek
-        // });
-
+        tmpschemasOnlyWithAsterisks = tmpschemasOnlyWithAsterisks.splice(this.state.sliderPopSizeValue)
+        // console.log(tmpschemasOnlyWithAsterisks)
         let tmpnewschema = []
         for (let i = 0; i <newSchemas.length; ++i) {
             tmpnewschema.push({ LP: i+1, Schemat: newSchemas[i] })
 
-            // while(tmpIndividuals[i]['Osobnik'].length < this.state.sliderCodeLengthValue) {
-            //     tmpIndividuals[i]['Osobnik'] = "0" + tmpIndividuals[i]['Osobnik'] // dodanie leading zeros
-            // }
         }
-        // console.log("tmpnewschema")
-        // console.log(tmpnewschema)
+        let tmpschemasasterix = []
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            tmpschemasasterix.push({ LP: i+1, Osobnik: tmpschemasOnlyWithAsterisks[i] })
+
+        }
         this.setState({
             schemas: tmpnewschema,
-            schemasOnlyWithAsterisks: tmpschemasOnlyWithAsterisks})
+            schemasOnlyWithAsterisks: tmpschemasasterix})
     }
 
     clearRepresentants = () => {
@@ -242,28 +218,16 @@ class Slide31A extends Component {
             return !schema.includes('*')  // usuniecie schematu *** samych gwiazdek
         });
         
-        // console.log(filteredwithoutstar)
         
         let tmpIndividuals = []
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
             tmpIndividuals.push({ LP: i+1, Osobnik: filteredwithoutstar[i] })
 
-            // while(tmpIndividuals[i]['Osobnik'].length < this.state.sliderCodeLengthValue) {
-            //     tmpIndividuals[i]['Osobnik'] = "0" + tmpIndividuals[i]['Osobnik'] // dodanie leading zeros
-            // }
         }
         this.setState({individuals:tmpIndividuals})
         
 
         this.computeSchemas(tmpIndividuals)
-        // this.clearRepresentants()
-
-        // workaround na usuniecie smieci po poprzedniej populacji
-        // tmpIndividuals = tmpIndividuals.filter(function(individual) {
-        //     return individual.Osobnik.length == sliderCodeLengthValue
-        // });
-
-        // this.setState({individuals: tmpIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0)), generation: 0})
     }
 
     renderCrossoverIDs = () => {
@@ -275,23 +239,7 @@ class Slide31A extends Component {
         })
     }
 
-    renderMutationBits = () => {
-        let mutationBits = [...Array(this.state.sliderCodeLengthValue+1).keys()]
-        return mutationBits.slice(1).map((index) => {
-            return (
-                <option value={index}>{index}</option>
-            )
-        })
-    }
 
-    renderCrossoverPoint = () => {
-        let crossoverPoints = [...Array(this.state.sliderCodeLengthValue).keys()]
-        return crossoverPoints.slice(1).map((index) => {
-            return (
-                <option value={index}>{index}</option>
-            )
-        })
-    }
 
     renderTableHeader(array) {
         let header = Object.keys(array[0])
@@ -304,42 +252,24 @@ class Slide31A extends Component {
 
     renderIndividualTableData(array) {
         return array.map((individual, index) => {
+            
            const { LP, Osobnik } = individual //destructuring
            return (
             (LP == this.crossoverIndividualsIDs1.value || LP == this.crossoverIndividualsIDs2.value ?
               (<tr key={LP}>
                   <td style={{backgroundColor: "gray"}}>{LP}</td>
                 <td><tt>{Osobnik}</tt></td>
-                 {/* <td><tt>{Przystosowanie}</tt></td>
-                 <td><tt>{(Procent * 100).toFixed(3)}</tt></td> */}
               </tr>)
               :
                 (<tr key={LP}>
                 <td>{LP}</td>
                 <td><tt>{Osobnik}</tt></td>
-                {/* <td><tt>{Przystosowanie}</tt></td>
-                <td><tt>{(Procent * 100).toFixed(3)}</tt></td> */}
             </tr>))
            )
         })
      }
 
-     renderSchemasTableData(array) {
-        //  console.log(array)
-        return array.map((schema, index) => {
-           const { Schemat, Reprezentanci, Rozpietosc, Rzad } = schema //destructuring
-           return (
-              <tr key={Schemat}>
-                 <td><tt>{index}</tt></td>
-                 <td><tt>{Schemat}</tt></td>
-                 {/* <td><tt>{Przystosowanie}</tt></td> */}
-                 {/* <td>{Reprezentanci[Reprezentanci.length - 1]}</td>
-                 <td>{Rozpietosc}</td>
-                 <td>{Rzad}</td> */}
-              </tr>
-           )
-        })
-     }
+    
 
     handleStartStop = (simulationStopped) => { // name = (param) => 
         if (simulationStopped) {
@@ -362,6 +292,16 @@ class Slide31A extends Component {
             this.generateAllPossibleSchemasStrings()
         }
     }
+
+    generateFinalPopulation = () => {
+
+        this.setState({
+            schemasFinal : this.state.schemasOnlyWithAsterisks
+        })
+
+
+    }
+
     render(){
         
         return(
@@ -378,7 +318,8 @@ class Slide31A extends Component {
                     </div>
 
                     <div className="col-4">
-                        <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generatePopulationAndSchemas}>Wygeneruj populację</button>
+                        <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generatePopulationAndSchemas}>Wygeneruj populacje</button>
+                        <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generateFinalPopulation}>Wygeneruj populacjękońcową</button>
                     </div>
                 </div>
 
@@ -386,8 +327,7 @@ class Slide31A extends Component {
                     <div className="col-2"><h3 style={{textAlign: "left"}}>POPULACJA 1 </h3></div>
                     <div className="col-3"><h3 style={{textAlign: "right"}}>POPULACJA 2</h3></div>
                     <div className="col-4"><h3 style={{textAlign: "right"}}>POPULACJA KOŃCOWA</h3></div>
-                    <input type="checkbox" onChange={this.filterSchemas} name="filterSchemas"/>
-                    <label for="filterSchemas">Pokaż tylko schematy z gwiazdkami</label>
+                    
                 </div>
                 <div className="row">
                     <div className="col-3 tableFixHead">
@@ -407,13 +347,24 @@ class Slide31A extends Component {
                                 <tr>{this.renderTableHeader(this.state.individuals)}</tr>
                             </thead>
                             <tbody>
-                                {this.state.filterSchemasChecked ? 
-                                this.renderSchemasTableData(this.state.schemasOnlyWithAsterisks) : 
-                                this.renderSchemasTableData(this.state.schemas)}
+                                {
+                                this.renderIndividualTableData(this.state.schemasOnlyWithAsterisks)  
+                                }
                             </tbody>
                         </table>
                     </div>
-
+                    <div className="col-5 tableFixHead">
+                        <table id='individuals'>
+                            <thead>
+                                <tr>{this.renderTableHeader(this.state.individuals)}</tr>
+                            </thead>
+                            <tbody>
+                                {
+                                this.renderIndividualTableData(this.state.schemasFinal)  
+                                }
+                            </tbody>
+                        </table>
+                    </div>            
                     
                 </div>
             
