@@ -70,23 +70,24 @@ class Slide32A extends Component {
         this.mutationIndividual = React.createRef(); 
 
         this.inputString = React.createRef();
-
+        this.inputGValue = React.createRef();
         this.state = {
             inputValue:'013',
+            inputGValue:'0.0',
             sliderPopSizeValue: Slide18A_SLIDER_POPSIZE_MIN_DEFAULT,
             sliderCodeLengthValue: Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT,
             individuals: [
-                { LP: 1, Osobnik: '0000' },
+                { LP: 1, Osobnik: '0000', Przystosowanie: 0.0 },
                
             ],
             schemas: [
-                { LP: 1, Osobnik: '0000' },
+                { LP: 1, Osobnik: '0000', Przystosowanie: 0.0 },
             ],
             schemasOnlyWithAsterisks: [
-                { LP: 1, Osobnik: '****' },
+                { LP: 1, Osobnik: '****', Przystosowanie: 0.0 },
             ],
             schemasFinal: [
-                { LP: 1, Osobnik: '****' },
+                { LP: 1, Osobnik: '****', Przystosowanie: 0.0 },
             ],
             filterSchemasChecked: false,
             generation: 0
@@ -183,9 +184,20 @@ class Slide32A extends Component {
             tmpnewschema.push({ LP: i+1, Schemat: newSchemas[i] })
 
         }
+        // tutaj taki maly algorytm -> jezeli jest gwiazdka, to doliczamy 2x jej wartosc int z chara
         let tmpschemasasterix = []
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            tmpschemasasterix.push({ LP: i+1, Osobnik: tmpschemasOnlyWithAsterisks[i] })
+            let przystosowanieSum = 0;
+            for (let obj of tmpschemasOnlyWithAsterisks[i].split("")) {
+                przystosowanieSum += obj.charCodeAt(0);
+                if(obj==='*'){
+                    przystosowanieSum += obj.charCodeAt(0);
+                }
+            }
+            if(tmpschemasOnlyWithAsterisks[i] * 1){
+                przystosowanieSum += tmpschemasOnlyWithAsterisks[i] * 1
+            }
+            tmpschemasasterix.push({ LP: i+1, Osobnik: tmpschemasOnlyWithAsterisks[i], Przystosowanie: przystosowanieSum})
 
         }
         this.setState({
@@ -218,7 +230,14 @@ class Slide32A extends Component {
         
         let tmpIndividuals = []
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            tmpIndividuals.push({ LP: i+1, Osobnik: filteredwithoutstar[i] })
+            let przystosowanieSum = 0;
+            for (let obj of filteredwithoutstar[i].split("")) {
+                przystosowanieSum += obj.charCodeAt(0);
+            }
+            if(filteredwithoutstar[i] * 1){
+                przystosowanieSum += filteredwithoutstar[i] * 1
+            }
+            tmpIndividuals.push({ LP: i+1, Osobnik: filteredwithoutstar[i], Przystosowanie: przystosowanieSum})
 
         }
         this.setState({individuals:tmpIndividuals})
@@ -250,17 +269,19 @@ class Slide32A extends Component {
     renderIndividualTableData(array) {
         return array.map((individual, index) => {
             
-           const { LP, Osobnik } = individual //destructuring
+           const { LP, Osobnik, Przystosowanie } = individual //destructuring
            return (
             (LP == this.crossoverIndividualsIDs1.value || LP == this.crossoverIndividualsIDs2.value ?
               (<tr key={LP}>
                   <td style={{backgroundColor: "gray"}}>{LP}</td>
                 <td><tt>{Osobnik}</tt></td>
+                <td><tt>{Przystosowanie}</tt></td>
               </tr>)
               :
                 (<tr key={LP}>
                 <td>{LP}</td>
                 <td><tt>{Osobnik}</tt></td>
+                <td><tt>{Przystosowanie}</tt></td>
             </tr>))
            )
         })
@@ -312,8 +333,8 @@ class Slide32A extends Component {
                         <h4></h4>
                         <h4>alfabet k elementowy</h4>
                         <input ref = {this.inputString} style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_slide17A" value={this.state.inputValue} onChange={evt =>this.changeValueInComponent(evt)} ></input>
-                        <h4>Współczynnik G</h4>
-                        <input ref = {this.inputString} style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_slide17A" value={this.state.inputValue} onChange={evt =>this.changeValueInComponent(evt)} ></input>
+                        <h4>Współczynnik G wartosci 0-1</h4>
+                        <input ref = {this.inputGValue} style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_slide17A" value={this.state.inputGValue} onChange={evt =>this.changeValueInComponent(evt)} ></input>
                     </div>
 
                     <div className="col-4">
