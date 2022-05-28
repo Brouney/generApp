@@ -273,13 +273,13 @@ class Slide32A extends Component {
            return (
             (LP == this.crossoverIndividualsIDs1.value || LP == this.crossoverIndividualsIDs2.value ?
               (<tr key={LP}>
-                  <td style={{backgroundColor: "gray"}}>{LP}</td>
+                  <td style={{backgroundColor: "gray"}}>{index}</td>
                 <td><tt>{Osobnik}</tt></td>
                 <td><tt>{Przystosowanie}</tt></td>
               </tr>)
               :
                 (<tr key={LP}>
-                <td>{LP}</td>
+                <td>{index}</td>
                 <td><tt>{Osobnik}</tt></td>
                 <td><tt>{Przystosowanie}</tt></td>
             </tr>))
@@ -310,16 +310,77 @@ class Slide32A extends Component {
             this.generateAllPossibleSchemasStrings()
         }
     }
+    changeValueInComponentG = (evt) => {
+        let value = evt.target.value;
+        value = parseFloat(value)
+        this.setState({inputGValue:value})
+        if (value !=='')
+        {
+            this.generateAllPossibleSchemasStrings()
+        }
+    }
+    generateFinalPopulationElite = () => {
 
-    generateFinalPopulation = () => {
-
+        let numberToDelete = Math.round(this.state.individuals.length * (1 - this.state.inputGValue))
+        
+        let sortedPopulation1 = this.state.individuals
+        sortedPopulation1.sort( function(a,b) {
+            return a.Przystosowanie - b.Przystosowanie
+        })
+        let sortedPopulation2 = this.state.schemasOnlyWithAsterisks
+        sortedPopulation2.sort( function(a,b) {
+            return a.Przystosowanie - b.Przystosowanie
+        })
+        let finalPopulation = []
+        if(numberToDelete>0.0){
+            for(let i = sortedPopulation2.length-1;i>(sortedPopulation2.length -1 - numberToDelete);--i){
+               
+                finalPopulation.push(sortedPopulation2[i])
+            } 
+        }
+        for(let i = sortedPopulation1.length-1;i>numberToDelete-1;--i){
+            finalPopulation.push(sortedPopulation1[i])
+        }
+        finalPopulation.sort( function(a,b) {
+            return a.Przystosowanie - b.Przystosowanie
+        })
         this.setState({
-            schemasFinal : this.state.schemasOnlyWithAsterisks
+            schemasFinal : finalPopulation
         })
 
 
     }
 
+    generateRandomIntegerInRange = (min, max) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    generateFinalPopulationRandom = () => {
+
+        let numberToDelete = Math.round(this.state.individuals.length * (1 - this.state.inputGValue))
+        
+        let sortedPopulation1 = this.state.individuals
+       
+        let sortedPopulation2 = this.state.schemasOnlyWithAsterisks
+       
+        let finalPopulation = []
+        if(numberToDelete>0.0){
+            for(let i = sortedPopulation2.length-1;i>(sortedPopulation2.length -1 - numberToDelete);--i){
+               
+                finalPopulation.push(sortedPopulation2[i])
+            } 
+        }
+
+        for(let i = sortedPopulation1.length-1;i>numberToDelete-1;--i){
+            finalPopulation.push(sortedPopulation1[i])
+        }
+       
+        this.setState({
+            schemasFinal : finalPopulation
+        })
+
+
+    }
     render(){
         
         return(
@@ -334,12 +395,13 @@ class Slide32A extends Component {
                         <h4>alfabet k elementowy</h4>
                         <input ref = {this.inputString} style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_slide17A" value={this.state.inputValue} onChange={evt =>this.changeValueInComponent(evt)} ></input>
                         <h4>Współczynnik G wartosci 0-1</h4>
-                        <input ref = {this.inputGValue} style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_slide17A" value={this.state.inputGValue} onChange={evt =>this.changeValueInComponent(evt)} ></input>
+                        <input ref = {this.inputGValue} style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_slide17A" value={this.state.inputGValue} onChange={evt =>this.changeValueInComponentG(evt)} ></input>
                     </div>
 
                     <div className="col-4">
                         <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generatePopulationAndSchemas}>Wygeneruj populacje</button>
-                        <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generateFinalPopulation}>Wygeneruj populacjękońcową</button>
+                        <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generateFinalPopulationElite}>Wygeneruj populację końcową - sukcesja elitarna</button>
+                        <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generateFinalPopulationRandom}>Wygeneruj populację końcową - losowo</button>
                     </div>
                 </div>
 
