@@ -151,7 +151,7 @@ class Slide32A extends Component {
 
         let newSchemas = []
         let replacement = ''
-        console.log(tmpIndividuals.length)
+        
         // szukanie ustalonych pozycji z lewej i prawej
         for (let i = 0; i < tmpIndividuals.length; ++i) {
             replacement = ''
@@ -356,25 +356,44 @@ class Slide32A extends Component {
     }
 
     generateFinalPopulationRandom = () => {
-
-        let numberToDelete = Math.round(this.state.individuals.length * (1 - this.state.inputGValue))
-        
-        let sortedPopulation1 = this.state.individuals
-       
-        let sortedPopulation2 = this.state.schemasOnlyWithAsterisks
-       
-        let finalPopulation = []
-        if(numberToDelete>0.0){
-            for(let i = sortedPopulation2.length-1;i>(sortedPopulation2.length -1 - numberToDelete);--i){
-               
-                finalPopulation.push(sortedPopulation2[i])
-            } 
+        this.setState({
+            schemasFinal :  { LP: 1, Osobnik: '****', Przystosowanie: 0.0 }
+        })
+        let numberOldPopulationRemains = Math.round((this.state.individuals.length -1) * (1 - this.state.inputGValue))
+        let numberToDelete = this.state.individuals.length - numberOldPopulationRemains
+        let arrayOfIndexesToDelete = []
+        while(arrayOfIndexesToDelete.length !== (numberToDelete)){
+            arrayOfIndexesToDelete.push(this.generateRandomIntegerInRange(0,this.state.individuals.length-1))
+            arrayOfIndexesToDelete = [...new Set(arrayOfIndexesToDelete)]
         }
-
-        for(let i = sortedPopulation1.length-1;i>numberToDelete-1;--i){
-            finalPopulation.push(sortedPopulation1[i])
+        let arrayOfIndexesToReplace = []
+        while(arrayOfIndexesToReplace.length !== (numberToDelete)){
+            arrayOfIndexesToReplace.push(this.generateRandomIntegerInRange(0,this.state.individuals.length-1))
+            arrayOfIndexesToReplace = [...new Set(arrayOfIndexesToReplace)]
         }
+        //od najwiekszej do najmniejszej, poniewaz splice nie usuwa jak trzeba
+        arrayOfIndexesToDelete.sort( function(a,b) {
+            return b - a
+        })
+        arrayOfIndexesToReplace.sort( function(a,b) {
+            return b - a
+        })
+        let sortedPopulation1 = [...this.state.individuals]
        
+        let sortedPopulation2 = [...this.state.schemasOnlyWithAsterisks]
+       
+
+        let finalPopulation = [...sortedPopulation2]
+        for(let el of arrayOfIndexesToDelete){
+            finalPopulation.splice(el,1)
+        }
+        for(let el of arrayOfIndexesToReplace){
+            finalPopulation.push(sortedPopulation1[el])
+        }
+        finalPopulation.sort( function(a,b) {
+            return a.Przystosowanie - b.Przystosowanie
+        })
+        console.log(finalPopulation)
         this.setState({
             schemasFinal : finalPopulation
         })
