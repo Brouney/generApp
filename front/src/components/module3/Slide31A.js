@@ -369,7 +369,7 @@ class Slide31A extends Component {
                 </div>
             
 
-            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={2} slidesInModuleCounter={MODULE_3_SLIDES_COUNT}
+            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_3_SLIDES_COUNT}
                                current={this}
             ></NavigationButtons>
         </div>
