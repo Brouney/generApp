@@ -2,6 +2,9 @@ import React, {Component} from "react";
 import { InputNumber } from 'antd';
 var Latex = require('react-latex');
 
+// TODO: 	- Umax - Umin przelicza na przedział (0, 2^l - 1)
+// - dorzucic podanie ciagu kodowego x, i na podstawie jego obliczam U
+
 function howManyBitsNeededToRepresentInteger(value) {
     if (value == 0) {
         return 1
@@ -103,7 +106,7 @@ class ParameterComponent111A extends Component {
             <div style={{margin: "10px"}}>
                 <h5><li>
                 <label>
-                    U_min
+                    <Latex>{"${U_{min}}$"}</Latex>
                     <InputNumber
                         min={0}
                         max={this.state.Umax-1}
@@ -116,7 +119,7 @@ class ParameterComponent111A extends Component {
                 </label>
 
                 <label>
-                    U_max
+                    <Latex>{"${U_{max}}$"}</Latex>
                     <InputNumber
                         min={this.state.Umin+1}
                         max={1023}
@@ -129,7 +132,7 @@ class ParameterComponent111A extends Component {
                 </label>
 
                 <label>
-                    Liczba bitów
+                    Liczba bitów <Latex>{"${l}$"}</Latex>
                     <InputNumber
                         min={1}
                         max={10}
@@ -142,7 +145,7 @@ class ParameterComponent111A extends Component {
                 </label>
 
                 <label>
-                    u kodowane
+                    <Latex>{"${u}$"}</Latex> kodowane
                     <InputNumber
                         min={this.state.Umin}
                         max={this.state.Umax}
@@ -154,12 +157,12 @@ class ParameterComponent111A extends Component {
                     />
                 </label>
 
-                x = {Number.isInteger(xKod)
+                <Latex>{"${x}$"}</Latex> = {Number.isInteger(xKod)
                 ? xKod
-                : xKod.toFixed(3)}
+                : Math.round(xKod)}
                 <Latex>{"$${_{dec}}$$"}</Latex>
 
-                 ({zeroPad(xKod.toString(2), bity)}<Latex>{"$${_{bin}}$$"}</Latex>)
+                 ({zeroPad(Math.round(xKod).toString(2), bity)}<Latex>{"$${_{bin}}$$"}</Latex>)
                 </li></h5>
             </div>
         )

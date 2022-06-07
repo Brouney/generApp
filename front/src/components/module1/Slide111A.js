@@ -51,6 +51,11 @@ class Slide111A extends Component {
                         {/* <Latex>{"${\\left\\{\\begin{matrix}  \\end{matrix}\\right.}$"}</Latex> */}
                         <div style={{margin: "20px"}}><Latex>{"$${x = \\frac{u - U_{min}}{U_{max} - U_{min}}(2^l - 1)}$$"}</Latex><br></br></div>
                         <div style={{margin: "20px"}}><Latex>{"${u = U_{min} + \\frac{U_{max} - U_{min}}{2^l - 1}x}$"}</Latex></div>
+                        <div style={{margin: "20px"}}><Latex>{"${U_{min} \\le u \\le U_{max}}$"}</Latex></div>
+                        <div style={{margin: "20px"}}>gdzie: <br></br></div>
+                        <div style={{margin: "2px"}}><Latex>{"${x}$"}</Latex> - zakodowana postać liczby,</div>
+                        <div style={{margin: "2px"}}><Latex>{"${u}$"}</Latex> - kodowana liczba,</div>
+                        <div style={{margin: "2px"}}><Latex>{"${l}$"}</Latex> - liczba bitów</div>
                     </h4>
                     </div>
                     <div className="col">
