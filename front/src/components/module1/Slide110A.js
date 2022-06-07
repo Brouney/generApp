@@ -5,7 +5,6 @@ import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Plot from "react-plotly.js";
 import Slide111A from "./Slide111A"; 
 
-//TODO: (opcjonalnie) lepiej zaznaczyc powierzchnie i krawedzie
 
 // x: [0, 0, 1, 1, 0, 0, 1, 1],
 // y: [0, 1, 1, 0, 0, 1, 1, 0],
@@ -153,7 +152,19 @@ class Slide110A extends Component {
                         x: [0, 0, 1, 1, 0, 0, 1, 1],
                         y: [0, 1, 1, 0, 0, 1, 1, 0],
                         z: [0, 0, 0, 0, 1, 1, 1, 1],
-                        colorscale: [['0', 'rgb(255, 0, 255)'], ['0.5', 'rgb(0, 255, 0)']],
+                        colorscale: [
+                            ['0.0', 'rgb(165,0,38)'],
+                            ['0.000001', 'rgb(165,0,38)'],
+                            ['0.01', 'rgb(180,210,150)'],
+                            ['0.222222222222', 'rgb(180,210,150)'],
+                            ['0.333333333333', 'rgb(180,210,150)'],
+                            ['0.444444444444', 'rgb(180,210,150)'],
+                            ['0.555555555556', 'rgb(180,210,150)'],
+                            ['0.666666666667', 'rgb(180,210,150)'],
+                            ['0.777777777778', 'rgb(180,210,150)'],
+                            ['0.888888888889', 'rgb(180,210,150)'],
+                            ['1.0', 'rgb(180,210,150)']
+                          ],
                         intensity: this.state.intensityForPaintedArea,
                         alphahull: 0,
                         showscale: false,
