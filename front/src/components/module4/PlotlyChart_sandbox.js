@@ -1,5 +1,6 @@
 import React from "react";
 import Plot from "react-plotly.js";
+var nj = require('numjs');
 
 const graphData = {
   masterGraph: {
@@ -22,7 +23,7 @@ class PlotlyChart_sandbox extends React.Component {
 
     constructor(props) {
         super(props)
-        this.GRID_DENSITY = props.gridDensity ? props.gridDensity : 10
+        this.GRID_DENSITY = props.gridDensity
 
         this.state = {
             data: props.data ? props.data : this.generateData(),
@@ -63,14 +64,17 @@ class PlotlyChart_sandbox extends React.Component {
         let saddleFormula = (x, y) => y*y - x*x
         let paraboloidFormula = (x, y) => - x*x - y*y
         let genRastriginsFunc = (x, y) => 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)
-
-        var randomNumbers = Array.from(Array(this.GRID_DENSITY), () => [])
-        for (let x = 0; x < randomNumbers.length; x++) {
-            for (let y = 0; y < this.GRID_DENSITY; y++) {
+        let xymin = -5.12
+        let xymax = 5.12
+        let dis = (xymax - xymin )/this.GRID_DENSITY
+        let values = nj.arange(xymin, xymax,dis)
+        var randomNumbers = Array.from(Array(this.GRID_DENSITY), () => new Array(this.GRID_DENSITY*this.GRID_DENSITY))
+        for (let x = 0; x < this.GRID_DENSITY; x++) {
+            for (let y = 0; y < this.GRID_DENSITY ; y++) {
                 // let yyy = y - this.GRID_DENSITY / 2
                 // let xxx = x - this.GRID_DENSITY / 2
-                let yyy = y 
-                let xxx = x
+                let yyy = values.get(x)
+                let xxx = values.get(y)
                 let computedValue
 
                 if (dataFunction3d === 'saddle') {

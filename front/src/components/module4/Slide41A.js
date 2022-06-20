@@ -4,6 +4,7 @@ import { MODULE_4_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Slide42A from "./Slide42A";
 import PlotlyChart_sandbox from "./PlotlyChart_sandbox";
 
+
 class Slide41A extends Component {
 
     constructor(props){
@@ -31,7 +32,7 @@ class Slide41A extends Component {
                         ref={this.plotlyChart_sandbox}
                         title='Poszukiwanie ekstremum globalnego funkcji'
                         onSimulationEnd={this.onSimulationEnd}
-                        gridDensity={500}
+                        gridDensity={100}
                     />
                 </div>
 
