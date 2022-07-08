@@ -204,13 +204,28 @@ class PlotlyChart_sandbox extends React.Component {
                 z: this.state.data,
                 showscale: false,
             },
+            // {
+            //     type: "surface",
+            //     name: 'Szukanie',
+            //     x: xOnChart,
+            //     y: yOnChart,
+            //     z: this.state.squareArea,
+            //     colorscale: 'hsv',
+            // },
             {
-                type: "surface",
-                name: 'Szukanie',
-                x: xOnChart,
-                y: yOnChart,
-                z: this.state.squareArea,
-                colorscale: 'hsv',
+                x: [70],
+                y: [70],
+                z: [70],
+                mode: 'markers',
+                type: 'scatter3d',
+                marker: {
+                  color: 'rgb(23, 190, 207)',
+                  size: 5,
+                  line: {
+                    color: 'rgb(204, 204, 204)',
+                    width: 1},
+                  opacity: 0.8
+                }
             },
             ]}
             config={{
@@ -240,6 +255,31 @@ class PlotlyChart_sandbox extends React.Component {
                     t: CHART_MARGIN * 8,
                     pad: 4
                 },
+                autosize: true,
+                scene: {
+                    aspectratio: {
+                        x: 1,
+                        y: 1,
+                        z: 1
+                    },
+                    camera: {
+                        center: {
+                            x: 0,
+                            y: 0,
+                            z: 0
+                        },
+                        eye: {
+                            x: 1.25,
+                            y: 1.25,
+                            z: 1.25
+                        },
+                        up: {
+                            x: 0,
+                            y: 0,
+                            z: 1
+                        }
+                    },
+                }
             //   scene: {
             //     xaxis: {
             //       title: graphData.masterGraph.xAxis,
