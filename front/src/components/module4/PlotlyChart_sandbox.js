@@ -88,8 +88,11 @@ class PlotlyChart_sandbox extends React.Component {
                 randomNumbers[x][y] = computedValue
             }
         }
-
+        for (let i = 0; i<4; i++){
+            
+        }
         this.setState({ data: randomNumbers })
+        console.log(randomNumbers)
         return randomNumbers
     }
 
