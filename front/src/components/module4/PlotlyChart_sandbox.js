@@ -1,3 +1,4 @@
+import { Button } from "antd";
 import React from "react";
 import Plot from "react-plotly.js";
 var nj = require('numjs');
@@ -26,8 +27,14 @@ class PlotlyChart_sandbox extends React.Component {
         this.GRID_DENSITY = props.gridDensity
 
         this.state = {
-            data: props.data ? props.data : this.generateData(),
-            squareArea: areaPoints
+            data: this.generateData(),
+            squareArea: areaPoints,
+            numOfObjects : 5,
+            objectsPoints: {
+                x:[],
+                y:[],
+                z:[],
+            }
         }
 
         this.generateData = this.generateData.bind(this);
@@ -52,22 +59,14 @@ class PlotlyChart_sandbox extends React.Component {
     }
 
     generateData = (dataFunction3d = 'saddle') => {
-        // let randomNumbers = []
-        // for (let i = 0; i < this.GRID_DENSITY; i++) {
-        //     // randomNumbers.push(Array(this.GRID_DENSITY).fill().map(() => 1 - i*0.1))  // plaska powierzchnia
-        //     randomNumbers.push(Array(this.GRID_DENSITY).fill().map(() => Math.random())) // losowa powierzchnia
-        // }
-        // console.log(areaPoints)
-
         this.setDefaultGlobalVariables()
 
-        let saddleFormula = (x, y) => y*y - x*x
-        let paraboloidFormula = (x, y) => - x*x - y*y
         let genRastriginsFunc = (x, y) => 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)
         let xymin = -5.12
         let xymax = 5.12
         let dis = (xymax - xymin )/this.GRID_DENSITY
         let values = nj.arange(xymin, xymax,dis)
+        //siatka
         var randomNumbers = Array.from(Array(this.GRID_DENSITY), () => new Array(this.GRID_DENSITY*this.GRID_DENSITY))
         for (let x = 0; x < this.GRID_DENSITY; x++) {
             for (let y = 0; y < this.GRID_DENSITY ; y++) {
@@ -81,21 +80,46 @@ class PlotlyChart_sandbox extends React.Component {
                     // computedValue = saddleFormula(xxx, yyy)
                     computedValue = genRastriginsFunc(xxx, yyy)
                 }
-                else if (dataFunction3d === 'paraboloid') {
-                    computedValue = paraboloidFormula(xxx, yyy)
-                }
+                // else if (dataFunction3d === 'paraboloid') {
+                //     computedValue = paraboloidFormula(xxx, yyy)
+                // }
 
                 randomNumbers[x][y] = computedValue
             }
         }
-        for (let i = 0; i<4; i++){
-            
-        }
+
         this.setState({ data: randomNumbers })
-        console.log(randomNumbers)
         return randomNumbers
     }
 
+    generateRandomObjects = () => {
+        let newObjectsX = []
+        let newObjectsY = []
+        let newObjectsZ = []
+
+        for (let i = 0; i<this.state.numOfObjects; i++){
+            // let newObjectsX = [...this.state.objectsPoints.x]
+            // let newObjectsY = [...this.state.objectsPoints.y]
+            // let newObjectsZ = [...this.state.objectsPoints.z]
+            // Math.floor(Math.random() * (max - min + 1)) + min
+            let randomX = Math.floor(Math.random() * (this.GRID_DENSITY - 0 + 1)) + 0
+            let randomY = Math.floor(Math.random() * (this.GRID_DENSITY - 0 + 1)) + 0
+            let randomZ = this.state.data[randomX][randomY]
+
+            newObjectsX.push(randomX)
+            newObjectsY.push(randomY)
+            newObjectsZ.push(randomZ)
+  
+        }
+        this.setState({
+            objectsPoints: {
+                x: [...newObjectsX],
+                y: [...newObjectsY],
+                z: [...newObjectsZ],
+            }
+        })
+
+    }
     findNeighborsOfPoint = (x, y) => { // zwraca srodki sasiadow punktu ktory ma srodek w x,y
         let neighbors = []
         for (let i = x-1; i < x+2; i++) {
@@ -199,118 +223,102 @@ class PlotlyChart_sandbox extends React.Component {
         // console.log(yOnChart)
 
         return (
-        <Plot
-            data={[
-            {
-                type: "surface",
-                name: '3D',
-                z: this.state.data,
-                showscale: false,
-            },
-            // {
-            //     type: "surface",
-            //     name: 'Szukanie',
-            //     x: xOnChart,
-            //     y: yOnChart,
-            //     z: this.state.squareArea,
-            //     colorscale: 'hsv',
-            // },
-            {
-                x: [70],
-                y: [70],
-                z: [70],
-                mode: 'markers',
-                type: 'scatter3d',
-                marker: {
-                  color: 'rgb(23, 190, 207)',
-                  size: 5,
-                  line: {
-                    color: 'rgb(204, 204, 204)',
-                    width: 1},
-                  opacity: 0.8
-                }
-            },
-            ]}
-            config={{
-                'displayModeBar': false, // wylaczenie kontrolek Plotly
-                "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
-            }}
-            layout={{
-                width: '100%',
-                height: '100%',
-                title: this.props.title,
-                paper_bgcolor: '#d3d3d3',
-                plot_bgcolor: '#343a40',
-                xaxis: {
-                    showgrid: false,
-                    // zeroline: False
-                    visible: false
+        <div> 
+            <div>
+            <Button type="primary" onClick={() => this.generateRandomObjects()}>Generuj populację</Button>
+            </div> 
+            <Plot
+                data={[
+                {
+                    type: "surface",
+                    name: '3D',
+                    z: this.state.data,
+                    showscale: false,
                 },
-                yaxis: {
-                    showgrid: false,
-                    // zeroline: False
-                    visible: false
+                // {
+                //     type: "surface",
+                //     name: 'Szukanie',
+                //     x: xOnChart,
+                //     y: yOnChart,
+                //     z: this.state.squareArea,
+                //     colorscale: 'hsv',
+                // },
+                {
+                    // x: [55,3],
+                    // y: [70,2],
+                    // z: [39,60],
+                    x: [...this.state.objectsPoints.x],
+                    y: [...this.state.objectsPoints.y],
+                    z: [...this.state.objectsPoints.z],
+                    mode: 'markers',
+                    type: 'scatter3d',
+                    name: "obiekty",
+                    marker: {
+                    color: 'rgb(23, 190, 207)',
+                    size: 8,
+                    line: {
+                        color: 'rgb(204, 204, 204)',
+                        width: 1},
+                    opacity: 1
+                    }
                 },
-                margin: {
-                    l: CHART_MARGIN,
-                    r: CHART_MARGIN,
-                    b: CHART_MARGIN,
-                    t: CHART_MARGIN * 8,
-                    pad: 4
-                },
-                autosize: true,
-                scene: {
-                    aspectratio: {
-                        x: 1,
-                        y: 1,
-                        z: 1
+                ]}
+                config={{
+                    'displayModeBar': false, // wylaczenie kontrolek Plotly
+                    "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
+                }}
+                layout={{
+                    width: '100%',
+                    height: '100%',
+                    title: this.props.title,
+                    paper_bgcolor: '#d3d3d3',
+                    plot_bgcolor: '#343a40',
+                    xaxis: {
+                        showgrid: false,
+                        // zeroline: False
+                        visible: false
                     },
-                    camera: {
-                        center: {
-                            x: 0,
-                            y: 0,
-                            z: 0
-                        },
-                        eye: {
-                            x: 1.25,
-                            y: 1.25,
-                            z: 1.25
-                        },
-                        up: {
-                            x: 0,
-                            y: 0,
+                    yaxis: {
+                        showgrid: false,
+                        // zeroline: False
+                        visible: false
+                    },
+                    margin: {
+                        l: CHART_MARGIN,
+                        r: CHART_MARGIN,
+                        b: CHART_MARGIN,
+                        t: CHART_MARGIN * 8,
+                        pad: 4
+                    },
+                    autosize: true,
+                    scene: {
+                        aspectratio: {
+                            x: 1,
+                            y: 1,
                             z: 1
-                        }
-                    },
-                }
-            //   scene: {
-            //     xaxis: {
-            //       title: graphData.masterGraph.xAxis,
-            //       titlefont: {
-            //         family: "Courier New, monospace",
-            //         size: 12,
-            //         color: "#444444"
-            //       }
-            //     },
-            //     yaxis: {
-            //       title: graphData.masterGraph.yAxis,
-            //       titlefont: {
-            //         family: "Courier New, monospace",
-            //         size: 12,
-            //         color: "#444444"
-            //       }
-            //     },
-            //     zaxis: {
-            //       title: graphData.masterGraph.zAxis,
-            //       titlefont: {
-            //         family: "Courier New, monospace",
-            //         size: 12,
-            //         color: "#444444"
-            //       }
-            //     }
-            //   }
-            }}
-        />
+                        },
+                        camera: {
+                            center: {
+                                x: 0,
+                                y: 0,
+                                z: 0
+                            },
+                            eye: {
+                                x: 1.25,
+                                y: 1.25,
+                                z: 1.25
+                            },
+                            up: {
+                                x: 0,
+                                y: 0,
+                                z: 1
+                            }
+                        },
+                    }
+
+                }}
+            />
+        </div>  
         );
     }
 }
