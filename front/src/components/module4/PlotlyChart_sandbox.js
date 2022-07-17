@@ -93,15 +93,12 @@ class PlotlyChart_sandbox extends React.Component {
     }
 
     generateRandomObjects = () => {
+        //generowanie punktów na funkcji
         let newObjectsX = []
         let newObjectsY = []
         let newObjectsZ = []
 
         for (let i = 0; i<this.state.numOfObjects; i++){
-            // let newObjectsX = [...this.state.objectsPoints.x]
-            // let newObjectsY = [...this.state.objectsPoints.y]
-            // let newObjectsZ = [...this.state.objectsPoints.z]
-            // Math.floor(Math.random() * (max - min + 1)) + min
             let randomX = Math.floor(Math.random() * (this.GRID_DENSITY - 0 + 1)) + 0
             let randomY = Math.floor(Math.random() * (this.GRID_DENSITY - 0 + 1)) + 0
             let randomZ = this.state.data[randomX][randomY]
@@ -188,10 +185,6 @@ class PlotlyChart_sandbox extends React.Component {
             zValues.push(this.state.data[point[0]][point[1]] + 0.1) // dodaje 0.1 zeby obszar nie nachodzil na wykres
         }
 
-        // console.log('zValues:', zValues)
-        // while (zValues.length) {
-        //     newww.push(zValues.splice(0,2))
-        // }
         let newww = new Array(4).fill(0).map(() => new Array(4).fill(0)) // tablica 4x4, aby dobrze rysowal sie obszar szukajacy ekstremum
     
         for (let i = 0; i < newww.length; i++) {
@@ -206,21 +199,6 @@ class PlotlyChart_sandbox extends React.Component {
 
     render() {
         const CHART_MARGIN = 5
-        let xOnChart = [
-                areaPoints[0][1],
-                areaPoints[1][1],
-                areaPoints[2][1],
-                areaPoints[3][1],
-            ]
-        let yOnChart = [
-            areaPoints[0][0],
-            areaPoints[1][0],
-            areaPoints[2][0],
-            areaPoints[3][0],
-        ]
-
-        // console.log(xOnChart)
-        // console.log(yOnChart)
 
         return (
         <div> 
@@ -235,18 +213,7 @@ class PlotlyChart_sandbox extends React.Component {
                     z: this.state.data,
                     showscale: false,
                 },
-                // {
-                //     type: "surface",
-                //     name: 'Szukanie',
-                //     x: xOnChart,
-                //     y: yOnChart,
-                //     z: this.state.squareArea,
-                //     colorscale: 'hsv',
-                // },
                 {
-                    // x: [55,3],
-                    // y: [70,2],
-                    // z: [39,60],
                     x: [...this.state.objectsPoints.x],
                     y: [...this.state.objectsPoints.y],
                     z: [...this.state.objectsPoints.z],
