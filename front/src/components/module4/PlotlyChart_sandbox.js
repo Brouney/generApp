@@ -1,6 +1,7 @@
 import { Button } from "antd";
 import React from "react";
 import Plot from "react-plotly.js";
+import MySlider from "../common/MySlider";
 var nj = require('numjs');
 
 const graphData = {
@@ -34,13 +35,30 @@ class PlotlyChart_sandbox extends React.Component {
                 x:[],
                 y:[],
                 z:[],
-            }
+            },
+            sliderPopSizeValuePT: 0.5,
+            sliderPopSizeValuePCross: 0.5
         }
-
+        this.sliderPopSize = React.createRef()
+        
         this.generateData = this.generateData.bind(this);
         this.moveSquareOnChartTowardsExtremum = this.moveSquareOnChartTowardsExtremum.bind(this);
     }
 
+    onChangeSliderPopSizePT = (v) => {
+        // this.disableOperatorsButtons()
+
+        this.setState({
+            sliderPopSizeValuePT: v,
+        });
+    }
+    onChangeSliderPopSizePCross = (v) => {
+        // this.disableOperatorsButtons()
+
+        this.setState({
+            sliderPopSizeValuePCross: v,
+        });
+    }
     setDefaultGlobalVariables() {
         let minValue = Math.ceil(2)
         let maxValue = Math.floor(this.GRID_DENSITY - 1)
@@ -205,6 +223,19 @@ class PlotlyChart_sandbox extends React.Component {
             <div>
             <Button type="primary" onClick={() => this.generateRandomObjects()}>Generuj populację</Button>
             </div> 
+            <div>
+
+            </div>
+            <div>
+                
+            </div>
+            <div>
+            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"P(t)"} passValueToParent={this.onChangeSliderPopSizePT}></MySlider>
+            </div>
+            <div>
+            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"P(cross)"} passValueToParent={this.onChangeSliderPopSizePCross}></MySlider>
+            </div>
+            
             <Plot
                 data={[
                 {
