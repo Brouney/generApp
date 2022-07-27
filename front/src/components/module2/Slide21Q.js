@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import QuizTemplate from "../templates/QuizTemplate";
-import Slide22A from "./Slide22A";
+import Slide27A from "./Slide27A";
 
 class Slide21Q extends Component {
 
@@ -10,7 +10,7 @@ class Slide21Q extends Component {
         super(props)
         this.mainArea = props.mainArea
         this.prev = null;
-        this.next = <Slide22A mainArea={this.mainArea}></Slide22A>;
+        this.next = <Slide27A mainArea={this.mainArea}></Slide27A>;
 
         this.quizTemplate = React.createRef()
     }

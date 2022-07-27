@@ -1,11 +1,14 @@
 import React, { Component } from "react";
-import { MODULE_1_SLIDES_COUNT } from "../templates/ListExercisePanel";
+import { MODULE_1_SLIDES_COUNT, MODULE_2_SLIDES_COUNT } from "../templates/ListExercisePanel";
 import NavigationButtons from "../templates/NavigationButtons";
-import Slide18A from "./Slide18A";
-import Slide110A from "./Slide110A";
+import Slide18A from "./Slide21A";
+import Slide110A from "./Slide22A";
 import MySlider from "../common/MySlider";
 import Plot from "react-plotly.js";
-import '../../css/Slide18A.css';
+import '../../css/Slide21A.css';
+import Description20 from "./Description20";
+import Description21 from "./Description21";
+import Slide21A from "./Slide21A";
 
 
 // TODO: jak liczyc dostosowanie
@@ -64,13 +67,13 @@ function printAllKLengthRec(set,prefix,n,k)
                                 n, k - 1);
     }
 }
-class Slide19A extends Component {
+class Slide20A extends Component {
 
     constructor(props) {
         super(props)
         this.mainArea = props.mainArea
-        this.prev = <Slide18A mainArea={this.mainArea}></Slide18A>
-        this.next = <Slide110A mainArea={this.mainArea}></Slide110A>
+        this.prev = <Description20 mainArea={this.mainArea}></Description20>;
+        this.next = <Description21 prev={<Slide20A></Slide20A>} next={<Slide21A mainArea={this.mainArea}></Slide21A>} mainArea={this.mainArea}></Description21>
         this.title = 'Konwencja zapisu i terminologia'
         this.navigationButtons = React.createRef()
 
@@ -499,8 +502,8 @@ class Slide19A extends Component {
                     mainArea={this.mainArea} 
                     prev={this.prev} 
                     next={this.next} 
-                    currentSlideCounter={9} 
-                    slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
+                    currentSlideCounter={2} 
+                    slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
                     current={this}
                     onStartStop={this.handleStartStop}
                 ></NavigationButtons>
@@ -509,5 +512,5 @@ class Slide19A extends Component {
     }
 }
 
-export default Slide19A
+export default Slide20A
 

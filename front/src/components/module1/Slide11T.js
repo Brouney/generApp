@@ -5,14 +5,16 @@ import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import 'antd/dist/antd.css';
 import  PlotlyChart3d from "../common/PlotlyChart3d";
+import Description11 from "./Description11";
+import Description12 from "./Description12";
 
 class Slide11T extends Component {
 
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
-        this.prev = null;
-        this.next = <Slide12A prev={<Slide11T></Slide11T>} next={<Slide13T></Slide13T>} mainArea={this.mainArea}></Slide12A>
+        this.prev = <Description11 mainArea={this.mainArea}></Description11>;
+        this.next = <Description12 prev={<Slide11T></Slide11T>} next={<Slide12A mainArea={this.mainArea}></Slide12A>} mainArea={this.mainArea}></Description12>
         this.timerId = null;
         this.title = 'Tradycyjne metody poszukiwania - metody analityczne'
 
@@ -93,7 +95,7 @@ class Slide11T extends Component {
                 mainArea={this.mainArea}
                 prev={this.prev}
                 next={this.next}
-                currentSlideCounter={1}
+                currentSlideCounter={2}
                 slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                 onStartStop={this.handleStartStop}
             ></NavigationButtons>

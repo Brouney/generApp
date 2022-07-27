@@ -1,24 +1,28 @@
 import React, { Component } from "react";
-import { MODULE_1_SLIDES_COUNT } from "../templates/ListExercisePanel";
+import { MODULE_1_SLIDES_COUNT, MODULE_2_SLIDES_COUNT } from "../templates/ListExercisePanel";
 import NavigationButtons from "../templates/NavigationButtons";
-import Slide17A from "./Slide17A";
-import Slide19A from "./Slide19A";
+
+import Slide23A from "./Slide20A";
 import MySlider from "../common/MySlider";
 import Plot from "react-plotly.js";
-import '../../css/Slide18A.css';
+import '../../css/Slide21A.css';
+import Description20 from "./Description20";
+import Description21 from "./Description21";
+import Description22 from "./Description22";
+import Slide22A from "./Slide22A";
 
 
 // TODO: poprawny update wykresu po mutacji i krzyzowaniu
 // TODO: (niekoniecznie) dodac wzory z twierdzenia schematow pod tabelkami
 
 
-const Slide18A_SLIDER_POPSIZE_MIN_DEFAULT = 10
-const Slide18A_SLIDER_POPSIZE_MAX_DEFAULT = 100
-const Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT = 3
-const Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT = 6
+const Slide_21A_SLIDER_POPSIZE_MIN_DEFAULT = 10
+const Slide_21A_SLIDER_POPSIZE_MAX_DEFAULT = 100
+const Slide_21A_SLIDER_CODELENGTH_MIN_DEFAULT = 3
+const Slide_21A_SLIDER_CODELENGTH_MAX_DEFAULT = 6
 
-var Slide18A_allPossibleSchemasStrings = [];
-var Slide18A_plotData = [];
+var Slide_21A_allPossibleSchemasStrings = [];
+var Slide_21A_plotData = [];
 
 function randomBinary(min, max) {
     return Math.floor(min + Math.random() * (max + 1 - min)).toString(2);
@@ -28,13 +32,13 @@ String.prototype.replaceAt = function(index, replacement) {
     return this.substring(0, index) + replacement + this.substring(index + replacement.length);
 }
 
-class Slide18A extends Component {
+class Slide21A extends Component {
 
     constructor(props) {
         super(props)
         this.mainArea = props.mainArea
-        this.prev = <Slide17A mainArea={this.mainArea}></Slide17A>
-        this.next = <Slide19A mainArea={this.mainArea}></Slide19A>
+        this.prev = <Description21 mainArea={this.mainArea}></Description21>;
+        this.next = <Description22 prev={<Slide21A></Slide21A>} next={<Slide22A mainArea={this.mainArea}></Slide22A>} mainArea={this.mainArea}></Description22>
         this.title = 'Wpływ operatorów genetycznych na schematy'
         this.navigationButtons = React.createRef()
 
@@ -55,8 +59,8 @@ class Slide18A extends Component {
 
 
         this.state = {
-            sliderPopSizeValue: Slide18A_SLIDER_POPSIZE_MIN_DEFAULT,
-            sliderCodeLengthValue: Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT,
+            sliderPopSizeValue: Slide_21A_SLIDER_POPSIZE_MIN_DEFAULT,
+            sliderCodeLengthValue: Slide_21A_SLIDER_CODELENGTH_MIN_DEFAULT,
             individuals: [
                 { LP: 1, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
                 { LP: 2, Osobnik: '000', Przystosowanie: 0.0, Procent: 0.0 },
@@ -92,14 +96,14 @@ class Slide18A extends Component {
     generateAllPossibleSchemasStrings() {
         var schema           = '';
         var alphabet       = '01*';
-        Slide18A_allPossibleSchemasStrings = [];
+        Slide_21A_allPossibleSchemasStrings = [];
         
-        while (Slide18A_allPossibleSchemasStrings.length != 3**this.state.sliderCodeLengthValue) {
+        while (Slide_21A_allPossibleSchemasStrings.length != 3**this.state.sliderCodeLengthValue) {
             for ( var i = 0; i < this.state.sliderCodeLengthValue; i++ ) {
                 schema += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
             }
-            if (!Slide18A_allPossibleSchemasStrings.includes(schema)) {
-                Slide18A_allPossibleSchemasStrings.push(schema)
+            if (!Slide_21A_allPossibleSchemasStrings.includes(schema)) {
+                Slide_21A_allPossibleSchemasStrings.push(schema)
             }
             
             schema = ''
@@ -304,24 +308,24 @@ class Slide18A extends Component {
         let newSchemas = []
 
         // szukanie ustalonych pozycji z lewej i prawej
-        for (let i = 0; i < Slide18A_allPossibleSchemasStrings.length; ++i) {
+        for (let i = 0; i < Slide_21A_allPossibleSchemasStrings.length; ++i) {
 
             let leftFound = false
             let rightFound = false
             let indexLeft = 0
-            let indexRight = Slide18A_allPossibleSchemasStrings[i].length - 1
+            let indexRight = Slide_21A_allPossibleSchemasStrings[i].length - 1
             while (!leftFound || !rightFound) {
-                if (Slide18A_allPossibleSchemasStrings[i][indexLeft] == '*')
+                if (Slide_21A_allPossibleSchemasStrings[i][indexLeft] == '*')
                     indexLeft++
                 else
                     leftFound=true
 
-                if (Slide18A_allPossibleSchemasStrings[i][indexRight] == '*')
+                if (Slide_21A_allPossibleSchemasStrings[i][indexRight] == '*')
                     indexRight--
                 else
                     rightFound=true
 
-                if (indexLeft > Slide18A_allPossibleSchemasStrings[i].length - 1)
+                if (indexLeft > Slide_21A_allPossibleSchemasStrings[i].length - 1)
                     break
             }
 
@@ -332,7 +336,7 @@ class Slide18A extends Component {
                 let schemaChecked = false
 
                 while (!schemaChecked) {
-                    if (tmpIndividuals[k]['Osobnik'][j] == Slide18A_allPossibleSchemasStrings[i][j] || Slide18A_allPossibleSchemasStrings[i][j] == '*') {
+                    if (tmpIndividuals[k]['Osobnik'][j] == Slide_21A_allPossibleSchemasStrings[i][j] || Slide_21A_allPossibleSchemasStrings[i][j] == '*') {
                         j++
                     }
                     else {
@@ -357,11 +361,11 @@ class Slide18A extends Component {
                 representants = [representantsOfSchemaCount]
             }
 
-            newSchemas.push({Schemat: Slide18A_allPossibleSchemasStrings[i],
+            newSchemas.push({Schemat: Slide_21A_allPossibleSchemasStrings[i],
                 Przystosowanie: representantsOfSchemaCount == 0 ? 0 : (representantsOfSchemaFitnessSum / representantsOfSchemaCount).toFixed(3),
                 Reprezentanci: representants,
                 Rozpietosc: indexRight - indexLeft, // odległość między skrajnymi ustalonymi pozycjami
-                Rzad: Slide18A_allPossibleSchemasStrings[i].split("0").length - 1 + Slide18A_allPossibleSchemasStrings[i].split("1").length - 1}) // liczba ustalonych pozycji (liczba zer lub jedynek)
+                Rzad: Slide_21A_allPossibleSchemasStrings[i].split("0").length - 1 + Slide_21A_allPossibleSchemasStrings[i].split("1").length - 1}) // liczba ustalonych pozycji (liczba zer lub jedynek)
         }
 
         // console.log(newSchemas)
@@ -527,10 +531,10 @@ class Slide18A extends Component {
     }
 
     computePlotData = () => {
-        Slide18A_plotData = []
+        Slide_21A_plotData = []
 
         for (let i = 0; i < this.state.schemasOnlyWithAsterisks.length; ++i) {
-            Slide18A_plotData.push({
+            Slide_21A_plotData.push({
                 type: "scatter",
                 name: this.state.schemasOnlyWithAsterisks[i]['Schemat'],
                 x: [...Array(this.state.generation).keys()],
@@ -549,8 +553,8 @@ class Slide18A extends Component {
                 <h1>{this.title}</h1>
                 <div className="row">
                     <div className="col-8">
-                        <MySlider min={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT} max={Slide18A_SLIDER_POPSIZE_MAX_DEFAULT} defaultValue={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Liczebność populacji"} passValueToParent={this.onChangeSliderPopSize}></MySlider>
-                        <MySlider min={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT} max={Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT} defaultValue={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderCodeLength} text={"Długość ciągu kodowego"} passValueToParent={this.onChangeSliderCodeLengthValue}></MySlider>
+                        <MySlider min={Slide_21A_SLIDER_POPSIZE_MIN_DEFAULT} max={Slide_21A_SLIDER_POPSIZE_MAX_DEFAULT} defaultValue={Slide_21A_SLIDER_POPSIZE_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Liczebność populacji"} passValueToParent={this.onChangeSliderPopSize}></MySlider>
+                        <MySlider min={Slide_21A_SLIDER_CODELENGTH_MIN_DEFAULT} max={Slide_21A_SLIDER_CODELENGTH_MAX_DEFAULT} defaultValue={Slide_21A_SLIDER_CODELENGTH_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderCodeLength} text={"Długość ciągu kodowego"} passValueToParent={this.onChangeSliderCodeLengthValue}></MySlider>
                     </div>
 
                     <div className="col-4">
@@ -649,7 +653,7 @@ class Slide18A extends Component {
 
                         <div className="row-3">
                             <Plot
-                                data={Slide18A_plotData}
+                                data={Slide_21A_plotData}
                                 config={{
                                     'displayModeBar': false, // wylaczenie kontrolek Plotly
                                     "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
@@ -699,8 +703,8 @@ class Slide18A extends Component {
                     mainArea={this.mainArea} 
                     prev={this.prev} 
                     next={this.next} 
-                    currentSlideCounter={8} 
-                    slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
+                    currentSlideCounter={4} 
+                    slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
                     current={this}
                     onStartStop={this.handleStartStop}
                 ></NavigationButtons>
@@ -709,5 +713,5 @@ class Slide18A extends Component {
     }
 }
 
-export default Slide18A
+export default Slide21A
 

@@ -4,6 +4,8 @@ import NavigationButtonsAllDisabled from "../templates/NavigationButtonsAllDisab
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import { Wheel } from 'react-custom-roulette'
 import Slide17A from "./Slide17A";
+import Description16 from "./Description16";
+import Description17 from "./Description17";
 
 const data = [
     { option: '0', style: { backgroundColor: 'red', textColor: 'white' } },
@@ -40,8 +42,8 @@ class Slide16A extends Component {
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
-        this.prev = <Slide15A mainArea={this.mainArea}></Slide15A>
-        this.next = <Slide17A prev={<Slide16A></Slide16A>} mainArea={this.mainArea}></Slide17A>
+        this.prev = <Description16 mainArea={this.mainArea}></Description16>;
+        this.next = <Description17 mainArea={this.mainArea}></Description17>;
         this.title = 'Podstawowe operacje algorytmów - selekcja (ruletkowa)'
         this.state = {
             start_spin: false,
@@ -185,7 +187,7 @@ class Slide16A extends Component {
                 mainArea={this.mainArea}
                 prev={this.prev}
                 next={this.next}
-                currentSlideCounter={6}
+                currentSlideCounter={12}
                 slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                 onStartStop={() => {this.handleStartStop(false)}}
             ></NavigationButtonsAllDisabled>

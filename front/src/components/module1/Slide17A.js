@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { MODULE_1_SLIDES_COUNT } from "../templates/ListExercisePanel";
 import NavigationButtons from "../templates/NavigationButtons";
-import Slide16A from "./Slide16A";
-import Slide18A from "./Slide18A";
+import Description17 from "./Description17";
+
 
 
 class Slide17A extends Component {
@@ -10,8 +10,8 @@ class Slide17A extends Component {
     constructor(props){
         super(props);
         this.mainArea = props.mainArea
-        this.prev = <Slide16A mainArea={this.mainArea}></Slide16A>
-        this.next = <Slide18A mainArea={this.mainArea}></Slide18A>
+        this.prev = <Description17 mainArea={this.mainArea}></Description17>;
+        this.next = null;
         this.title = 'Krzyżowanie proste (jednopunktowe) '
         this.navigationButtons = React.createRef()
 
@@ -114,7 +114,7 @@ class Slide17A extends Component {
                     mainArea={this.mainArea} 
                     prev={this.prev} 
                     next={this.next} 
-                    currentSlideCounter={7} 
+                    currentSlideCounter={14} 
                     slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                     current={this}
                     onStartStop={this.handleStartStop}

@@ -4,14 +4,16 @@ import Slide14A from "./Slide14A";
 import SimulatedAnnealing13 from "./SimulatedAnnealing13";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import Description13 from "./Description13";
+import Description14 from "./Description14";
 
 class Slide13T extends Component {
 
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
-        this.prev = <Slide12A mainArea={this.mainArea}></Slide12A>
-        this.next = <Slide14A prev={<Slide13T></Slide13T>} mainArea={this.mainArea}></Slide14A>
+        this.prev = <Description13 mainArea={this.mainArea}></Description13>;
+        this.next = <Description14 mainArea={this.mainArea}></Description14>;
         this.title = 'Tradycyjne metody poszukiwania - metody losowe'
 
         this.navigationButtons = React.createRef();
@@ -64,7 +66,7 @@ class Slide13T extends Component {
                 mainArea={this.mainArea}
                 prev={this.prev}
                 next={this.next}
-                currentSlideCounter={3}
+                currentSlideCounter={6}
                 slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                 onStartStop={this.handleStartStop}
             ></NavigationButtons>

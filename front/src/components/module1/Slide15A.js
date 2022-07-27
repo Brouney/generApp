@@ -4,14 +4,16 @@ import Slide16A from "./Slide16A";
 import NavigationButtons from "../templates/NavigationButtons";
 import ElementaryAG15 from "./ElementaryAG15";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import Description15 from "./Description15";
+import Description16 from "./Description16";
 
 class Slide15A extends Component {
 
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
-        this.prev = <Slide14A mainArea={this.mainArea}></Slide14A>
-        this.next = <Slide16A mainArea={this.mainArea}></Slide16A>
+        this.prev = <Description15 mainArea={this.mainArea}></Description15>;
+        this.next = <Description16 mainArea={this.mainArea}></Description16>;
         this.title = 'Elementarny algorytm genetyczny'
 
         this.navigationButtons = React.createRef()
@@ -39,7 +41,7 @@ class Slide15A extends Component {
                 mainArea={this.mainArea}
                 prev={this.prev}
                 next={this.next}
-                currentSlideCounter={5}
+                currentSlideCounter={10}
                 slidesInModuleCounter={MODULE_1_SLIDES_COUNT}
                 onStartStop={this.handleStartStop}
             ></NavigationButtons>

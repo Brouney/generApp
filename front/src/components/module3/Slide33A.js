@@ -4,6 +4,8 @@ import { MODULE_3_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Slide34A from "./Slide34A";
 import Slide32A from "./Slide32A";
 import MySlider from "../common/MySlider";
+import Description33 from "./Description33";
+import Description34 from "./Description34";
 
 function printAllKLength(set,k)
 {
@@ -51,8 +53,8 @@ class Slide33A extends Component {
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
-        this.prev = <Slide32A mainArea={this.mainArea}></Slide32A>;
-        this.next = <Slide34A prev={<Slide33A></Slide33A>} mainArea={this.mainArea}></Slide34A>
+        this.prev = <Description33 mainArea={this.mainArea}></Description33>;
+        this.next = <Description34 mainArea={this.mainArea}></Description34>;
 
         this.navigationButtons = React.createRef()
 
@@ -426,7 +428,7 @@ class Slide33A extends Component {
             
       
 
-            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={3} slidesInModuleCounter={MODULE_3_SLIDES_COUNT}
+            <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={6} slidesInModuleCounter={MODULE_3_SLIDES_COUNT}
                                current={this}
             ></NavigationButtons>
         </div>
