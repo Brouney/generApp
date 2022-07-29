@@ -19,8 +19,8 @@ class Slide34A extends Component {
         
         return(
         <div>
-            <h1>Moduł 3 Slajd 2</h1>
-            Szablon quizu
+            <h1>Operatory reprodukcji  TODO</h1>
+           
             
 
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={8} slidesInModuleCounter={MODULE_3_SLIDES_COUNT}

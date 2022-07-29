@@ -11,6 +11,7 @@ class Slide44A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide43A mainArea={this.mainArea}></Slide43A>;
         this.next = <Slide45A prev={<Slide44A></Slide44A>} mainArea={this.mainArea}></Slide45A>
+        this.title = 'Krzyżowanie uśredniające (wariant alternatywny) - Marek'
 
         this.quizTemplate = React.createRef()
     }
@@ -19,8 +20,7 @@ class Slide44A extends Component {
         
         return(
         <div>
-            <h1>Moduł 4 Slajd 1</h1>
-            Szablon quizu
+            <h1>{this.title}</h1>
             
 
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={4} slidesInModuleCounter={MODULE_4_SLIDES_COUNT}

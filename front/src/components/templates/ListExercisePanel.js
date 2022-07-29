@@ -10,14 +10,13 @@ import Description11 from "../module1/Description11";
 import Description21 from "../module2/Description21";
 import Description20 from "../module2/Description20";
 import Description31 from "../module3/Description31";
-import Description41 from "../module4/Description41";
 
 // TODO: increase below globals whenever you add new slides to module
-export let MODULE_1_SLIDES_COUNT = 14;
-export let MODULE_2_SLIDES_COUNT = 16;
+export let MODULE_1_SLIDES_COUNT = 12;
+export let MODULE_2_SLIDES_COUNT = 14;
 export let MODULE_3_SLIDES_COUNT = 8;
-export let MODULE_4_SLIDES_COUNT = 10;
-export let MODULE_5_SLIDES_COUNT = 10;
+export let MODULE_4_SLIDES_COUNT = 7;
+export let MODULE_5_SLIDES_COUNT = 1;
 
 class ListExercisePanel extends Component {
 
@@ -29,7 +28,7 @@ class ListExercisePanel extends Component {
         this.module1 = <Description11 mainArea={this.mainArea}></Description11>
         this.module2 = <Description20 mainArea={this.mainArea}></Description20>
         this.module3 = <Description31 mainArea={this.mainArea}></Description31> // TODO: proper slides to initialize module
-        this.module4 = <Description41 mainArea={this.mainArea}></Description41>
+        this.module4 = <Slide41A mainArea={this.mainArea}></Slide41A>
         this.module5 = <Slide51A mainArea={this.mainArea}></Slide51A>
 
         return(
@@ -38,8 +37,8 @@ class ListExercisePanel extends Component {
             <InListButton list={this} mainArea={this.mainArea} text={'Algorytmy genetyczne\njako metoda optymalizacji'} knowledgePanel={this.module1}></InListButton>
             <InListButton list={this} mainArea={this.mainArea} text={'Podstawy matematyczne\nalgorytmów genetycznych'} knowledgePanel={this.module2}></InListButton>
             <InListButton list={this} mainArea={this.mainArea} text="Operatory selekcji" knowledgePanel={this.module3}></InListButton>
-            <InListButton list={this} mainArea={this.mainArea} text="Metody krzyżowania i mutacji" knowledgePanel={this.module4}></InListButton>
-            <InListButton list={this} mainArea={this.mainArea} text="Techniki zabezpieczające" knowledgePanel={this.module5}></InListButton>
+            <InListButton list={this} mainArea={this.mainArea} text="Metody krzyżowania" knowledgePanel={this.module4}></InListButton>
+            <InListButton list={this} mainArea={this.mainArea} text={'Strojenie\noperatorów\ngenetycznych'} knowledgePanel={this.module5}></InListButton>
             
         </div>)
     }

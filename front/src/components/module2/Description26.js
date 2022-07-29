@@ -3,8 +3,8 @@ import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import 'antd/dist/antd.css';
 import Slide25A from "./Slide25A";
-import Description25 from "./Description25";
 import Slide26A from "./Slide26A";
+import Description25 from "./Description25";
 
 class Description26 extends Component {
 

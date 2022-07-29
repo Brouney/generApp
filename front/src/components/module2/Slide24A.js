@@ -11,7 +11,7 @@ class Slide24A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Description24 mainArea={this.mainArea}></Description24>
         this.next = <Description25 prev={<Slide24A></Slide24A>} mainArea={this.mainArea}></Description25>
-        this.title = 'Metoda kar'
+        this.title = 'Metoda kar - TODO - Marek'
         this.state = {
         }
     }

@@ -3,9 +3,7 @@ import Slide15A from "./Slide15A";
 import NavigationButtonsAllDisabled from "../templates/NavigationButtonsAllDisabled";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import { Wheel } from 'react-custom-roulette'
-import Slide17A from "./Slide17A";
 import Description16 from "./Description16";
-import Description17 from "./Description17";
 
 const data = [
     { option: '0', style: { backgroundColor: 'red', textColor: 'white' } },
@@ -43,7 +41,7 @@ class Slide16A extends Component {
         super(props)
         this.mainArea = props.mainArea
         this.prev = <Description16 mainArea={this.mainArea}></Description16>;
-        this.next = <Description17 mainArea={this.mainArea}></Description17>;
+        this.next = null;
         this.title = 'Podstawowe operacje algorytmów - selekcja (ruletkowa)'
         this.state = {
             start_spin: false,
