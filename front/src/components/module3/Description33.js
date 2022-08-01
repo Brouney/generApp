@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
-import { MODULE_1_SLIDES_COUNT, MODULE_3_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import { MODULE_3_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import 'antd/dist/antd.css';
 import Slide33A from "./Slide33A";
 import Description34 from "./Description34";
@@ -14,7 +14,7 @@ class Description33 extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide32A prev={<Description32></Description32>}  mainArea={this.mainArea}></Slide32A>
         this.next = <Slide33A prev={<Description33></Description33>} next={<Description34></Description34>} mainArea={this.mainArea}></Slide33A>
-        this.title = 'Desc3'
+        this.title = 'Piotr 3.5'
 
         this.navigationButtons = React.createRef();
 
@@ -38,6 +38,7 @@ class Description33 extends Component {
                 currentSlideCounter={5}
                 slidesInModuleCounter={MODULE_3_SLIDES_COUNT}
                 onStartStop={this.handleStartStop}
+                hiddenStartStopButton={true}
             ></NavigationButtons>
 
         </div>

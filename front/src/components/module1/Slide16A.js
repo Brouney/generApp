@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import Slide15A from "./Slide15A";
 import NavigationButtonsAllDisabled from "../templates/NavigationButtonsAllDisabled";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import { Wheel } from 'react-custom-roulette'

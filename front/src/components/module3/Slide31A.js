@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_3_SLIDES_COUNT } from '../templates/ListExercisePanel'
-import Slide32A from "./Slide32A";
 import MySlider from "../common/MySlider";
 import Plot from "react-plotly.js";
 import '../../css/Slide21A.css';

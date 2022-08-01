@@ -1,10 +1,7 @@
 import React, {Component} from "react";
-import Slide19A from "./Slide20A";
 import NavigationButtons from "../templates/NavigationButtons";
-import { MODULE_1_SLIDES_COUNT, MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Plot from "react-plotly.js";
-import Slide23A from "./Slide23A"; 
-import Slide20A from "./Slide20A";
 import Description22 from "./Description22";
 import Description23 from "./Description23";
 

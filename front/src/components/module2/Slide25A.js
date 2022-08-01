@@ -1,7 +1,6 @@
 import React, {Component} from "react";
-import Slide24A from "./Slide24A";
 import NavigationButtons from "../templates/NavigationButtons";
-import { MODULE_1_SLIDES_COUNT, MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Puzzle_113 from "../module1/Puzzle_113";
 import Description25 from "./Description25";
 import Description26 from "./Description26";

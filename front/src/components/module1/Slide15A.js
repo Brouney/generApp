@@ -1,6 +1,4 @@
 import React, {Component} from "react";
-import Slide14A from "./Slide14A";
-import Slide16A from "./Slide16A";
 import NavigationButtons from "../templates/NavigationButtons";
 import ElementaryAG15 from "./ElementaryAG15";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'

@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_3_SLIDES_COUNT } from '../templates/ListExercisePanel'
-import Slide33A from "./Slide33A";
 import Description34 from "./Description34";
 
 class Slide34A extends Component {

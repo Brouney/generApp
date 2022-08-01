@@ -13,7 +13,7 @@ class Description26 extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide25A prev={<Description25></Description25>} next={<Description26></Description26>} mainArea={this.mainArea}></Slide25A>;
         this.next = <Slide26A prev={<Description26></Description26>}  mainArea={this.mainArea}></Slide26A>
-        this.title = 'desc6'
+        this.title = 'Piotr 2.13'
 
         this.navigationButtons = React.createRef();
 
@@ -37,6 +37,7 @@ class Description26 extends Component {
                 currentSlideCounter={13}
                 slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
                 onStartStop={this.handleStartStop}
+                hiddenStartStopButton={true}
             ></NavigationButtons>
 
         </div>

@@ -1,13 +1,8 @@
 import React, {Component} from "react";
 import InListButton from "./InListButton";
-import Slide11T from "../module1/Slide11T";
-import Slide110A from "../module2/Slide22A";
-import Slide21Q from "../module2/Slide21Q";
-import Slide31A from "../module3/Slide31A";
 import Slide41A from "../module4/Slide41A";
 import Slide51A from "../module5/Slide51A";
 import Description11 from "../module1/Description11";
-import Description21 from "../module2/Description21";
 import Description20 from "../module2/Description20";
 import Description31 from "../module3/Description31";
 

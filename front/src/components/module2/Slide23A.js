@@ -1,8 +1,6 @@
 import React, {Component} from "react";
-import Slide22A from "./Slide22A";
-import Slide24A from "./Slide24A";
 import NavigationButtons from "../templates/NavigationButtons";
-import { MODULE_1_SLIDES_COUNT, MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
+import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import ParameterComponent111A from "../module1/ParameterComponent111A";
 import Description23 from "./Description23";
 import Description24 from "./Description24";
