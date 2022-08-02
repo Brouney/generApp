@@ -13,7 +13,7 @@ class Description14 extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide13T prev={<Description13></Description13>} next={<Description14></Description14>} mainArea={this.mainArea}></Slide13T>;
         this.next = <Slide14A prev={<Description14></Description14>} next={<Description14></Description14>} mainArea={this.mainArea}></Slide14A>
-        this.title = 'Piotr 1.7'
+        this.title = 'Wstęp do zawartości slajdu 8'
 
         this.navigationButtons = React.createRef();
 
@@ -27,7 +27,8 @@ class Description14 extends Component {
         return(
         <div>
             <h1>{this.title}</h1>
-
+            <h3>Dopasuj cechy do odpowiedniej rubryki - Algorytmy genetyczne lub metody tradycyjne.</h3>
+            <h3>W momencie, gdy wszystkie cechy zostaną dobrze przypisane, czerwony przycisk zmieni swój kolor na niebieski.</h3>
 
             <NavigationButtons
                 ref={this.navigationButtons}
