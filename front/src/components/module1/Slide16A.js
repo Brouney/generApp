@@ -94,7 +94,7 @@ class Slide16A extends Component {
         return(
         <div>
             <h1>{this.title}</h1>
-            <div>
+            <div style={{float:"left"}}>
             <Wheel
                 mustStartSpinning={this.state.start_spin}
                 prizeNumber={this.state.wal_win}
