@@ -12,7 +12,7 @@ class Description20 extends Component {
         this.mainArea = props.mainArea
         this.prev = null;
         this.next = <Slide20A prev={<Description20></Description20>} next={<Description21></Description21>} mainArea={this.mainArea}></Slide20A>
-        this.title = 'Piotr 2.1'
+        this.title = 'Wstęp przed slajdem 1.'
 
         this.navigationButtons = React.createRef();
 
@@ -26,7 +26,7 @@ class Description20 extends Component {
         return(
         <div>
             <h1>{this.title}</h1>
-
+            <h3></h3>
 
             <NavigationButtons
                 ref={this.navigationButtons}
