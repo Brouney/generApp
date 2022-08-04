@@ -4,6 +4,7 @@ import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import 'antd/dist/antd.css';
 import Description21 from "./Description21";
 import Slide20A from "./Slide20A";
+var Latex = require('react-latex');
 
 class Description20 extends Component {
 
@@ -26,8 +27,15 @@ class Description20 extends Component {
         return(
         <div>
             <h1>{this.title}</h1>
-            <h3></h3>
-
+            <h3>
+                <Latex>{"Alfabet składający się z k symboli i ciągów l elementowych posiada ${k^l}$ ciągów i ${(k+1)^l}$ schematów"}</Latex>
+            </h3>
+            <h3>
+                Aby wygenerować losową populację oraz schematy naciśnij przycisk wygeneruj populację. 
+            </h3>
+            <h3>
+                Animację można konfigurować: można zmieniać liczebność populacji jak i długość ciągu kodowego oraz alfabet k elementowy.
+            </h3>
             <NavigationButtons
                 ref={this.navigationButtons}
                 mainArea={this.mainArea}

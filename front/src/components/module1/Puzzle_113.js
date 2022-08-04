@@ -68,6 +68,9 @@ const onDragEnd = (result, columns, setColumns) =>{
         const destItems = [...destColumn.items]; //usuwamy jeden element 
         const [removed] = sourceItems.splice(source.index, 1);
         destItems.splice(destination.index, 0, removed); //dodajemy w 2 kolumnie
+        if (destItems.length > 2){
+            return
+        }
         setColumns({
             ...columns,
             [source.droppableId]: {

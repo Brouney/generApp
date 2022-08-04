@@ -383,11 +383,20 @@ class Slide20A extends Component {
             },)
         }
     }
+
+    filtrWithoutChar = (el) => {
+        if (el !== '*'){
+            return el
+        }
+        else{
+            return
+        }
+    }
+
     changeValueInComponent = (evt) => {
-        // console.log(Slide18A_allPossibleSchemasStrings)
-        let value = evt.target.value;
-        // value = value==='' || value.length < 2 ? '01*' : value;
-        value = [...new Set(value)].join('');
+        let value = evt.target.value
+        //brak mozliwosci wpisania gwiazdki
+        value = [...new Set(value)].filter(this.filtrWithoutChar).join('');
         this.setState({inputValue:value})
         if (value !=='')
         {
@@ -445,49 +454,7 @@ class Slide20A extends Component {
                         </table>
                     </div>
 
-                    <div className="col-5">
-                        
-
-
-                        {/* <div className="row-3">
-                            <Plot
-                                data={Slide18A_plotData}
-                                config={{
-                                    'displayModeBar': false, // wylaczenie kontrolek Plotly
-                                    "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
-                                }}
-                                layout={{
-                                    width: 500,
-                                    height: 400,
-                                    margin: {
-                                        l: 50,
-                                        r: 20,
-                                        b: 60,
-                                        t: 60,
-                                        pad: 4
-                                      },
-                                    title: "Liczba reprezentantów schematu",
-                                    // paper_bgcolor: '#d3d3d3',
-                                    // plot_bgcolor: '#343a40',
-                                    xaxis: {
-                                        // showgrid: false,
-                                        // visible: false,
-                                        title: {
-                                            text: 't'
-                                        },
-                                        tickmode: "linear",
-                                        tick0: 1,
-                                        dtick: 3
-                                    },
-                                    yaxis: {
-                                        title: "m(H, t)",
-                                        // showgrid: false,
-                                        // visible: false
-                                    },
-                                }}
-                            />
-                        </div> */}
-                    </div>
+                    
                 </div>
 
 
