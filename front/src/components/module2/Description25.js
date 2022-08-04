@@ -14,7 +14,7 @@ class Description25 extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide24A prev={<Description24></Description24>} next={<Description25></Description25>} mainArea={this.mainArea}></Slide24A>;
         this.next = <Slide25A prev={<Description25></Description25>} next={<Description26></Description26>} mainArea={this.mainArea}></Slide25A>
-        this.title = 'Piotr 2.11'
+        this.title = 'Wstęp przed slajdem 12'
 
         this.navigationButtons = React.createRef();
 
@@ -28,7 +28,10 @@ class Description25 extends Component {
         return(
         <div>
             <h2>{this.title}</h2>
-
+            <h3>Połącz definicje biologiczne.</h3>
+            <h3>W momencie, gdy wszystkie definicje zostaną dobrze połączone, czerwony przycisk zmieni swój kolor na niebieski.</h3>
+            <h3>Pamiętaj! W każdym połączeniu muszą znajdować się 2 definicje</h3>
+            <h3>Powodzenia!</h3>
 
             <NavigationButtons
                 ref={this.navigationButtons}
