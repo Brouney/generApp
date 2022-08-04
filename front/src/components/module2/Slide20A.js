@@ -419,8 +419,6 @@ class Slide20A extends Component {
                 <div className="row">
                     <div className="col-2"><h3 style={{textAlign: "left"}}>POPULACJA</h3></div>
                     <div className="col-3"><h3 style={{textAlign: "right"}}>SCHEMATY</h3></div>
-                    <input type="checkbox" onChange={this.filterSchemas} name="filterSchemas"/>
-                    <label for="filterSchemas">Pokaż tylko schematy z gwiazdkami</label>
                 </div>
                 <div className="row">
                     <div className="col-3 tableFixHead">

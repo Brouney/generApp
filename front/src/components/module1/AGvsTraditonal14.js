@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const itemsFromBackend = [
-    {id:'1', content:'Przetwarzają1...', type:1},
-    {id:'2', content:'Działają na 1...', type:1},
-    {id:'3', content:'Korzystają z1...', type:1},
-    {id:'4', content:'Wykorzystują2...', type:2},
-    {id:'5', content:'Działają na2...', type:2},
-    {id:'6', content:'Przetwarzają2...', type:2}
+    {id:'1', content:'Przetwarzają zakodowaną postać zadania', type:1},
+    {id:'2', content:'Działają na populacji rozwiązań', type:1},
+    {id:'3', content:'Korzystają z funkcji celu', type:1},
+    {id:'4', content:'Wykorzystują metody deterministyczne', type:2},
+    {id:'5', content:'Przewarzają jedno rozwiązanie', type:2},
+    {id:'6', content:'Przetwarzają bezpośrednio parametry zadania', type:2}
 
 ];
 
