@@ -282,11 +282,21 @@ class Slide31A extends Component {
         }
         
     }
+
+    filtrWithoutChar = (el) => {
+        if (el !== '*'){
+            return el
+        }
+        else{
+            return
+        }
+    }
+
     changeValueInComponent = (evt) => {
         // console.log(Slide18A_allPossibleSchemasStrings)
         let value = evt.target.value;
         // value = value==='' || value.length < 2 ? '01*' : value;
-        value = [...new Set(value)].join('');
+        value = [...new Set(value)].filter(this.filtrWithoutChar).join('');
         this.setState({inputValue:value})
         if (value !=='')
         {

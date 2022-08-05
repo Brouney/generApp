@@ -34,7 +34,7 @@ class Slide41A extends Component {
 
     changeValueInComponent = (evt) => {
         let value = evt.target.value;
-        value = isNaN(value) ? 6 : value;
+        value = isNaN(value) ? 6 : value > 10 ? 0 : value;
         this.setState({cross: value});
     }
 
