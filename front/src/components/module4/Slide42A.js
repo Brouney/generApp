@@ -34,13 +34,13 @@ class Slide42A extends Component {
 
     changeValueInComponentLeft = (evt) => {
         let value = evt.target.value;
-        value = isNaN(value) ? this.state.crossRight-1 : value > 10 ? 0 : value;
+        value = isNaN(value) ? this.state.crossRight-1 : value > 10 ? 0 : value < this.state.crossRight ? value : this.state.crossRight-1;
         this.setState({crossLeft: value});
     }
 
     changeValueInComponentRight = (evt) => {
         let value = evt.target.value;
-        value = isNaN(value) ? this.state.crossLeft+1 : value > 10 ? 5 : value;
+        value = isNaN(value) ? this.state.crossLeft+1 : value > 10 ? 5 : value > this.state.crossLeft ? value : this.state.crossLeft+1;
         this.setState({crossRight: value});
     }
 
@@ -61,7 +61,7 @@ class Slide42A extends Component {
                 • Losowo wybieramy z populacji parę osobników do krzyżowania
             </h2>
             <h2>
-                • Losowo wybieramy miejsce krzyżowania. Dla ciągów k-pozycyjnych mamy k-1 możliwości
+                • Losowo wybieramy 2  miejsca krzyżowania. Dla ciągów k-pozycyjnych mamy k-1 możliwości
             </h2>
             <h2>
                 • Jeśli miejsce krzyżowania to n, wymieniamy miejscami bity od pozycji n+1 do końca ciągu
