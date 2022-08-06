@@ -17,7 +17,7 @@ class Slide42A extends Component {
 
         this.state = {
             crossLeft: 3,
-            crossRight: 6,
+            crossRight: 5,
         }
     }
 
@@ -34,13 +34,13 @@ class Slide42A extends Component {
 
     changeValueInComponentLeft = (evt) => {
         let value = evt.target.value;
-        value = isNaN(value) ? 3 : value > 10 ? 0 : value;
+        value = isNaN(value) ? this.state.crossRight-1 : value > 10 ? 0 : value;
         this.setState({crossLeft: value});
     }
 
     changeValueInComponentRight = (evt) => {
         let value = evt.target.value;
-        value = isNaN(value) ? 6 : value > 10 ? 5 : value;
+        value = isNaN(value) ? this.state.crossLeft+1 : value > 10 ? 5 : value;
         this.setState({crossRight: value});
     }
 
@@ -84,45 +84,45 @@ class Slide42A extends Component {
                     </tr>
                     <tr>
                         <td style={{fontSize:"50px"}}>A2 =  </td> 
-                        <td style={{fontSize:"50px", color:"coral"}}>0</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>1</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>1</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>1</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>1</td>
-                         <td style={{fontSize:"50px", color:"coral"}}>0</td>
+                        {this.coralTD(0)}
+                        {this.coralTD(1)}
+                         {this.coralTD(0)}
+                         {this.coralTD(1)}
+                         {this.coralTD(0)}
+                         {this.coralTD(0)}
+                         {this.coralTD(1)}
+                         {this.coralTD(0)}
+                         {this.coralTD(1)}
+                         {this.coralTD(0)}
                     </tr>
                     <tr >
                         <td style={{fontSize:"50px"}}>A`1=</td>
-                         {this.state.crossLeft >= 1?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
-                         {this.state.crossLeft >= 2?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
-                         {this.state.crossLeft >= 3?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
-                         {this.state.crossLeft >= 4?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
-                         {this.state.crossLeft >= 5?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
+                         {this.state.crossLeft >= 1 || 1 >= this.state.crossRight ? this.blueVioletTD(1) : this.coralTD(0) }
+                         {this.state.crossLeft >= 2 || 2 >= this.state.crossRight ? this.blueVioletTD(0) : this.coralTD(1) }
+                         {this.state.crossLeft >= 3 || 3 >= this.state.crossRight ? this.blueVioletTD(0) : this.coralTD(0) }
+                         {this.state.crossLeft >= 4 || 4 >= this.state.crossRight ? this.blueVioletTD(1) : this.coralTD(1) }
+                         {this.state.crossLeft >= 5 || 5 >= this.state.crossRight ? this.blueVioletTD(1) : this.coralTD(0) }
 
-                         {this.state.crossLeft >= 6?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
-                         {this.state.crossLeft >= 7?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
-                         {this.state.crossLeft >= 8?<td style={{fontSize:"50px", color:"blueviolet"}}>0</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
-                         {this.state.crossLeft >= 9?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>1</td> }
-                         {this.state.crossLeft >= 10?<td style={{fontSize:"50px", color:"blueviolet"}}>1</td>:<td style={{fontSize:"50px", color:"coral"}}>0</td> }
+                         {this.state.crossLeft >= 6  || 6 >= this.state.crossRight ? this.blueVioletTD(0) : this.coralTD(0) }
+                         {this.state.crossLeft >= 7 || 7 >= this.state.crossRight ? this.blueVioletTD(0) : this.coralTD(1) }
+                         {this.state.crossLeft >= 8 || 8 >= this.state.crossRight ? this.blueVioletTD(0) : this.coralTD(0) }
+                         {this.state.crossLeft >= 9 || 9 >= this.state.crossRight ? this.blueVioletTD(1) : this.coralTD(1) }
+                         {this.state.crossLeft >= 10 || 10 >= this.state.crossRight ? this.blueVioletTD(1) : this.coralTD(0) }
                         
                     </tr>
                     <tr>
                         <td style={{fontSize:"50px"}}>A`2=  </td> 
-                        {this.state.crossLeft >= 1?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
-                        {this.state.crossLeft >= 2?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
-                        {this.state.crossLeft >= 3?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
-                        {this.state.crossLeft >= 4?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
-                        {this.state.crossLeft >= 5?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.crossLeft >= 1 || 1 >= this.state.crossRight? this.coralTD(0) : this.blueVioletTD(1) }
+                        {this.state.crossLeft >= 2 || 2 >= this.state.crossRight? this.coralTD(1) : this.blueVioletTD(0) }
+                        {this.state.crossLeft >= 3 || 3 >= this.state.crossRight? this.coralTD(0) : this.blueVioletTD(0) }
+                        {this.state.crossLeft >= 4 || 4 >= this.state.crossRight? this.coralTD(1) : this.blueVioletTD(1) }
+                        {this.state.crossLeft >= 5 || 5 >= this.state.crossRight? this.coralTD(0) : this.blueVioletTD(1) }
 
-                        {this.state.crossLeft >= 6?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
-                        {this.state.crossLeft >= 7?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
-                        {this.state.crossLeft >= 8?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>0</td> }
-                        {this.state.crossLeft >= 9?<td style={{fontSize:"50px", color:"coral"}}>1</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
-                        {this.state.crossLeft >= 10?<td style={{fontSize:"50px", color:"coral"}}>0</td>:<td style={{fontSize:"50px", color:"blueviolet"}}>1</td> }
+                        {this.state.crossLeft >= 6 || 6 >= this.state.crossRight? this.coralTD(0) : this.blueVioletTD(0) }
+                        {this.state.crossLeft >= 7 || 7 >= this.state.crossRight? this.coralTD(1) : this.blueVioletTD(0) }
+                        {this.state.crossLeft >= 8 || 8 >= this.state.crossRight? this.coralTD(0) : this.blueVioletTD(0) }
+                        {this.state.crossLeft >= 9 || 9 >= this.state.crossRight? this.coralTD(1) : this.blueVioletTD(1) }
+                        {this.state.crossLeft >= 10 || 10 >= this.state.crossRight? this.coralTD(0) : this.blueVioletTD(1)  }
                          
                     </tr>
                 </table>
