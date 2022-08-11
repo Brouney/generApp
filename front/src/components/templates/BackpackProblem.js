@@ -9,6 +9,8 @@ const itemsFromBackend = [
     {id:'4', content:'Batonik 10', value: 10},
     {id:'5', content:'Piórnik 15', value: 15},
     {id:'6', content:'Teczka 20', value: 20},
+    {id:'7', content:'Długopis 5', value: 5},
+    {id:'8', content:'Piłka 40', value: 40}
 ];
 
 const columnsFromBackend = {

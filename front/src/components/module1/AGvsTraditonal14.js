@@ -7,7 +7,7 @@ const itemsFromBackend = [
     {id:'2', content:'Działają na populacji rozwiązań', type:1},
     {id:'3', content:'Korzystają z funkcji celu', type:1},
     {id:'4', content:'Wykorzystują metody deterministyczne', type:2},
-    {id:'5', content:'Przewarzają jedno rozwiązanie', type:2},
+    {id:'5', content:'Przetwarzają jedno rozwiązanie', type:2},
     {id:'6', content:'Przetwarzają bezpośrednio parametry zadania', type:2}
 
 ];
@@ -19,11 +19,11 @@ const columnsFromBackend = {
             items: itemsFromBackend
         },
         ["12"]: {
-            name:'AG',
+            name:"Algorytmy\ngenetyczne",
             items: []
         },
         ["13"]: {
-            name:'Tradycyjne',
+            name:'Metody tradycyjne',
             items: []
         }
     };
@@ -96,15 +96,15 @@ function AGvsTraditional14(){
         <div>
             <div>
                 { inpropervalue ?
-                <Button type="primary" danger onSubmit={checkValues(columns) }style={{marginLeft:"35%"}} >
+                <Button type="primary" danger onSubmit={checkValues(columns) }style={{marginLeft:"30%"}} >
                 Dopasuj poprawnie
                 </Button>:
-                <Button type="primary"  onSubmit={checkValues(columns)} style={{marginLeft:"35%"}} >
-                    Wszystko poprawnie dopasowane
+                <Button type="primary"  onSubmit={checkValues(columns)} style={{marginLeft:"30%"}} >
+                Wszystko poprawnie dopasowane
                 </Button> 
             }
             </div>
-            <div style={{display:'flex', justifyContent: 'center'}}>
+            <div style={{display:'flex', marginLeft: "5%", marginTop: 50}}>
                 
                 <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
                     {Object.entries(columns).map(([id,column]) => {
@@ -123,7 +123,8 @@ function AGvsTraditional14(){
                                                         background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
                                                         padding: 4,
                                                         width: 250,
-                                                        minHeight: 500
+                                                        minHeight: 500,
+                                                        margin: 25
                                                     
                                                     }}
                                                 >

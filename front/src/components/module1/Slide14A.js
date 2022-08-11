@@ -12,7 +12,7 @@ class Slide14A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Description14 mainArea={this.mainArea}></Description14>;
         this.next = <Description15 mainArea={this.mainArea}></Description15>;
-        this.title = 'Różnice między AG i metodami tradycyjnymi'
+        this.title = 'Różnice między algorytmami genetycznymi i metodami tradycyjnymi'
 
     }
 

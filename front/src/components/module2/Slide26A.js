@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
-import ParameterComponent22A from "../module1/ParameterComponent22A";
+import ParameterComponent26A from "./ParameterComponent26A";
 import Plot from "react-plotly.js";
 import Description26 from "./Description26";
 
@@ -28,7 +28,7 @@ class Slide26A extends Component {
     }
     onClickAddParameter = () => {
         
-        let tmp = <ParameterComponent22A ref={this.state.references[this.state.level]}main={this} level={this.state.level + 1}/>
+        let tmp = <ParameterComponent26A ref={this.state.references[this.state.level]}main={this} level={this.state.level + 1}/>
         this.setState(prevState => ({
             parameters: [...prevState.parameters, tmp ],
             level: this.state.level + 1,

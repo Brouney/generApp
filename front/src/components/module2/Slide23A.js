@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
-import ParameterComponent111A from "../module1/ParameterComponent111A";
+import ParameterComponent23A from "./ParameterComponent23A";
 import Description23 from "./Description23";
 import Description24 from "./Description24";
 var Latex = require('react-latex');
@@ -20,16 +20,16 @@ class Slide23A extends Component {
 
         this.state = {
             parameters: [
-                <ParameterComponent111A Umax={7} bity={3}/>,
-                <ParameterComponent111A Umax={15} bity={4}/>,
-                <ParameterComponent111A Umax={31} bity={5}/>,
+                <ParameterComponent23A Umax={7} bity={3}/>,
+                <ParameterComponent23A Umax={15} bity={4}/>,
+                <ParameterComponent23A Umax={31} bity={5}/>,
             ]
         }
     }
 
     onClickAddParameter = () => {
         this.setState(prevState => ({
-            parameters: [...prevState.parameters, <ParameterComponent111A Umax={15} bity={4}/>]
+            parameters: [...prevState.parameters, <ParameterComponent23A Umax={15} bity={4}/>]
         }))
     }
 

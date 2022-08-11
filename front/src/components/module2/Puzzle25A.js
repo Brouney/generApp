@@ -118,7 +118,7 @@ const checkValues = (columns) => {
 
     
 }
-function Puzzle_113(){
+function Puzzle25A(){
     const [columns, setColumns] = useState(columnsFromBackend);
     return(
         <div>
@@ -257,4 +257,4 @@ function Puzzle_113(){
 
 
 }
-export default Puzzle_113
+export default Puzzle25A

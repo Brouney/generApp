@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
-import Puzzle_113 from "../module1/Puzzle_113";
+import Puzzle25A from "./Puzzle25A";
 import Description25 from "./Description25";
 import Description26 from "./Description26";
 class Slide25A extends Component {
@@ -21,7 +21,7 @@ class Slide25A extends Component {
         return(
             <div>
                 <h1>{this.title}</h1>
-                <Puzzle_113 parent={this} ></Puzzle_113>
+                <Puzzle25A parent={this} ></Puzzle25A>
                 <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={12} slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
                                 current={this}
                 ></NavigationButtons>

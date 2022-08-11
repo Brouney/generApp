@@ -34,6 +34,10 @@ class Slide15A extends Component {
             <h1>{this.title}</h1>
             <ElementaryAG15 ref={this.elementaryAG15}/>
 
+            <h3><ul>
+                <li><b>Space</b> - wznów/przerwij animację</li><br></br>
+            </ul></h3>
+
             <NavigationButtons 
                 ref={this.navigationButtons}
                 mainArea={this.mainArea}

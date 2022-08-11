@@ -1,8 +1,5 @@
 import React from 'react'
 import Sketch from 'react-p5'
-import MySlider from '../common/MySlider'
-
-// slajd 2/11
 
 const ElementaryAG15_WIDTH = 900
 const ElementaryAG15_HEIGHT = 600
@@ -311,7 +308,7 @@ class ElementaryAG15 extends React.Component {
                     this.isWindowCurrentStepMoving = true
                     this.windowCurrentStepY += 2
                 }
-                else { // trwa animacja populacji z prawej strony slajdu 2/11
+                else { // trwa animacja populacji z prawej strony slajdu 1/10
                     
                     switch (this.windowCurrentStepY) {
                         case this.rectanglesYCoords[0]: // 1 krok

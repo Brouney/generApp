@@ -12,7 +12,7 @@ class Slide13T extends Component {
         this.mainArea = props.mainArea
         this.prev = <Description13 mainArea={this.mainArea}></Description13>;
         this.next = <Description14 mainArea={this.mainArea}></Description14>;
-        this.title = 'Tradycyjne metody poszukiwania - metody losowe'
+        this.title = 'Metody losowe - symulowane wyżarzanie'
 
         this.navigationButtons = React.createRef();
         this.simulatedAnnealing13 = React.createRef();

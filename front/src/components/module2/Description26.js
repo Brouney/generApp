@@ -29,13 +29,13 @@ class Description26 extends Component {
         <div>
             <h1>{this.title}</h1>
             <h2>
-                Zbieżnośc on-line - jest to miara bieżącej efektywności algorytmu, czyli średnia ze wszystkich osobników, które pojawiły się do chwili obecnej.
+                Zbieżność on-line - jest to miara bieżącej efektywności algorytmu, czyli średnia ze wszystkich osobników, które pojawiły się do chwili obecnej.
             </h2>
             <h2>
                 <Latex>{"${e_{on} = \\frac{1}{T} \\displaystyle\\sum_{t=1}^{T} \\overline{f}(t) = \\frac{1}{T} \\sum_{t=1}^{T}} \\left(\\frac{1}{N} \\displaystyle\\sum_{t=1}^{N}f_{i}(t)\\right)$"}</Latex>
             </h2>
             <h2>
-                Zbieżnośc off-line - jest to miara poziomu bieżności algorytmu. W każdym pokoleniu wyznaczony jest najlepszy osobnik, który pojawił się dotychczas. Następnie obliczana jest średnia z najlepszych od pierwszego pokolenia do bieżącego
+                Zbieżność off-line - jest to miara poziomu bieżności algorytmu. W każdym pokoleniu wyznaczony jest najlepszy osobnik, który pojawił się dotychczas. Następnie obliczana jest średnia z najlepszych od pierwszego pokolenia do bieżącego
             </h2>
             <h2>
                 <Latex>{"${e_{off} = \\frac{1}{T} \\displaystyle\\sum_{t=1}^{T} f^{*}(t) }$"}</Latex>

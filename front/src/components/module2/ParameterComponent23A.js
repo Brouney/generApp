@@ -16,7 +16,7 @@ function howManyBitsNeededToRepresentInteger(value) {
 
 const zeroPad = (num, places) => String(num).padStart(places, '0')
 
-class ParameterComponent111A extends Component {
+class ParameterComponent23A extends Component {
 
     constructor(props){
         super(props)
@@ -170,4 +170,4 @@ class ParameterComponent111A extends Component {
 
 }
 
-export default ParameterComponent111A;
+export default ParameterComponent23A;

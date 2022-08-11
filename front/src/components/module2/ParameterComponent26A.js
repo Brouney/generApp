@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { InputNumber } from 'antd';
 var Latex = require('react-latex');
 
-class ParameterComponent22A extends Component {
+class ParameterComponent26A extends Component {
 
     constructor(props){
         super(props)
@@ -307,4 +307,4 @@ class ParameterComponent22A extends Component {
 
 }
 
-export default ParameterComponent22A;
+export default ParameterComponent26A;
