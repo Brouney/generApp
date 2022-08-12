@@ -125,8 +125,8 @@ function Puzzle25A(){
             <div>
                 { inpropervalue ?
                 <Button type="primary" danger onSubmit={checkValues(columns) }style={{marginLeft:"35%"}} >
-                Dopasuj poprawnie
-                </Button>:
+                    Dopasuj poprawnie
+                </Button> :
                 <Button type="primary"  onSubmit={checkValues(columns)} style={{marginLeft:"35%"}} >
                     Wszystko poprawnie dopasowane
                 </Button> 

@@ -2,16 +2,11 @@ import React, { Component } from "react";
 import { MODULE_2_SLIDES_COUNT } from "../templates/ListExercisePanel";
 import NavigationButtons from "../templates/NavigationButtons";
 import MySlider from "../common/MySlider";
-import Plot from "react-plotly.js";
 import '../../css/Slide21A.css';
 import Description20 from "./Description20";
 import Description21 from "./Description21";
 import Slide21A from "./Slide21A";
-
-
-// TODO: jak liczyc dostosowanie
-// TODO: update wykresu po mutacji i krzyzowaniu
-// TODO: (niekoniecznie) dodac wzory z twierdzenia schematow pod tabelkami
+var Latex = require('react-latex');
 
 
 const Slide18A_SLIDER_POPSIZE_MIN_DEFAULT = 10
@@ -22,9 +17,6 @@ const Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT = 6
 var Slide18A_allPossibleSchemasStrings = [];
 var Slide18A_plotData = [];
 
-function randomBinary(min, max) {
-    return Math.floor(min + Math.random() * (max + 1 - min)).toString(2);
-}
 
 String.prototype.replaceAt = function(index, replacement) {
     return this.substring(0, index) + replacement + this.substring(index + replacement.length);
@@ -406,17 +398,34 @@ class Slide20A extends Component {
 
     render() {
         this.computePlotData()
-
         
         return(
             <div>
                 <h1>{this.title}</h1>
                 <div className="row">
                     <div className="col-8">
-                        <MySlider min={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT} max={Slide18A_SLIDER_POPSIZE_MAX_DEFAULT} defaultValue={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Liczebność populacji"} passValueToParent={this.onChangeSliderPopSize}></MySlider>
-                        <MySlider min={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT} max={Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT} defaultValue={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderCodeLength} text={"Długość ciągu kodowego"} passValueToParent={this.onChangeSliderCodeLengthValue}></MySlider>
+                        <MySlider
+                            min={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT}
+                            max={Slide18A_SLIDER_POPSIZE_MAX_DEFAULT}
+                            defaultValue={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT}
+                            sliderSize={5}
+                            step={1}
+                            ref={this.sliderPopSize}
+                            text={<Latex>{"Liczebność populacji ${n}$"}</Latex>}
+                            passValueToParent={this.onChangeSliderPopSize}>
+                        </MySlider>
+                        <MySlider
+                            min={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT}
+                            max={Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT}
+                            defaultValue={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT}
+                            sliderSize={5}
+                            step={1}
+                            ref={this.sliderCodeLength}
+                            text={<Latex>{"Długość ciągu kodowego ${l}$"}</Latex>}
+                            passValueToParent={this.onChangeSliderCodeLengthValue}>
+                        </MySlider>
                         <h4></h4>
-                        <h4>alfabet k elementowy</h4>
+                        <h4>Alfabet <Latex>{"${k}$"}</Latex>-elementowy</h4>
                         <input ref = {this.inputString} style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_slide17A" value={this.state.inputValue} onChange={evt =>this.changeValueInComponent(evt)} ></input>
                     </div>
 
