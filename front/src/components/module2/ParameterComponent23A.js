@@ -2,9 +2,6 @@ import React, {Component} from "react";
 import { InputNumber } from 'antd';
 var Latex = require('react-latex');
 
-// TODO: 	- Umax - Umin przelicza na przedział (0, 2^l - 1)
-// - dorzucic podanie ciagu kodowego x, i na podstawie jego obliczam U
-
 function howManyBitsNeededToRepresentInteger(value) {
     if (value == 0) {
         return 1
@@ -26,6 +23,9 @@ class ParameterComponent23A extends Component {
             Umax: props.Umax ? props.Umax : 7,
             bity: props.bity ? props.bity : 3,
             uKod: props.uKod ? props.uKod : 1,
+            xKod: props.xKod ? props.xKod : 1,
+
+            listIndex: props.listIndex,
         }
     }
 
@@ -42,8 +42,11 @@ class ParameterComponent23A extends Component {
         if (value > this.state.uKod) {
             this.setState({
                 uKod: value,
+                xKod: value
             });
         }
+
+        this.props.passXkodToParent(this.state.listIndex, zeroPad(Math.round(this.state.xKod).toString(2), this.state.bity));
     };
 
     handleChangeUmax = value => {
@@ -61,8 +64,11 @@ class ParameterComponent23A extends Component {
         if (value < this.state.uKod) {
             this.setState({
                 uKod: value,
+                xKod: value
             });
         }
+
+        this.props.passXkodToParent(this.state.listIndex,  zeroPad(Math.round(this.state.xKod).toString(2), newBits));
     };
 
     handleChangeBits = value => {
@@ -75,13 +81,16 @@ class ParameterComponent23A extends Component {
         });
 
         let maxPossibleEncodedValue = 2**value - 1
-        if (maxPossibleEncodedValue < this.state.Umax) {
+        if (maxPossibleEncodedValue < this.state.Umax || maxPossibleEncodedValue < this.state.xKod) {
             this.setState({
                 Umin: 0,
                 Umax: maxPossibleEncodedValue,
-                uKod: 0
+                uKod: 0,
+                xKod: 0
             });
+
         }
+        this.props.passXkodToParent(this.state.listIndex,  zeroPad(Math.round(this.state.xKod).toString(2), value));
     };
 
     handleChangeUkod = value => {
@@ -89,18 +98,29 @@ class ParameterComponent23A extends Component {
             value = this.state.Umin
         }
 
-        // TODO kodujemy tylko liczby calkowite?
-        // TODO umin=12 umax=31 ukod=21 = liczba binarna z ulamkiem, czy mozemy tak kodowac? dopytac promot
-        // value = Number.isInteger(value) ? value : Math.floor(value)
-
         this.setState({
             uKod: value,
+            xKod: (value - this.state.Umin) * (2**this.state.bity - 1) / (this.state.Umax - this.state.Umin)
         });
+
+        this.props.passXkodToParent(this.state.listIndex,  zeroPad(Math.round(this.state.xKod).toString(2), this.state.bity));
+    };
+
+    handleChangeXkod = value => {
+        if (value == null) {
+            value = this.state.Umin
+        }
+
+        this.setState({
+            uKod: value * (this.state.Umax - this.state.Umin) / (2**this.state.bity - 1) + this.state.Umin,
+            xKod: value,
+        });
+
+        this.props.passXkodToParent(this.state.listIndex,  zeroPad(Math.round(value).toString(2), this.state.bity));
     };
 
     render(){
-        const { Umin, Umax, bity, uKod } = this.state;
-        let xKod = (uKod - Umin) * (2**bity - 1) / (Umax - Umin)
+        const { Umin, Umax, bity, uKod, xKod } = this.state;
 
         return(
             <div style={{margin: "10px"}}>
@@ -157,12 +177,20 @@ class ParameterComponent23A extends Component {
                     />
                 </label>
 
-                <Latex>{"${x}$"}</Latex> = {Number.isInteger(xKod)
-                ? xKod
-                : Math.round(xKod)}
-                <Latex>{"$${_{dec}}$$"}</Latex>
+                <label>
+                    <Latex>{"${x_{dec}}$"}</Latex>
+                    <InputNumber
+                        min={0}
+                        max={2**bity - 1}
+                        defaultValue={this.state.Umin}
+                        style={{ margin: '0 16px' }}
+                        value={typeof uKod === 'number' ? xKod : this.state.xKod}
+                        onChange={this.handleChangeXkod}
+                        step={this.step ? this.step : 1}
+                    />
+                </label>
 
-                 ({zeroPad(Math.round(xKod).toString(2), bity)}<Latex>{"$${_{bin}}$$"}</Latex>)
+                <Latex>{"${x_{bin}}$"}</Latex> = {zeroPad(Math.round(xKod).toString(2), bity)}
                 </li></h5>
             </div>
         )

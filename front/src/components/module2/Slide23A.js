@@ -4,7 +4,8 @@ import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import ParameterComponent23A from "./ParameterComponent23A";
 import Description23 from "./Description23";
 import Description24 from "./Description24";
-var Latex = require('react-latex');
+
+const SLIDE23A_INITIAL_GENOTYPE = ["001", "0001", "00001"]
 
 class Slide23A extends Component {
 
@@ -20,51 +21,63 @@ class Slide23A extends Component {
 
         this.state = {
             parameters: [
-                <ParameterComponent23A Umax={7} bity={3}/>,
-                <ParameterComponent23A Umax={15} bity={4}/>,
-                <ParameterComponent23A Umax={31} bity={5}/>,
-            ]
+                <ParameterComponent23A Umax={7} bity={3} passXkodToParent={this.buildIndividualGenotype} listIndex={0}/>,
+                <ParameterComponent23A Umax={15} bity={4} passXkodToParent={this.buildIndividualGenotype} listIndex={1}/>,
+                <ParameterComponent23A Umax={31} bity={5} passXkodToParent={this.buildIndividualGenotype} listIndex={2}/>,
+            ],
+            individualWholeGenotype: SLIDE23A_INITIAL_GENOTYPE
         }
+    }
+
+    buildIndividualGenotype = (listIndex, xKod) => {
+        let tmpParams = [...this.state.individualWholeGenotype]
+        tmpParams[listIndex] = xKod
+
+        console.log(tmpParams)
+
+        this.setState(prevState => ({
+            individualWholeGenotype: tmpParams
+        }))
     }
 
     onClickAddParameter = () => {
         this.setState(prevState => ({
-            parameters: [...prevState.parameters, <ParameterComponent23A Umax={15} bity={4}/>]
+            parameters: [...prevState.parameters, <ParameterComponent23A Umax={15} bity={4} passXkodToParent={this.buildIndividualGenotype} listIndex={prevState.parameters.length}/>],
+            individualWholeGenotype: [...prevState.individualWholeGenotype, "0001"]
         }))
     }
 
     onClickDeleteParameter = () => {
+        if (this.state.parameters.length == 1) {
+            return
+        }
+
         var parametersAfterDeletion = [...this.state.parameters];
         var lastElement = parametersAfterDeletion.length-1
-
         parametersAfterDeletion.splice(parametersAfterDeletion[lastElement], 1);
-        this.setState({parameters: parametersAfterDeletion});
+
+        var individualWholeGenotypeAfterDeletion = [...this.state.individualWholeGenotype];
+        individualWholeGenotypeAfterDeletion.pop()
+
+        this.setState({
+            parameters: parametersAfterDeletion,
+            individualWholeGenotype: individualWholeGenotypeAfterDeletion,
+        });
     }
 
-    render(){
+    render() {
+
         return(
             <div>
                 <h1>{this.title}</h1>
-                <div className="row">
-                    <div className="col-3">
-                    <h4>
-                        {/* <Latex>{"${\\left\\{\\begin{matrix}  \\end{matrix}\\right.}$"}</Latex> */}
-                        <div style={{margin: "20px"}}><Latex>{"$${x = \\frac{u - U_{min}}{U_{max} - U_{min}}(2^l - 1)}$$"}</Latex><br></br></div>
-                        <div style={{margin: "20px"}}><Latex>{"${u = U_{min} + \\frac{U_{max} - U_{min}}{2^l - 1}x}$"}</Latex></div>
-                        <div style={{margin: "20px"}}><Latex>{"${U_{min} \\le u \\le U_{max}}$"}</Latex></div>
-                        <div style={{margin: "20px"}}>gdzie: <br></br></div>
-                        <div style={{margin: "2px"}}><Latex>{"${x}$"}</Latex> - zakodowana postać liczby,</div>
-                        <div style={{margin: "2px"}}><Latex>{"${u}$"}</Latex> - kodowana liczba,</div>
-                        <div style={{margin: "2px"}}><Latex>{"${l}$"}</Latex> - liczba bitów</div>
-                    </h4>
-                    </div>
-                    <div className="col">
+                <div>
                     <button ref={ref => this.addParameter = ref} type="submit" className="btn btn-success col-2 m-1" onClick={this.onClickAddParameter}>Dodaj parametr</button>
                     <button ref={ref => this.deleteParameter = ref} type="submit" className="btn btn-warning col-2 m-1" onClick={this.onClickDeleteParameter}>Usuń parametr</button>
-                    </div>
-                </div>
+                </div><br></br>
 
-                <div className="col-8" style={{textAlign:"center"}}><h3>PARAMETRY</h3></div>
+                <div><h3>Genotyp osobnika <h2><span style={{color: "lightgreen"}}>{this.state.individualWholeGenotype}</span></h2></h3></div><br></br>
+
+                <div className="col-10" style={{textAlign:"center"}}><h3>CECHY</h3></div>
                 <ol>
                     {this.state.parameters.map(component => component)}
                 </ol>
