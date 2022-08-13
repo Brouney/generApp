@@ -41,7 +41,7 @@ class Description20 extends Component {
                 <Latex>{"można wygenerować ${n}$ różnych ciągów wybranych z ${k^l}$ kombinacji, a także wytworzyć ${(k+1)^l}$ schematów."}</Latex>
             </h3>
             <h3>
-                Aby wygenerować losową populację oraz odpowiadające jej schematy naciśnij przycisk <button type="submit" className="btn btn-primary">Wygeneruj populację</button>. 
+                Aby wygenerować populację składającą się z niepowtarzalnych genotypów, a przy tym wyznaczyć schematy odpowiadające takiej populacji, naciśnij przycisk <button type="submit" className="btn btn-primary">Wygeneruj populację</button>. 
             </h3>
             <h3>
                 Interakcję można konfigurować poprzez:

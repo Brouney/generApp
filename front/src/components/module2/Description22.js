@@ -14,11 +14,9 @@ class Description22 extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide21A prev={<Description21></Description21>} next={<Description22></Description22>} mainArea={this.mainArea}></Slide21A>;
         this.next = <Slide22A prev={<Description22></Description22>} next={<Description23></Description23>} mainArea={this.mainArea}></Slide22A>
-        this.title = 'Marek 2.5'
+        this.title = 'Schematy jako wycinki przestrzeni rozwiązań - wykres 3D'
 
         this.navigationButtons = React.createRef();
-
-
     }
 
     

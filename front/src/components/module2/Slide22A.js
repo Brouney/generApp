@@ -258,8 +258,7 @@ class Slide22A extends Component {
         • Schemat rzędu 0 (***): <b>cała przestrzeń</b><br></br>
         • Schematy rzędu 1: <b>płaszczyzny</b><br></br>
         • Schematy rzędu 2: <b>proste</b><br></br>
-        • W &gt;3D schematy to <b>hiperpłaszczyzny</b>
-        o różnych wymiarach
+        • Dla więcej wymiarów niż 3, schematy to <b>hiperpłaszczyzny</b> o różnych wymiarach
     </h3>
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={6} slidesInModuleCounter={MODULE_2_SLIDES_COUNT}
                                current={this}

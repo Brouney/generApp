@@ -183,12 +183,12 @@ class ParameterComponent26A extends Component {
             <div style={{margin: "10px"}}>
                 <h5><li>
                 <label>
-                    n1
+                    <Latex>{"${n_1}$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
                         defaultValue={this.state.n1}
-                        style={{ margin: '0 16px' }}
+                        style={{ margin: '0 10px' }}
                         // value={this.state.n1}
                         value={typeof n1 === 'number' ? n1 : this.state.n1}
                         onChange={this.handleChange_n1}
@@ -196,12 +196,12 @@ class ParameterComponent26A extends Component {
                     />
                 </label>
                 <label>
-                    n2
+                <Latex>{"${n_2}$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
                         defaultValue={this.state.n2}
-                        style={{ margin: '0 16px' }}
+                        style={{ margin: '0 10px' }}
                         // value={this.state.n2}
                         value={typeof n2 === 'number' ? n2 : this.state.n2}
                         onChange={this.handleChange_n2}
@@ -209,12 +209,12 @@ class ParameterComponent26A extends Component {
                     />
                 </label>
                 <label>
-                    n3
+                    <Latex>{"${n_3}$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
                         defaultValue={this.state.n3}
-                        style={{ margin: '0 16px' }}
+                        style={{ margin: '0 10px' }}
                         // value={this.state.n3}
                         value={typeof n3 === 'number' ? n3 : this.state.n3}
                         onChange={this.handleChange_n3}
@@ -222,73 +222,71 @@ class ParameterComponent26A extends Component {
                     />
                 </label>
                 <label>
-                    n4
+                    <Latex>{"${n_4}$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
                         defaultValue={this.state.n4}
                         // value={this.state.n4}
-                        style={{ margin: '0 16px' }}
+                        style={{ margin: '0 10px' }}
                         value={typeof n4 === 'number' ? n4 : this.state.n4}
                         onChange={this.handleChange_n4}
                         step={this.step ? this.step : 1}
                     />
                 </label>
                 <label>
-                    n5
+                    <Latex>{"${n_5}$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
                         defaultValue={this.state.n5}
                         // value={this.state.n5}
-                        style={{ margin: '0 16px' }}
+                        style={{ margin: '0 10px' }}
                         value={typeof n5 === 'number' ? n5 : this.state.n5}
                         onChange={this.handleChange_n5}
                         step={this.step ? this.step : 1}
                     />
                 </label>
                 <label>
-                    {'<f>'}
+                    <Latex>{"${\\langle f\\rangle}$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
                         defaultValue={15}
-                        style={{ margin: '0 16px' }}
+                        style={{ margin: '0 10px' }}
                         value={f}
                         readOnly = {true}
                     />
                 </label>
                 <label>
-                    {'f*(t)'}
+                <Latex>{"${f^{*}(t)}$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
                         defaultValue={15}
-                        style={{ margin: '0 16px' }}
+                        style={{ margin: '0 10px' }}
                         value={ft}
                         readOnly = {true}
                     />
                 </label>
                 <label>
-                    e
-                    <Latex>{"$${_{on}}$$"}</Latex>
+                    <Latex>{"$${e_{on}}$$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
                         defaultValue={15}
-                        style={{ margin: '0 16px' }}
+                        style={{ margin: '0 10px' }}
                         value={eon}
                         readOnly = {true}
                     />
                 </label>
                 <label>
-                    e
-                    <Latex>{"$${_{off}}$$"}</Latex>
+                    <Latex>{"$${e_{off}}$$"}</Latex>
                     <InputNumber
                         min={0}
                         max={1023}
                         defaultValue={15}
-                        style={{ margin: '0 16px' }}
+                        style={{ margin: '0 10px' }}
                         value={eoff}
                         readOnly = {true}
                     />

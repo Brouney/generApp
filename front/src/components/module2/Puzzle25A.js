@@ -2,8 +2,8 @@ import { Button } from 'antd';
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-// TODO 
-// ladniejsze cssy 
+// TODO: ladniejsze cssy - zrobić 2 rzędy połączeń, niech nie będzie wszystko w jednej linii obok siebie bo się nie mieści na monitorze
+
 const itemsFromBackend = [
     {id:'1', content:'chromosom', type:1},
     {id:'2', content:'ciąg kodowy', type:1},
@@ -19,13 +19,12 @@ const itemsFromBackend = [
     {id:'12', content:'zbiór parametrów', type:6},
     {id:'13', content:'epistaza', type:7},
     {id:'14', content:'nieliniowość', type:7}
-
 ];
 
 const columnsFromBackend = {
     
         ["111"]:{
-            name:'Definicje Biologiczne',
+            name:'Pojęcia i definicje',
             items: itemsFromBackend
         },
         ["112"]: {
@@ -102,9 +101,9 @@ let inpropervalue = false
 const checkValues = (columns) => {
     inpropervalue = false
     
-    if(columns['112'].items.length !== 2 || columns['113'].items.length !== 2|| columns['114'].items.length !== 2
-    || columns['115'].items.length !== 2|| columns['116'].items.length !== 2|| columns['117'].items.length !== 2
-    || columns['118'].items.length !== 2){
+    if(columns['112'].items.length !== 2 || columns['113'].items.length !== 2 || columns['114'].items.length !== 2
+    || columns['115'].items.length !== 2 || columns['116'].items.length !== 2 || columns['117'].items.length !== 2
+    || columns['118'].items.length !== 2) {
         inpropervalue = true
         return
     }
@@ -139,8 +138,8 @@ function Puzzle25A(){
                         
                         return(
                             <div style={{ justifyContent: "center", height: "100%" }}>
-                                 {column.name == 'Definicje Biologiczne' ?
-                                <h2 style={{textAlign:"center", marginLeft:400}}>{column.name}</h2>:
+                                 {column.name == 'Pojęcia i definicje' ?
+                                <h2 style={{textAlign:"center", marginLeft:600}}>{column.name}</h2>:
                                 <h2 style={{textAlign:"center"}}>{column.name}</h2>
                                 }
 
@@ -148,7 +147,7 @@ function Puzzle25A(){
                                     <Droppable droppableId={id} key={id} >
                                         {(provided, snapshot) => {
                                             return(
-                                                column.name == 'Definicje Biologiczne' ?
+                                                column.name == 'Pojęcia i definicje' ?
                                                 <div 
                                                     {...provided.droppableProps}
                                                     ref={provided.innerRef}
@@ -157,7 +156,7 @@ function Puzzle25A(){
                                                         padding: 4,
                                                         width: 250,
                                                         minHeight: 150,
-                                                        marginLeft:400
+                                                        marginLeft:600
                                                     }}
                                                 >
                                                     
@@ -196,7 +195,7 @@ function Puzzle25A(){
                                                     {provided.placeholder}
                                                 </div>
                                                 :
-                                                <div
+                                                <div 
                                                     {...provided.droppableProps}
                                                     ref={provided.innerRef}
                                                     style={{
@@ -204,7 +203,6 @@ function Puzzle25A(){
                                                         padding: 4,
                                                         width: 250,
                                                         minHeight: 150
-                                                    
                                                     }}
                                                 >
                                                     

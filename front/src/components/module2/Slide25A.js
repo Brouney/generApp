@@ -4,6 +4,7 @@ import { MODULE_2_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Puzzle25A from "./Puzzle25A";
 import Description25 from "./Description25";
 import Description26 from "./Description26";
+
 class Slide25A extends Component {
 
     constructor(props){
@@ -11,10 +12,7 @@ class Slide25A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Description25 mainArea={this.mainArea}></Description25>
         this.next = <Description26 mainArea={this.mainArea}></Description26>
-        this.title = 'Terminologia - puzzle'
-        this.state = {
-            backpackCurrentWeight: 0
-        }
+        this.title = 'Terminologia algorytmów genetycznych - puzzle'
     }
 
     render(){

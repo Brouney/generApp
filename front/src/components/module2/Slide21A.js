@@ -11,7 +11,6 @@ import Slide22A from "./Slide22A";
 
 
 // TODO: poprawny update wykresu po mutacji i krzyzowaniu
-// TODO: (niekoniecznie) dodac wzory z twierdzenia schematow pod tabelkami
 
 
 const Slide_21A_SLIDER_POPSIZE_MIN_DEFAULT = 10

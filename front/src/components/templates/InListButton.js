@@ -7,7 +7,7 @@ class InListButton extends Component {
         super(props)
         this.listExercisePanel   = props.listExercisePanel ? props.listExercisePanel : '';
         this.mainArea            = props.mainArea ? props.mainArea : '';
-        this.text                = props.text ? props.text.split('\n').map(str => <p>{str}</p>) : '';
+        this.text                = props.text ? props.text.split('\n').map(str => <p style={{margin: 5, fontSize: 19, padding: 5, fontWeight: 700}}>{str}</p>) : '';
         this.knowledgePanel      = props.knowledgePanel ? props.knowledgePanel : null;
     }
 
@@ -18,7 +18,7 @@ class InListButton extends Component {
     render(){
         return(
             <div className='InListButton'>
-                <button type="submit" className="btn btn-info m-2" onClick={this.updateMainAreaKnowledgePanel}>{this.text}</button>
+                <button type="submit" className="btn btn-info m-3" onClick={this.updateMainAreaKnowledgePanel}>{this.text}</button>
             </div>)
     }
 }

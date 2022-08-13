@@ -13,7 +13,7 @@ class Description23 extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide22A prev={<Description22></Description22>} next={<Description23></Description23>} mainArea={this.mainArea}></Slide22A>;
         this.next = <Slide23A prev={<Description23></Description23>} next={<Description23></Description23>} mainArea={this.mainArea}></Slide23A>
-        this.title = 'Marek 2.7'
+        this.title = 'Standardowe kodowanie dowolnej liczby na N bitach - instrukcja'
 
         this.navigationButtons = React.createRef();
 
