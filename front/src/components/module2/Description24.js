@@ -16,8 +16,6 @@ class Description24 extends Component {
         this.title = 'Marek 2.9'
 
         this.navigationButtons = React.createRef();
-
-
     }
 
     
@@ -25,7 +23,7 @@ class Description24 extends Component {
         
         return(
         <div>
-            <h2>{this.title}</h2>
+            <h1>{this.title}</h1>
 
 
             <NavigationButtons
