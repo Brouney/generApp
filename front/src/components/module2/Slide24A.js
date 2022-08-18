@@ -6,6 +6,7 @@ import Description25 from "./Description25";
 import Plot from "react-plotly.js";
 import { Button } from "antd";
 import MySlider from "../common/MySlider";
+var Latex = require('react-latex');
 
 const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
 
@@ -36,6 +37,16 @@ var Slide24A_Y_ON_MAP = range(Slide24A_Y_MIN, Slide24A_Y_MAX, Slide24A_Y_STEP)
 
 var Slide24A_Z_ON_MAP = []
 
+const Slide24A_x_minText = <Latex>{"${X_{min}}$"}</Latex>
+const Slide24A_x_maxText = <Latex>{"${X_{max}}$"}</Latex>
+const Slide24A_y_minText = <Latex>{"${Y_{min}}$"}</Latex>
+const Slide24A_y_maxText = <Latex>{"${Y_{max}}$"}</Latex>
+
+const Slide24A_penaltyAreaMinX_DEFAULT = -1
+const Slide24A_penaltyAreaMaxX_DEFAULT = 2
+const Slide24A_penaltyAreaMinY_DEFAULT = -1
+const Slide24A_penaltyAreaMaxY_DEFAULT = 2
+
 class Slide24A extends Component {
 
     constructor(props){
@@ -44,15 +55,24 @@ class Slide24A extends Component {
         this.prev = <Description24 mainArea={this.mainArea}></Description24>
         this.next = <Description25 prev={<Slide24A></Slide24A>} mainArea={this.mainArea}></Description25>
         this.timerId = null;
-        this.title = 'Metoda kar'
+        this.title = 'Metoda kar - poszukiwanie minimum funkcji dwóch zmiennych'
         this.state = {
             populationXcoord: [0,1,2],
             populationYcoord: [0,1,2],
-            populationSize: 10
+            populationSize: 10,
+
+            penaltyAreaMinX: Slide24A_penaltyAreaMinX_DEFAULT,
+            penaltyAreaMaxX: Slide24A_penaltyAreaMaxX_DEFAULT,
+            penaltyAreaMinY: Slide24A_penaltyAreaMinY_DEFAULT,
+            penaltyAreaMaxY: Slide24A_penaltyAreaMaxY_DEFAULT,
         }
 
         this.navigationButtons = React.createRef();
         this.sliderPopSize = React.createRef()
+        this.penaltyAreaSliderMinX = React.createRef()
+        this.penaltyAreaSliderMaxX = React.createRef()
+        this.penaltyAreaSliderMinY = React.createRef()
+        this.penaltyAreaSliderMaxY = React.createRef()
 
         this.evolution = this.evolution.bind(this);
         this.generate2Dmap = this.generate2Dmap.bind(this);
@@ -122,6 +142,27 @@ class Slide24A extends Component {
         });
     }
 
+    onChangeSliderPenaltyAreaMinX = (v) => {
+        this.setState({
+            penaltyAreaMinX: v
+        });
+    }
+    onChangeSliderPenaltyAreaMaxX = (v) => {
+        this.setState({
+            penaltyAreaMaxX: v,
+        });
+    }
+    onChangeSliderPenaltyAreaMinY = (v) => {
+        this.setState({
+            penaltyAreaMinY: v,
+        });
+    }
+    onChangeSliderPenaltyAreaMaxY = (v) => {
+        this.setState({
+            penaltyAreaMaxY: v,
+        });
+    } 
+
     generateRandomObjects = () => {
         //generowanie punktów na funkcji (osobnikow)
         let newObjectsX = []
@@ -157,6 +198,21 @@ class Slide24A extends Component {
                                     z: Slide24A_Z_ON_MAP,
                                     type: 'contour',
                                     name: 'Mapa',
+                                },
+                                {
+                                    x: [this.state.penaltyAreaMinX, this.state.penaltyAreaMaxX, this.state.penaltyAreaMinX, this.state.penaltyAreaMaxX],
+                                    y: [this.state.penaltyAreaMinY, this.state.penaltyAreaMinY, this.state.penaltyAreaMaxY, this.state.penaltyAreaMaxY],
+                                    z: [60,60,60,60],
+                                    type: 'contour',
+                                    name: 'Granica kary',
+                                    opacity: 0.8,
+                                    showscale: false,
+                                    contours: {
+                                        start: 60,
+                                        end: 61,
+                                        size: 25,
+                                        coloring: "heatmap"
+                                    }
                                 },
                                 {
                                     type: "scatter",
@@ -214,6 +270,12 @@ class Slide24A extends Component {
                     <div className="col-4">
                         <Button type="primary" onClick={this.generateRandomObjects}>Wygeneruj populację</Button>
                         <MySlider min={5} max={30} defaultValue={10} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Rozmiar populacji"} passValueToParent={this.onChangeSliderPopulationSize}></MySlider>
+                        
+                        <br></br><h3>Obszar kary</h3>
+                        <MySlider min={Slide24A_X_MIN} max={-0.05} defaultValue={Slide24A_penaltyAreaMinX_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMinX} text={Slide24A_x_minText} passValueToParent={this.onChangeSliderPenaltyAreaMinX}></MySlider>
+                        <MySlider min={0.05} max={Slide24A_X_MAX} defaultValue={Slide24A_penaltyAreaMaxX_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMaxX} text={Slide24A_x_maxText} passValueToParent={this.onChangeSliderPenaltyAreaMaxX}></MySlider>
+                        <MySlider min={Slide24A_Y_MIN} max={-0.05} defaultValue={Slide24A_penaltyAreaMinY_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMinY} text={Slide24A_y_minText} passValueToParent={this.onChangeSliderPenaltyAreaMinY}></MySlider>
+                        <MySlider min={0.05} max={Slide24A_Y_MAX} defaultValue={Slide24A_penaltyAreaMaxY_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMaxY} text={Slide24A_y_maxText} passValueToParent={this.onChangeSliderPenaltyAreaMaxY}></MySlider>
                     </div>
                 </div>
 
