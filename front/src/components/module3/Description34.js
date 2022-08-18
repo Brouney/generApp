@@ -16,8 +16,6 @@ class Description34 extends Component {
         this.title = 'Marek 3.7 operatory reprodukcji'
 
         this.navigationButtons = React.createRef();
-
-
     }
 
     

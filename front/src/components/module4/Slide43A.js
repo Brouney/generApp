@@ -12,8 +12,6 @@ class Slide43A extends Component {
         this.prev = <Slide42A mainArea={this.mainArea}></Slide42A>;
         this.next = <Slide44A prev={<Slide43A></Slide43A>} mainArea={this.mainArea}></Slide44A>
         this.title = 'Krzyżowanie uśredniające (wariant podstawowy) - Marek'
-
-        this.quizTemplate = React.createRef()
     }
     
     render(){

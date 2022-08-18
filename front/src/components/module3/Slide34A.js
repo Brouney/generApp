@@ -10,8 +10,6 @@ class Slide34A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Description34 mainArea={this.mainArea}></Description34>;
         this.next = null
-
-        this.quizTemplate = React.createRef()
     }
     
     render(){
