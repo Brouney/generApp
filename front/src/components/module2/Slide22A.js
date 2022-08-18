@@ -53,11 +53,6 @@ class Slide22A extends Component {
         };
     }
 
-    onSimulationEnd = () => {
-        this.handleStartStop(true)
-        this.navigationButtons.current.enableNavigationButtons()
-    }
-
     onSchemaChange = (event) => {
         switch (event.target.value) {
             // sciany

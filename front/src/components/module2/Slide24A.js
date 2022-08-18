@@ -23,7 +23,7 @@ function rastrigin(x, y) {
 }
 
 const Slide24A_INDIVIDUALS_OFFSET = 0.2
-const Slide24A_EVOLUTION_INDIVIDUAL_STEP = 0.05
+const Slide24A_EVOLUTION_INDIVIDUAL_STEP = 0.2
 
 const Slide24A_X_MIN = -5
 const Slide24A_X_MAX = 5
@@ -42,10 +42,14 @@ const Slide24A_x_maxText = <Latex>{"${X_{max}}$"}</Latex>
 const Slide24A_y_minText = <Latex>{"${Y_{min}}$"}</Latex>
 const Slide24A_y_maxText = <Latex>{"${Y_{max}}$"}</Latex>
 
-const Slide24A_penaltyAreaMinX_DEFAULT = -1
+const Slide24A_penaltyAreaMinX_DEFAULT = -2
 const Slide24A_penaltyAreaMaxX_DEFAULT = 2
-const Slide24A_penaltyAreaMinY_DEFAULT = -1
+const Slide24A_penaltyAreaMinY_DEFAULT = -2
 const Slide24A_penaltyAreaMaxY_DEFAULT = 2
+
+const Slide24A_MAX_GENERATIONS_COUNT = 1000
+
+var Slide24A_currentGenerationsCount = 0
 
 class Slide24A extends Component {
 
@@ -59,16 +63,23 @@ class Slide24A extends Component {
         this.state = {
             populationXcoord: [0,1,2],
             populationYcoord: [0,1,2],
+            populationZcoord: [1,1,1],
+            populationIfKilled: [false, false, false],
             populationSize: 10,
 
             penaltyAreaMinX: Slide24A_penaltyAreaMinX_DEFAULT,
             penaltyAreaMaxX: Slide24A_penaltyAreaMaxX_DEFAULT,
             penaltyAreaMinY: Slide24A_penaltyAreaMinY_DEFAULT,
             penaltyAreaMaxY: Slide24A_penaltyAreaMaxY_DEFAULT,
+
+            penaltyOn: false,
+
+            generationsCount: 100
         }
 
         this.navigationButtons = React.createRef();
         this.sliderPopSize = React.createRef()
+        this.sliderGenerationsCount = React.createRef()
         this.penaltyAreaSliderMinX = React.createRef()
         this.penaltyAreaSliderMaxX = React.createRef()
         this.penaltyAreaSliderMinY = React.createRef()
@@ -87,7 +98,7 @@ class Slide24A extends Component {
         else {
             this.timerId = setInterval(() => {
                 this.evolution()
-            }, 50);
+            }, 100);
         }
     }
 
@@ -100,6 +111,8 @@ class Slide24A extends Component {
         Slide24A_X_ON_MAP = range(Slide24A_X_MIN, Slide24A_X_MAX, Slide24A_X_STEP)
         Slide24A_Y_ON_MAP = range(Slide24A_Y_MIN, Slide24A_Y_MAX, Slide24A_Y_STEP)
         Slide24A_Z_ON_MAP = []
+
+        Slide24A_currentGenerationsCount = 0
     }
 
     generate2Dmap = () => {
@@ -114,29 +127,80 @@ class Slide24A extends Component {
         }
     }
 
+    anyIndividualAlive() {
+        return this.state.populationXcoord.length > 0  ? true : false
+    }
+
     evolution = () => {
-        var xxx = [...this.state.populationXcoord]
-        var yyy = [...this.state.populationYcoord]
+        if (Slide24A_currentGenerationsCount < this.state.generationsCount && this.anyIndividualAlive()) {
+            var xxx = [...this.state.populationXcoord]
+            var yyy = [...this.state.populationYcoord]
+            var newPopulationIfKilled = [...this.state.populationIfKilled]
+    
+            // individuals are moving in current generation
+            for (let i = 0; i < xxx.length; i++) {
+                xxx[i] += randomFloatFromInterval(-Slide24A_EVOLUTION_INDIVIDUAL_STEP, Slide24A_EVOLUTION_INDIVIDUAL_STEP)
+                yyy[i] += randomFloatFromInterval(-Slide24A_EVOLUTION_INDIVIDUAL_STEP, Slide24A_EVOLUTION_INDIVIDUAL_STEP)
+    
+                // prevent leaving map
+                if (xxx[i] < Slide24A_X_MIN) { xxx[i] = Slide24A_X_MIN }
+                if (xxx[i] > Slide24A_X_MAX) { xxx[i] = Slide24A_X_MAX }
+                if (yyy[i] < Slide24A_Y_MIN) { yyy[i] = Slide24A_Y_MIN }
+                if (yyy[i] > Slide24A_Y_MAX) { yyy[i] = Slide24A_Y_MAX }
+    
+                if (this.state.penaltyOn == false) {
+                    if (xxx[i] < this.state.penaltyAreaMinX || 
+                        xxx[i] > this.state.penaltyAreaMaxX ||
+                        yyy[i] < this.state.penaltyAreaMinY ||
+                        yyy[i] > this.state.penaltyAreaMaxY) {
+        
+                        newPopulationIfKilled[i] = true
+                    }
+                }
+                else {
+                    // TODO gdy metoda kar wlaczona
+                    // TODO this.state.populationZcoord.sort od najmniejszej wartosci
+                }
+            }
+    
+            // reproduction
+            var newX = []
+            var newY = []
+            var newZ = []
+            for (let i = 0; i < newPopulationIfKilled.length; i++) {
+                if (newPopulationIfKilled[i] == false) {
+                    newX.push(xxx[i])
+                    newY.push(yyy[i])
+                    newZ.push(rastrigin(xxx[i], yyy[i]))
+                }
+            }
+    
+            newPopulationIfKilled = []
+            for (let i = 0; i < newX.length; i++) {
+                newPopulationIfKilled.push(false)
+            }
+    
+            this.setState(prevState => ({
+                populationXcoord: newX,
+                populationYcoord: newY,
+                populationZcoord: newZ,
+                populationIfKilled: newPopulationIfKilled,
+            }))
 
-        xxx.push(randomFloatFromInterval(Slide24A_Y_MIN+Slide24A_INDIVIDUALS_OFFSET, Slide24A_Y_MAX-Slide24A_INDIVIDUALS_OFFSET))
-        yyy.push(randomFloatFromInterval(Slide24A_Y_MIN+Slide24A_INDIVIDUALS_OFFSET, Slide24A_Y_MAX-Slide24A_INDIVIDUALS_OFFSET))
-
-        for (let i = 0; i < 5; i++){
-            xxx[randomIntFromInterval(0, xxx.length)] += Slide24A_EVOLUTION_INDIVIDUAL_STEP
-            yyy[randomIntFromInterval(0, yyy.length)] += Slide24A_EVOLUTION_INDIVIDUAL_STEP
+            Slide24A_currentGenerationsCount++
         }
-        xxx[0] += Slide24A_EVOLUTION_INDIVIDUAL_STEP
-        yyy[0] += Slide24A_EVOLUTION_INDIVIDUAL_STEP
+        else {
+            this.onSimulationEnd()
+        }
+    }
 
-        this.setState(prevState => ({
-            populationXcoord: xxx,
-            populationYcoord: yyy,
-        }))
+    onChangeSliderGenerationsCount = (v) => {
+        this.setState({
+            generationsCount: v,
+        });
     }
 
     onChangeSliderPopulationSize = (v) => {
-        // this.disableOperatorsButtons()
-
         this.setState({
             populationSize: v,
         });
@@ -167,19 +231,34 @@ class Slide24A extends Component {
         //generowanie punktów na funkcji (osobnikow)
         let newObjectsX = []
         let newObjectsY = []
+        let newObjectsZ = []
+        let newPopulationIfKilled = []
 
-        for (let i = 0; i < this.state.populationSize; i++){
+        for (let i = 0; i < this.state.populationSize; i++) {
             let randomX = randomFloatFromInterval(Slide24A_X_MIN+Slide24A_INDIVIDUALS_OFFSET, Slide24A_X_MAX-Slide24A_INDIVIDUALS_OFFSET)
             let randomY = randomFloatFromInterval(Slide24A_Y_MIN+Slide24A_INDIVIDUALS_OFFSET, Slide24A_Y_MAX-Slide24A_INDIVIDUALS_OFFSET)
 
             newObjectsX.push(randomX)
             newObjectsY.push(randomY)
+            newObjectsZ.push(rastrigin(randomX, randomY))
+            newPopulationIfKilled.push(false)
         }
 
         this.setState({
             populationXcoord: [...newObjectsX],
             populationYcoord: [...newObjectsY],
+            populationZcoord: [...newObjectsZ],
+            populationIfKilled: [...newPopulationIfKilled],
+            generationsCount: 100
         })
+
+        Slide24A_currentGenerationsCount = 0
+    }
+
+    penaltyOnOff = () => {
+        this.setState({
+            penaltyOn: !this.state.penaltyOn,
+        });
     }
 
 
@@ -187,7 +266,7 @@ class Slide24A extends Component {
         return(
             <div>
                 <h1>{this.title}</h1>
-                
+                0
                 <div className="row">
                     <div className="col-8">
                         <Plot
@@ -205,7 +284,7 @@ class Slide24A extends Component {
                                     z: [60,60,60,60],
                                     type: 'contour',
                                     name: 'Granica kary',
-                                    opacity: 0.8,
+                                    opacity: 0.6,
                                     showscale: false,
                                     contours: {
                                         start: 60,
@@ -236,8 +315,8 @@ class Slide24A extends Component {
                                 "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
                             }}
                             layout={{
-                                width: 800,
-                                height: 600,
+                                width: 700,
+                                height: 550,
                                 margin: {
                                     l: 80,
                                     r: 20,
@@ -269,13 +348,21 @@ class Slide24A extends Component {
                     </div>
                     <div className="col-4">
                         <Button type="primary" onClick={this.generateRandomObjects}>Wygeneruj populację</Button>
-                        <MySlider min={5} max={30} defaultValue={10} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Rozmiar populacji"} passValueToParent={this.onChangeSliderPopulationSize}></MySlider>
+                        <MySlider min={5} max={50} defaultValue={10} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Rozmiar populacji"} passValueToParent={this.onChangeSliderPopulationSize}></MySlider>
+                        <MySlider min={10} max={Slide24A_MAX_GENERATIONS_COUNT} defaultValue={this.state.generationsCount} sliderSize={4} step={1} ref={this.sliderGenerationsCount} text={"Liczba pokoleń"} passValueToParent={this.onChangeSliderGenerationsCount}></MySlider>
                         
+                        <br></br>
+                        <h4><label class="switch">
+                            <input type="checkbox" onChange={this.penaltyOnOff} name="penaltyOnOff"/> 
+                            {this.state.penaltyOn ? <label for="penaltyOnOff"><span style={{color: "lime"}}> Metoda kar WŁĄCZONA</span></label> : <label for="penaltyOnOff"><span style={{color: "red"}}> Metoda kar WYŁĄCZONA</span></label>}
+                        </label></h4>
                         <br></br><h3>Obszar kary</h3>
                         <MySlider min={Slide24A_X_MIN} max={-0.05} defaultValue={Slide24A_penaltyAreaMinX_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMinX} text={Slide24A_x_minText} passValueToParent={this.onChangeSliderPenaltyAreaMinX}></MySlider>
                         <MySlider min={0.05} max={Slide24A_X_MAX} defaultValue={Slide24A_penaltyAreaMaxX_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMaxX} text={Slide24A_x_maxText} passValueToParent={this.onChangeSliderPenaltyAreaMaxX}></MySlider>
                         <MySlider min={Slide24A_Y_MIN} max={-0.05} defaultValue={Slide24A_penaltyAreaMinY_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMinY} text={Slide24A_y_minText} passValueToParent={this.onChangeSliderPenaltyAreaMinY}></MySlider>
                         <MySlider min={0.05} max={Slide24A_Y_MAX} defaultValue={Slide24A_penaltyAreaMaxY_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMaxY} text={Slide24A_y_maxText} passValueToParent={this.onChangeSliderPenaltyAreaMaxY}></MySlider>
+                        <br></br><h3>Pokolenie: {Slide24A_currentGenerationsCount+1}<br></br></h3><h3>{this.state.populationXcoord.length ? <span style={{color: "lime"}}>Pozostałe osobniki:  {this.state.populationXcoord.length}</span> : <span style={{color: "red"}}> Wszystkie osobniki wymarły</span>}<br></br><br></br>Wartości funkcji dostosowania</h3>
+                        <br></br>{this.state.populationZcoord.map(i => (<li>{i.toFixed(3)}</li>))}
                     </div>
                 </div>
 
