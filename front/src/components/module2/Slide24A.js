@@ -266,7 +266,7 @@ class Slide24A extends Component {
         return(
             <div>
                 <h1>{this.title}</h1>
-                0
+
                 <div className="row">
                     <div className="col-8">
                         <Plot
