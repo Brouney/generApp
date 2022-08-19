@@ -26,7 +26,7 @@ class Description24 extends Component {
         <div>
             <h1>{this.title}</h1>
 
-            <h4>
+            <h6>
             Niektóre zagadnienia narzucają na rozwiązania więzy; mogą one być w postaci:
             <ul>
                 <li>równości (włączamy do kodowania)</li>
@@ -34,20 +34,24 @@ class Description24 extends Component {
             </ul>
             <span style={{color: "red"}}>Problem: można w ogóle nie znaleźć rozwiązania!</span><br></br><br></br>
             Stosując <span style={{color: "cyan"}}><b>metodę kar</b></span> nie odrzucamy rozwiązań niedopuszczalnych, ale obniżamy im dostosowanie w stopniu zależnym od naruszenia więzów. Czyli karę włączamy do funkcji dostosowania.<br></br><br></br>
-            </h4>
+            </h6>
 
-            <h4>
+            <h6>
                 Przykładowo zakładając funkcję dostosowania <span style={{color: "yellow"}}><Latex>{"${g(x)}$"}</Latex></span> przy warunku <span style={{color: "yellow"}}><Latex>{"${h_i(x) \\geq 0, i = 1, 2, \\dots, n}$"}</Latex></span><br></br><br></br>
                 minimalizujemy <span style={{color: "yellow"}}><Latex>{"${g(x) + r\\sum_{i=1}^{n}\\Phi(h_i(x))}$"}</Latex></span> gdzie:<br></br><br></br>
                 <ul>
                     <li><span style={{color: "yellow"}}><Latex>{"${\\Phi(h_i(x))}$"}</Latex></span> - funkcja kary, np. <span style={{color: "yellow"}}><Latex>{"${\\Phi[h_i(x)] = h_i^2(x)}$"}</Latex></span></li>
                     <li><span style={{color: "yellow"}}><Latex>{"${r}$"}</Latex></span> - współczynnik kary</li>
                 </ul>
-            </h4>
+            </h6>
 
-            <h4>
-                Na kolejnym slajdzie obrazowo przedstawiono problem więzów - .....TODO
-            </h4>
+            <h5>
+                Na kolejnym slajdzie obrazowo przedstawiono problem więzów.<br></br><br></br>
+                Za pomocą suwaków można zmienić rozmiar populacji, liczbę pokoleń symulacji, a także dopasować obszar kary, który jest zaznaczony na wykresie jako przezroczysty prostokąt.<br></br><br></br>
+                Jeżeli <input type="checkbox" name="penaltyOff"/><label for="penaltyOff"><span style={{color: "red"}}> Metoda kar WYŁĄCZONA</span></label>, osobniki znajdujące się poza obszarem giną i rozwiązanie może nie zostać znalezione.<br></br><br></br>
+                Jeżeli <input type="checkbox" name="penaltyOn" checked/> <label for="penaltyOn"><span style={{color: "lime"}}> Metoda kar WŁĄCZONA</span></label>, wartość funkcji dostosowania jest korygowana o określony <Latex>{"współczynnik kary ${r}$"}</Latex>.<br></br><br></br>
+                Symulacja kończy się, gdy liczba pokoleń osiągnie zadaną przez użytkownika wartość lub gdy wszystkie osobniki wyginą.
+            </h5>
 
 
             <NavigationButtons

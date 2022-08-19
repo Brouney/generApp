@@ -41,11 +41,12 @@ const Slide24A_x_minText = <Latex>{"${X_{min}}$"}</Latex>
 const Slide24A_x_maxText = <Latex>{"${X_{max}}$"}</Latex>
 const Slide24A_y_minText = <Latex>{"${Y_{min}}$"}</Latex>
 const Slide24A_y_maxText = <Latex>{"${Y_{max}}$"}</Latex>
+const Slide24A_penaltyRatioText = <Latex>{"Współczynnik kary ${r}$"}</Latex>
 
-const Slide24A_penaltyAreaMinX_DEFAULT = -2
-const Slide24A_penaltyAreaMaxX_DEFAULT = 2
-const Slide24A_penaltyAreaMinY_DEFAULT = -2
-const Slide24A_penaltyAreaMaxY_DEFAULT = 2
+const Slide24A_penaltyAreaMinX_DEFAULT = -3
+const Slide24A_penaltyAreaMaxX_DEFAULT = 3
+const Slide24A_penaltyAreaMinY_DEFAULT = -3
+const Slide24A_penaltyAreaMaxY_DEFAULT = 3
 
 const Slide24A_MAX_GENERATIONS_COUNT = 1000
 
@@ -61,8 +62,8 @@ class Slide24A extends Component {
         this.timerId = null;
         this.title = 'Metoda kar - poszukiwanie minimum funkcji dwóch zmiennych'
         this.state = {
-            populationXcoord: [0,1,2],
-            populationYcoord: [0,1,2],
+            populationXcoord: [-2,0.8,1],
+            populationYcoord: [-1.5,0.3,1],
             populationZcoord: [1,1,1],
             populationIfKilled: [false, false, false],
             populationSize: 10,
@@ -73,13 +74,15 @@ class Slide24A extends Component {
             penaltyAreaMaxY: Slide24A_penaltyAreaMaxY_DEFAULT,
 
             penaltyOn: false,
+            penaltyRatio: 0.01,
 
-            generationsCount: 100
+            generationsCount: 100,
         }
 
         this.navigationButtons = React.createRef();
         this.sliderPopSize = React.createRef()
         this.sliderGenerationsCount = React.createRef()
+        this.sliderPenaltyRatio = React.createRef()
         this.penaltyAreaSliderMinX = React.createRef()
         this.penaltyAreaSliderMaxX = React.createRef()
         this.penaltyAreaSliderMinY = React.createRef()
@@ -148,7 +151,7 @@ class Slide24A extends Component {
                 if (yyy[i] < Slide24A_Y_MIN) { yyy[i] = Slide24A_Y_MIN }
                 if (yyy[i] > Slide24A_Y_MAX) { yyy[i] = Slide24A_Y_MAX }
     
-                if (this.state.penaltyOn == false) {
+                if (this.state.penaltyOn == false) { // metoda kar wylaczona, zabijamy osobniki ktore znalazly sie poza obszarem kary
                     if (xxx[i] < this.state.penaltyAreaMinX || 
                         xxx[i] > this.state.penaltyAreaMaxX ||
                         yyy[i] < this.state.penaltyAreaMinY ||
@@ -157,9 +160,11 @@ class Slide24A extends Component {
                         newPopulationIfKilled[i] = true
                     }
                 }
-                else {
-                    // TODO gdy metoda kar wlaczona
-                    // TODO this.state.populationZcoord.sort od najmniejszej wartosci
+                else { // metoda kar wlaczona
+                    if (xxx[i] < this.state.penaltyAreaMinX) { xxx[i] += ((1 - this.state.penaltyRatio) / 5)  }
+                    if (xxx[i] > this.state.penaltyAreaMaxX) { xxx[i] -= ((1 - this.state.penaltyRatio) / 5)  }
+                    if (yyy[i] < this.state.penaltyAreaMinY) { yyy[i] += ((1 - this.state.penaltyRatio) / 5)  }
+                    if (yyy[i] > this.state.penaltyAreaMaxY) { yyy[i] -= ((1 - this.state.penaltyRatio) / 5)  }
                 }
             }
     
@@ -192,6 +197,12 @@ class Slide24A extends Component {
         else {
             this.onSimulationEnd()
         }
+    }
+    
+    onChangeSliderPenaltyRatio = (v) => {
+        this.setState({
+            penaltyRatio: v,
+        });
     }
 
     onChangeSliderGenerationsCount = (v) => {
@@ -350,19 +361,22 @@ class Slide24A extends Component {
                         <Button type="primary" onClick={this.generateRandomObjects}>Wygeneruj populację</Button>
                         <MySlider min={5} max={50} defaultValue={10} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Rozmiar populacji"} passValueToParent={this.onChangeSliderPopulationSize}></MySlider>
                         <MySlider min={10} max={Slide24A_MAX_GENERATIONS_COUNT} defaultValue={this.state.generationsCount} sliderSize={4} step={1} ref={this.sliderGenerationsCount} text={"Liczba pokoleń"} passValueToParent={this.onChangeSliderGenerationsCount}></MySlider>
+                        <MySlider min={0.01} max={1} defaultValue={this.state.penaltyRatio} sliderSize={4} step={0.01} ref={this.sliderPenaltyRatio} text={Slide24A_penaltyRatioText} passValueToParent={this.onChangeSliderPenaltyRatio}></MySlider>
                         
                         <br></br>
                         <h4><label class="switch">
                             <input type="checkbox" onChange={this.penaltyOnOff} name="penaltyOnOff"/> 
                             {this.state.penaltyOn ? <label for="penaltyOnOff"><span style={{color: "lime"}}> Metoda kar WŁĄCZONA</span></label> : <label for="penaltyOnOff"><span style={{color: "red"}}> Metoda kar WYŁĄCZONA</span></label>}
                         </label></h4>
-                        <br></br><h3>Obszar kary</h3>
+                        <br></br><h3>Obszar kary</h3> 
                         <MySlider min={Slide24A_X_MIN} max={-0.05} defaultValue={Slide24A_penaltyAreaMinX_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMinX} text={Slide24A_x_minText} passValueToParent={this.onChangeSliderPenaltyAreaMinX}></MySlider>
                         <MySlider min={0.05} max={Slide24A_X_MAX} defaultValue={Slide24A_penaltyAreaMaxX_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMaxX} text={Slide24A_x_maxText} passValueToParent={this.onChangeSliderPenaltyAreaMaxX}></MySlider>
                         <MySlider min={Slide24A_Y_MIN} max={-0.05} defaultValue={Slide24A_penaltyAreaMinY_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMinY} text={Slide24A_y_minText} passValueToParent={this.onChangeSliderPenaltyAreaMinY}></MySlider>
                         <MySlider min={0.05} max={Slide24A_Y_MAX} defaultValue={Slide24A_penaltyAreaMaxY_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMaxY} text={Slide24A_y_maxText} passValueToParent={this.onChangeSliderPenaltyAreaMaxY}></MySlider>
-                        <br></br><h3>Pokolenie: {Slide24A_currentGenerationsCount+1}<br></br></h3><h3>{this.state.populationXcoord.length ? <span style={{color: "lime"}}>Pozostałe osobniki:  {this.state.populationXcoord.length}</span> : <span style={{color: "red"}}> Wszystkie osobniki wymarły</span>}<br></br><br></br>Wartości funkcji dostosowania</h3>
-                        <br></br>{this.state.populationZcoord.map(i => (<li>{i.toFixed(3)}</li>))}
+                        <br></br>
+                        <h3>Pokolenie: {Slide24A_currentGenerationsCount+1}<br></br></h3><h3>{this.state.populationXcoord.length ? <span style={{color: "lime"}}>Pozostałe osobniki:  {this.state.populationXcoord.length}</span> : <span style={{color: "red"}}> Wszystkie osobniki wymarły</span>}<br></br><br></br>
+                        Najlepszy osobnik: {this.state.populationXcoord.length ? Math.min(...this.state.populationZcoord).toFixed(3) : <span style={{color: "red"}}></span>}
+                        </h3>
                     </div>
                 </div>
 
