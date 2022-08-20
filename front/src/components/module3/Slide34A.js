@@ -17,6 +17,8 @@ function bin2dec(binStr) {
     ), 0);
 }
 
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
 
 // ALGO FUNCTIONS
 function calculate_p_r_A(f_A, sum_f_i) {
@@ -39,15 +41,10 @@ function calculate_frac_n_A(n_A) {
 
 
 class ReproductionType {
-    constructor(algoText, step_1, step_2, step_3, step_4, step_5, step_6) {
+    constructor(algoText, algoStepsCount, step_1, step_2, step_3, step_4, step_5, step_6) {
         this.algoText = algoText
-
-        this.step_1 = step_1
-        this.step_2 = step_2
-        this.step_3 = step_3
-        this.step_4 = step_4
-        this.step_5 = step_5
-        this.step_6 = step_6
+        this.algoStepsCount = algoStepsCount
+        this.algoStepsList = [step_1, step_2, step_3, step_4, step_5, step_6]
     }
 }
 
@@ -67,32 +64,32 @@ class Individual {
 
 const Slide34A_DETERMINISTIC_ALGO_TEXT = 
 <ol>
-    <li>Obliczamy <span style={{color: "yellow"}}><Latex>{"${p_r(A) = \\frac{f(A)}{\\sum_i f_i}}$"}</Latex></span></li><br></br>
-    <li>Obliczamy <span style={{color: "yellow"}}><Latex>{"${n(A) = E[n(A)] = N\\cdot p_r(A)}$"}</Latex></span></li><br></br>
-    <li>Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
-    <li>Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
-    <li>Sortujemy osobniki wg malejącej <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
-    <li>Uzupełniamy braki w populacji od góry listy z punktu 5</li>
+    <li id="0">Obliczamy <span style={{color: "yellow"}}><Latex>{"${p_r(A) = \\frac{f(A)}{\\sum_i f_i}}$"}</Latex></span></li><br></br>
+    <li id="1">Obliczamy <span style={{color: "yellow"}}><Latex>{"${n(A) = E[n(A)] = N\\cdot p_r(A)}$"}</Latex></span></li><br></br>
+    <li id="2">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="3">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="4">Sortujemy osobniki wg malejącej <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="5">Uzupełniamy braki w populacji od góry listy z punktu 5</li>
 </ol>
 
 const Slide34A_RANDOM_WITH_REPETITIONS_ALGO_TEXT = 
 <ol>
-    <li>Obliczamy <span style={{color: "yellow"}}><Latex>{"${p_r(A) = \\frac{f(A)}{\\sum_i f_i}}$"}</Latex></span></li><br></br>
-    <li>Obliczamy <span style={{color: "yellow"}}><Latex>{"${n(A) = E[n(A)] = N\\cdot p_r(A)}$"}</Latex></span></li><br></br>
-    <li>Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
-    <li>Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
-    <li>Wartości <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span> używamy do wykalibrowania koła ruletki</li><br></br>
-    <li>Brakujące osobniki losujemy metodą ruletki</li>
+    <li id="0">Obliczamy <span style={{color: "yellow"}}><Latex>{"${p_r(A) = \\frac{f(A)}{\\sum_i f_i}}$"}</Latex></span></li><br></br>
+    <li id="1">Obliczamy <span style={{color: "yellow"}}><Latex>{"${n(A) = E[n(A)] = N\\cdot p_r(A)}$"}</Latex></span></li><br></br>
+    <li id="2">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="3">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="4">Wartości <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span> używamy do wykalibrowania koła ruletki</li><br></br>
+    <li id="5">Brakujące osobniki losujemy metodą ruletki</li>
 </ol>
 
 const Slide34A_RANDOM_WITHOUT_REPETITIONS_ALGO_TEXT = 
 <ol>
-    <li>Obliczamy <span style={{color: "yellow"}}><Latex>{"${p_r(A) = \\frac{f(A)}{\\sum_i f_i}}$"}</Latex></span></li><br></br>
-    <li>Obliczamy <span style={{color: "yellow"}}><Latex>{"${n(A) = E[n(A)] = N\\cdot p_r(A)}$"}</Latex></span></li><br></br>
-    <li>Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
-    <li>Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
-    <li>Wartości <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span> są prawdopodobieństwami sukcesu w próbach Bernoulliego</li><br></br>
-    <li>Losujemy poszczególne osobniki aż do zapełnienia populacji</li>
+    <li id="0">Obliczamy <span style={{color: "yellow"}}><Latex>{"${p_r(A) = \\frac{f(A)}{\\sum_i f_i}}$"}</Latex></span></li><br></br>
+    <li id="1">Obliczamy <span style={{color: "yellow"}}><Latex>{"${n(A) = E[n(A)] = N\\cdot p_r(A)}$"}</Latex></span></li><br></br>
+    <li id="2">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="3">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="4">Wartości <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span> są prawdopodobieństwami sukcesu w próbach Bernoulliego</li><br></br>
+    <li id="5">Losujemy poszczególne osobniki aż do zapełnienia populacji</li>
 </ol>
 
 const Slide34A_RANK_ALGO_TEXT = 'Rankingowa TODO'
@@ -100,17 +97,17 @@ const Slide34A_TOURNAMENT_ALGO_TEXT = 'Turniejowa TODO'
 const Slide34A_DUEL_ALGO_TEXT = 'Pojedynkowa TODO'
 const Slide34A_THRESHOLD_ALGO_TEXT = 'Progowa TODO'
 
-var Slide34A_DETERMINISTIC = new ReproductionType(Slide34A_DETERMINISTIC_ALGO_TEXT,
+var Slide34A_DETERMINISTIC = new ReproductionType(Slide34A_DETERMINISTIC_ALGO_TEXT, 6,
     calculate_p_r_A,
     calculate_n_A,
     calculate_int_n_A,
     calculate_frac_n_A)
-var Slide34A_RANDOM_WITH_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITH_REPETITIONS_ALGO_TEXT,
+var Slide34A_RANDOM_WITH_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITH_REPETITIONS_ALGO_TEXT, 6,
     calculate_p_r_A,
     calculate_n_A,
     calculate_int_n_A,
     calculate_frac_n_A)
-var Slide34A_RANDOM_WITHOUT_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITHOUT_REPETITIONS_ALGO_TEXT,
+var Slide34A_RANDOM_WITHOUT_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITHOUT_REPETITIONS_ALGO_TEXT, 6,
     calculate_p_r_A,
     calculate_n_A,
     calculate_int_n_A,
@@ -127,6 +124,7 @@ const Slide34A_INDIVIDUAL_MAX_FITNESS = 2**Slide34A_INDIVIDUAL_GENOTYPE_LENGTH -
 
 const Slide34A_FITNESS_FUNCTION = (x) => x*x
 
+var Slide34A_counter = 0
 
 class Slide34A extends Component {
 
@@ -135,8 +133,10 @@ class Slide34A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Description34 mainArea={this.mainArea}></Description34>;
         this.next = null
+        this.timerId = null;
 
         this.generateButton = React.createRef()
+        this.navigationButtons = React.createRef();
 
         let tmpIndividuals = []
         for (let i = 0; i < Slide34A_POPULATION_SIZE; ++i) {
@@ -155,10 +155,101 @@ class Slide34A extends Component {
         this.state = {
             chosenReproductionType: Slide34A_DETERMINISTIC,
             individuals: tmpIndividuals,
+            currentAlgoStepIndex: 0,
+            stepEnded: false
         }
     }
 
+    handleStartStop = (simulationStopped) => { // name = (param) => 
+        if (simulationStopped) {
+            clearInterval(this.timerId)
+
+            this.generateButton.current.disabled = false
+            var inputs = document.querySelectorAll("input");
+            for (var input of inputs) {
+                input.disabled = false;
+            }
+        }
+        else {
+            var inputs = document.querySelectorAll("input");
+            this.generateButton.current.disabled = true
+            for (var input of inputs) {
+                input.disabled = true;
+            }
+
+            this.timerId = setInterval(() => {
+                this.algoStep()
+            }, 1000);
+        }
+    }
+
+    algoStep = () => {
+        // TODO Slide34A_counter zastapic obliczeniami
+        // TODO wyliczanie krok po kroku i update tabeli po jednej komorce
+
+        console.log(this.state.chosenReproductionType.algoStepsList[this.state.currentAlgoStepIndex])
+
+        if (this.state.currentAlgoStepIndex == this.state.chosenReproductionType.algoStepsCount) {
+            this.onSimulationEnd()
+            return
+        }
+
+        document.getElementById(this.state.currentAlgoStepIndex).style = "color: cyan; font-weight: 800"
+        var tmpIndividuals = []
+
+        if (Slide34A_counter == 2) {
+            Slide34A_counter = 0
+            this.setState({
+                stepEnded: true
+            });
+        }
+
+        Slide34A_counter++
+        // for (let i = 0; i < Slide34A_POPULATION_SIZE; ++i) {
+        //     var genotype = randomBinary(0, Slide34A_INDIVIDUAL_MAX_FITNESS)
+        //     var fenotype = bin2dec(genotype)
+        //     var fitness = Slide34A_FITNESS_FUNCTION(fenotype)
+
+        //     var newIndividual = new Individual(i+1, genotype, fenotype, fitness)
+        //     tmpIndividuals.push(newIndividual)
+
+        //     while(tmpIndividuals[i].Genotyp.length < Slide34A_INDIVIDUAL_GENOTYPE_LENGTH) {
+        //         tmpIndividuals[i].Genotyp = "0" + tmpIndividuals[i].Genotyp // dodanie leading zeros
+        //     }
+        // }
+
+        if (this.state.stepEnded) {
+            document.getElementById(this.state.currentAlgoStepIndex).style = ""
+    
+            this.setState(prevState => {
+                return {
+                    currentAlgoStepIndex: prevState.currentAlgoStepIndex+1,
+                    stepEnded: false
+                }
+            });
+        }
+    }
+
+    onSimulationEnd = () => {
+        this.setState({
+            currentAlgoStepIndex: 0
+        });
+        this.handleStartStop(true)
+        this.navigationButtons.current.enableNavigationButtons()
+    }
+
     generatePopulation = () => {
+        //resetting whole slide
+        for (let i = 0; i < this.state.chosenReproductionType.algoStepsCount; ++i) {
+            document.getElementById(i).style = ""
+        }
+
+        Slide34A_counter = 0
+        this.setState({
+            currentAlgoStepIndex: 0,
+        });
+
+        // generate population
         let tmpIndividuals = []
         for (let i = 0; i < Slide34A_POPULATION_SIZE; ++i) {
             var genotype = randomBinary(0, Slide34A_INDIVIDUAL_MAX_FITNESS)
@@ -174,7 +265,6 @@ class Slide34A extends Component {
         }
 
         this.setState({individuals: tmpIndividuals})
-        
     }
 
     renderTableHeader(array) {
@@ -211,6 +301,16 @@ class Slide34A extends Component {
 
 
     onReproductionTypeChange = (event) => {
+        for (let i = 0; i < this.state.chosenReproductionType.algoStepsCount; ++i) {
+            document.getElementById(i).style = ""
+        }
+
+        Slide34A_counter = 0
+        this.setState({
+            currentAlgoStepIndex: 0,
+        });
+
+
         switch (event.target.value) {
             case '1':
                 this.setState({chosenReproductionType: Slide34A_DETERMINISTIC})
@@ -246,7 +346,7 @@ class Slide34A extends Component {
             <div className="row">
                 
                 <div className="col-4 tableFixHead">
-                    <h5><div style={{borderStyle: "double", display: "inline-block", padding:8}}>Osobniki</div> <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generatePopulation}>Wygeneruj populację</button><br></br></h5>
+                    <h5><div style={{borderStyle: "double", display: "inline-block", padding:8}}>Osobniki</div> <button ref={this.generateButton} type="submit" className="btn btn-primary" onClick={this.generatePopulation}>Wygeneruj populację</button><br></br></h5>
                     <table id='individuals'>
                         <thead>
                             <tr>{this.renderTableHeader(this.state.individuals)}</tr>
@@ -278,22 +378,19 @@ class Slide34A extends Component {
             </div>
 
             <div className="row">
-                <h1>symulacjo animacja</h1>
+                <h1>symulacjo animacja TODO</h1>
             </div>
            
            
 # W metodzie deterministycznej wynik reprodukcji na danej populacji zawsze jest taki sam -
 # nie ma tutaj czynnika losowego (inaczej niż np, w ruletce). Stąd nie ma sensu uruchamiać reprodukcji 100 razy.
 
-
-
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={8} slidesInModuleCounter={MODULE_3_SLIDES_COUNT}
-                               current={this}
+                               onStartStop={this.handleStartStop} ref={this.navigationButtons} current={this}
             ></NavigationButtons>
         </div>
         )
     }
-
 }
 
 export default Slide34A;

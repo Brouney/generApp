@@ -84,7 +84,6 @@ class NavigationButtons extends Component {
 
         if (this.simulationIsRunning) {
             this.enableNavigationButtons();
-
         }
         else {
             this.disableNavigationButtons()
