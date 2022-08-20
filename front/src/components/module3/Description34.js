@@ -5,6 +5,7 @@ import 'antd/dist/antd.css';
 import Slide34A from "./Slide34A";
 import Description33 from "./Description33";
 import Slide33A from "./Slide33A";
+var Latex = require('react-latex');
 
 class Description34 extends Component {
 

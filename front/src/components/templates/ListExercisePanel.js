@@ -22,7 +22,7 @@ class ListExercisePanel extends Component {
     render(){
         this.module1 = <Description11 mainArea={this.mainArea}></Description11>
         this.module2 = <Description20 mainArea={this.mainArea}></Description20>
-        this.module3 = <Description31 mainArea={this.mainArea}></Description31> // TODO: proper slides to initialize module
+        this.module3 = <Description31 mainArea={this.mainArea}></Description31>
         this.module4 = <Slide41A mainArea={this.mainArea}></Slide41A>
         this.module5 = <Slide51A mainArea={this.mainArea}></Slide51A>
 
