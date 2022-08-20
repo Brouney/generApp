@@ -167,12 +167,6 @@ class Slide20A extends Component {
         this.generateAllPossibleSchemasStrings()
     }
 
-    highlightIndividuals = (e) =>  {
-        this.setState({
-            individuals: this.state.individuals,
-        });
-    }
-
 
     computeSchemas = (tmpIndividuals) => {
 

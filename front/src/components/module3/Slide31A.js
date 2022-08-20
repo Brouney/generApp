@@ -330,15 +330,14 @@ class Slide31A extends Component {
 
                     <div className="col-4">
                         <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generatePopulationAndSchemas}>Wygeneruj populacje</button>
-                        <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generateFinalPopulation}>Wygeneruj populacjękońcową</button>
+                        <button ref={ref => this.generateButton = ref} type="submit" className="btn btn-primary" onClick={this.generateFinalPopulation}>Wygeneruj populację końcową</button>
                     </div>
                 </div>
 
                 <div className="row">
-                    <div className="col-2"><h3 style={{textAlign: "left"}}>POPULACJA 1 </h3></div>
-                    <div className="col-3"><h3 style={{textAlign: "right"}}>POPULACJA 2</h3></div>
-                    <div className="col-4"><h3 style={{textAlign: "right"}}>POPULACJA KOŃCOWA</h3></div>
-                    
+                    <div className="col-3"><h3 style={{textAlign: "center"}}>POPULACJA 1 </h3></div>
+                    <div className="col-3"><h3 style={{textAlign: "center"}}>POPULACJA 2</h3></div>
+                    <div className="col-4"><h3 style={{textAlign: "center"}}>POPULACJA KOŃCOWA</h3></div>
                 </div>
                 <div className="row">
                     <div className="col-3 tableFixHead">
