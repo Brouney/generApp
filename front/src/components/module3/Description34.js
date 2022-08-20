@@ -13,7 +13,7 @@ class Description34 extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide33A prev={<Description33></Description33>}  mainArea={this.mainArea}></Slide33A>
         this.next = <Slide34A prev={<Description34></Description34>}  mainArea={this.mainArea}></Slide34A>
-        this.title = 'Marek 3.7 operatory reprodukcji'
+        this.title = 'Operatory reprodukcji - opis interakcji'
 
         this.navigationButtons = React.createRef();
     }
