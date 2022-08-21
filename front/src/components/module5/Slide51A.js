@@ -24,7 +24,7 @@ class Slide51A extends Component {
         
         return(
         <div>
-            <h1>Piaskownica</h1>
+            <h1>Badanie wpływu operatorów na działanie algorytmu genetycznego</h1>
             
             <div className='col-10'>
                     <PlotlyChart_sandbox
