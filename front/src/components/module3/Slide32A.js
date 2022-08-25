@@ -77,17 +77,17 @@ class Slide32A extends Component {
             sliderPopSizeValue: Slide18A_SLIDER_POPSIZE_MIN_DEFAULT,
             sliderCodeLengthValue: Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT,
             individuals: [
-                { LP: 1, Osobnik: '0000', Przystosowanie: 0.0 },
+                { LP: 1, Osobnik: '0000', Przystosowanie: 0.0, Color: "magenta"},
                
             ],
             schemas: [
-                { LP: 1, Osobnik: '0000', Przystosowanie: 0.0 },
+                { LP: 1, Osobnik: '0000', Przystosowanie: 0.0, Color: "yellow" },
             ],
             schemasOnlyWithAsterisks: [
-                { LP: 1, Osobnik: '****', Przystosowanie: 0.0 },
+                { LP: 1, Osobnik: '0000', Przystosowanie: 0.0, Color: "green" },
             ],
             schemasFinal: [
-                { LP: 1, Osobnik: '****', Przystosowanie: 0.0 },
+                { LP: 1, Osobnik: '0000', Przystosowanie: 0.0, Color: "green" },
             ],
             filterSchemasChecked: false,
             generation: 0
@@ -102,7 +102,11 @@ class Slide32A extends Component {
         var alphabet       = this.state.inputValue;
 
         Slide18A_allPossibleSchemasStrings = [];
-        printAllKLength(alphabet,this.state.sliderCodeLengthValue)
+        var n = alphabet.length;
+        var i = 1;
+        var s = 1;
+        while (i <= n) s *= i++;
+        printAllKLength(alphabet,i)
         Slide18A_allPossibleSchemasStrings = [...new Set(Slide18A_allPossibleSchemasStrings)]
 
 
@@ -153,55 +157,40 @@ class Slide32A extends Component {
         let replacement = ''
         
         // szukanie ustalonych pozycji z lewej i prawej
-        for (let i = 0; i < tmpIndividuals.length; ++i) {
-            replacement = ''
-            if (tmpIndividuals[i] && tmpIndividuals[i]['Osobnik'] && tmpIndividuals[i]['Osobnik'].length){
-                for(let lengthofstar = 1; lengthofstar <= tmpIndividuals[i]['Osobnik'].length; ++lengthofstar ){
-                    replacement += '*'
-                    for(let charatof = 0; charatof < tmpIndividuals[i]['Osobnik'].length; ++charatof ){
-                        if(charatof + lengthofstar <= tmpIndividuals[i]['Osobnik'].length){
-                            newSchemas.push(tmpIndividuals[i]['Osobnik'].replaceAt(charatof, replacement));
-                        }
-                        // console.log(newSchemas)
-                    }
-                    
-                }
-            }
-            
-        }
-        newSchemas = [...new Set(newSchemas)]
-        Slide18A_allPossibleSchemasStrings = newSchemas
-
-        let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-
-        let tmpschemasOnlyWithAsterisks = newSchemas.filter(function(schema) {
-            return schema.includes('*')  // usuniecie schematu *** samych gwiazdek
-        });
-        tmpschemasOnlyWithAsterisks = tmpschemasOnlyWithAsterisks.splice(this.state.sliderPopSizeValue)
-        // console.log(tmpschemasOnlyWithAsterisks)
-        let tmpnewschema = []
-        for (let i = 0; i <newSchemas.length; ++i) {
-            tmpnewschema.push({ LP: i+1, Schemat: newSchemas[i] })
-
-        }
+        
         // tutaj taki maly algorytm -> jezeli jest gwiazdka, to doliczamy 2x jej wartosc int z chara
         let tmpschemasasterix = []
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
             let przystosowanieSum = 0;
-            for (let obj of tmpschemasOnlyWithAsterisks[i].split("")) {
+            let random_obj = Math.floor(Math.random() * Slide18A_allPossibleSchemasStrings.length);
+            for (let obj of Slide18A_allPossibleSchemasStrings[random_obj].split("")) {
                 przystosowanieSum += obj.charCodeAt(0);
-                if(obj==='*'){
-                    przystosowanieSum += obj.charCodeAt(0);
-                }
+                
             }
-            if(tmpschemasOnlyWithAsterisks[i] * 1){
-                przystosowanieSum += tmpschemasOnlyWithAsterisks[i] * 1
+            if(Slide18A_allPossibleSchemasStrings[random_obj] * 1){
+                przystosowanieSum += Slide18A_allPossibleSchemasStrings[random_obj] * 1
             }
-            tmpschemasasterix.push({ LP: i+1, Osobnik: tmpschemasOnlyWithAsterisks[i], Przystosowanie: przystosowanieSum})
+            tmpschemasasterix.push({ LP: i+1, Osobnik: Slide18A_allPossibleSchemasStrings[random_obj], Przystosowanie: przystosowanieSum, Color: "green"})
 
         }
+        let tmpnewschema = []
+        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+            let przystosowanieSum = 0;
+            let random_obj = Math.floor(Math.random() * Slide18A_allPossibleSchemasStrings.length);
+            for (let obj of Slide18A_allPossibleSchemasStrings[random_obj].split("")) {
+                przystosowanieSum += obj.charCodeAt(0);
+                
+            }
+            if(Slide18A_allPossibleSchemasStrings[random_obj] * 1){
+                przystosowanieSum += Slide18A_allPossibleSchemasStrings[random_obj] * 1
+            }
+            tmpnewschema.push({ LP: i+1, Osobnik: Slide18A_allPossibleSchemasStrings[random_obj], Przystosowanie: przystosowanieSum, Color: "magenta"})
+
+        }
+
+
         this.setState({
-            schemas: tmpnewschema,
+            individuals: tmpnewschema,
             schemasOnlyWithAsterisks: tmpschemasasterix})
     }
 
@@ -223,24 +212,24 @@ class Slide32A extends Component {
         this.generateAllPossibleSchemasStrings()
         this.enableOperatorsButtons()
         let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-        let filteredwithoutstar = Slide18A_allPossibleSchemasStrings.filter(function(schema) {
-            return !schema.includes('*')  // usuniecie schematu *** samych gwiazdek
-        });
+        // let filteredwithoutstar = Slide18A_allPossibleSchemasStrings.filter(function(schema) {
+        //     return !schema.includes('*')  // usuniecie schematu *** samych gwiazdek
+        // });
         
         
         let tmpIndividuals = []
-        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            let przystosowanieSum = 0;
-            for (let obj of filteredwithoutstar[i].split("")) {
-                przystosowanieSum += obj.charCodeAt(0);
-            }
-            if(filteredwithoutstar[i] * 1){
-                przystosowanieSum += filteredwithoutstar[i] * 1
-            }
-            tmpIndividuals.push({ LP: i+1, Osobnik: filteredwithoutstar[i], Przystosowanie: przystosowanieSum})
+        // for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+        //     let przystosowanieSum = 0;
+        //     for (let obj of filteredwithoutstar[i].split("")) {
+        //         przystosowanieSum += obj.charCodeAt(0);
+        //     }
+        //     if(filteredwithoutstar[i] * 1){
+        //         przystosowanieSum += filteredwithoutstar[i] * 1
+        //     }
+        //     tmpIndividuals.push({ LP: i+1, Osobnik: filteredwithoutstar[i], Przystosowanie: przystosowanieSum})
 
-        }
-        this.setState({individuals:tmpIndividuals})
+        // }
+        // this.setState({individuals:tmpIndividuals})
         
 
         this.computeSchemas(tmpIndividuals)
@@ -259,6 +248,7 @@ class Slide32A extends Component {
 
     renderTableHeader(array) {
         let header = Object.keys(array[0])
+        header.pop()
         return header.map((key, index) => {
            return key == 'Procent' ? 
            <th key={index}>%</th> : 
@@ -269,7 +259,7 @@ class Slide32A extends Component {
     renderIndividualTableData(array) {
         return array.map((individual, index) => {
             
-           const { LP, Osobnik, Przystosowanie } = individual //destructuring
+           const { LP, Osobnik, Przystosowanie, Color } = individual //destructuring
            return (
             (LP == this.crossoverIndividualsIDs1.value || LP == this.crossoverIndividualsIDs2.value ?
               (<tr key={LP}>
@@ -279,7 +269,7 @@ class Slide32A extends Component {
               </tr>)
               :
                 (<tr key={LP}>
-                <td>{index}</td>
+                <td  style={{backgroundColor: Color}}>{index}</td>
                 <td><tt>{Osobnik}</tt></td>
                 <td><tt>{Przystosowanie}</tt></td>
             </tr>))
