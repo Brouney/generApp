@@ -347,17 +347,17 @@ class Slide32A extends Component {
 
     generateFinalPopulationRandom = () => {
         this.setState({
-            schemasFinal :  { LP: 1, Osobnik: '****', Przystosowanie: 0.0 }
+            schemasFinal :  { }
         })
         let numberOldPopulationRemains = Math.round((this.state.individuals.length -1) * (1 - this.state.inputGValue))
         let numberToDelete = this.state.individuals.length - numberOldPopulationRemains
         let arrayOfIndexesToDelete = []
-        while(arrayOfIndexesToDelete.length !== (numberToDelete)){
+        while(arrayOfIndexesToDelete.length < (numberToDelete)){
             arrayOfIndexesToDelete.push(this.generateRandomIntegerInRange(0,this.state.individuals.length-1))
             arrayOfIndexesToDelete = [...new Set(arrayOfIndexesToDelete)]
         }
         let arrayOfIndexesToReplace = []
-        while(arrayOfIndexesToReplace.length !== (numberToDelete)){
+        while(arrayOfIndexesToReplace.length < (numberToDelete)){
             arrayOfIndexesToReplace.push(this.generateRandomIntegerInRange(0,this.state.individuals.length-1))
             arrayOfIndexesToReplace = [...new Set(arrayOfIndexesToReplace)]
         }
