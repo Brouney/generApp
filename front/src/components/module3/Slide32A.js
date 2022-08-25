@@ -349,7 +349,7 @@ class Slide32A extends Component {
         this.setState({
             schemasFinal :  { }
         })
-        let numberOldPopulationRemains = Math.round((this.state.individuals.length -1) * (1 - this.state.inputGValue))
+        let numberOldPopulationRemains = Math.round((this.state.individuals.length ) * (1 - this.state.inputGValue))
         let numberToDelete = this.state.individuals.length - numberOldPopulationRemains
         let arrayOfIndexesToDelete = []
         while(arrayOfIndexesToDelete.length < (numberToDelete)){
