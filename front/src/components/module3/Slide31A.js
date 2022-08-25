@@ -19,6 +19,7 @@ function printAllKLength(set,k)
     // strings of length k
 function printAllKLengthRec(set,prefix,n,k)
 {
+
     // Base case: k is 0,
     // print prefix
     if (k == 0)
@@ -87,10 +88,10 @@ class Slide31A extends Component {
                 { LP: 1, Osobnik: '0000' },
             ],
             schemasOnlyWithAsterisks: [
-                { LP: 1, Osobnik: '****' },
+                { LP: 1, Osobnik: '0000' },
             ],
             schemasFinal: [
-                { LP: 1, Osobnik: '****' },
+                { LP: 1, Osobnik: '0000' },
             ],
             filterSchemasChecked: false,
             generation: 0
@@ -105,7 +106,11 @@ class Slide31A extends Component {
         var alphabet       = this.state.inputValue;
 
         Slide18A_allPossibleSchemasStrings = [];
-        printAllKLength(alphabet,this.state.sliderCodeLengthValue)
+        var n = alphabet.length;
+        var i = 1;
+        var s = 1;
+        while (i <= n) s *= i++;
+        printAllKLength(alphabet,i)
         Slide18A_allPossibleSchemasStrings = [...new Set(Slide18A_allPossibleSchemasStrings)]
 
 
@@ -152,48 +157,20 @@ class Slide31A extends Component {
 
     computeSchemas = (tmpIndividuals) => {
 
-        let newSchemas = []
-        let replacement = ''
-        console.log(tmpIndividuals.length)
-        // szukanie ustalonych pozycji z lewej i prawej
-        for (let i = 0; i < tmpIndividuals.length; ++i) {
-            replacement = ''
-            if (tmpIndividuals[i] && tmpIndividuals[i]['Osobnik'] && tmpIndividuals[i]['Osobnik'].length){
-                for(let lengthofstar = 1; lengthofstar <= tmpIndividuals[i]['Osobnik'].length; ++lengthofstar ){
-                    replacement += '*'
-                    for(let charatof = 0; charatof < tmpIndividuals[i]['Osobnik'].length; ++charatof ){
-                        if(charatof + lengthofstar <= tmpIndividuals[i]['Osobnik'].length){
-                            newSchemas.push(tmpIndividuals[i]['Osobnik'].replaceAt(charatof, replacement));
-                        }
-                        // console.log(newSchemas)
-                    }
-                    
-                }
-            }
-            
-        }
-        newSchemas = [...new Set(newSchemas)]
-        Slide18A_allPossibleSchemasStrings = newSchemas
-
-        let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-
-        let tmpschemasOnlyWithAsterisks = newSchemas.filter(function(schema) {
-            return schema.includes('*')  // usuniecie schematu *** samych gwiazdek
-        });
-        tmpschemasOnlyWithAsterisks = tmpschemasOnlyWithAsterisks.splice(this.state.sliderPopSizeValue)
-        // console.log(tmpschemasOnlyWithAsterisks)
         let tmpnewschema = []
-        for (let i = 0; i <newSchemas.length; ++i) {
-            tmpnewschema.push({ LP: i+1, Schemat: newSchemas[i] })
+        for (let i = 0; i <this.state.sliderPopSizeValue; ++i) {
+            let random_obj = Math.floor(Math.random() * Slide18A_allPossibleSchemasStrings.length);
+            tmpnewschema.push({ LP: i+1, Osobnik: Slide18A_allPossibleSchemasStrings[random_obj] })
 
         }
         let tmpschemasasterix = []
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            tmpschemasasterix.push({ LP: i+1, Osobnik: tmpschemasOnlyWithAsterisks[i] })
+            let random_obj = Math.floor(Math.random() * Slide18A_allPossibleSchemasStrings.length);
+            tmpschemasasterix.push({ LP: i+1, Osobnik: Slide18A_allPossibleSchemasStrings[random_obj] })
 
         }
         this.setState({
-            schemas: tmpnewschema,
+            individuals: tmpnewschema,
             schemasOnlyWithAsterisks: tmpschemasasterix})
     }
 
@@ -221,11 +198,11 @@ class Slide31A extends Component {
         
         
         let tmpIndividuals = []
-        for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            tmpIndividuals.push({ LP: i+1, Osobnik: filteredwithoutstar[i] })
+        // for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
+        //     tmpIndividuals.push({ LP: i+1, Osobnik: filteredwithoutstar[i] })
 
-        }
-        this.setState({individuals:tmpIndividuals})
+        // }
+        // this.setState({individuals:tmpIndividuals})
         
 
         this.computeSchemas(tmpIndividuals)

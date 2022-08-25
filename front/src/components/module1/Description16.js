@@ -13,7 +13,7 @@ class Description16 extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide15A prev={<Description15></Description15>} next={<Description16></Description16>} mainArea={this.mainArea}></Slide15A>;
         this.next = <Slide16A prev={<Description16></Description16>} next={null} mainArea={this.mainArea}></Slide16A>
-        this.title = 'Piotr 1.11'
+        this.title = 'Selekcja ruletkowa - animacja'
 
         this.navigationButtons = React.createRef();
 
@@ -28,7 +28,13 @@ class Description16 extends Component {
         <div>
             <h1>{this.title}</h1>
 
-
+            <h5>
+                Na kolejnym slajdzie przedstawiono animację dotyczącą podstawowych operacji algorytmów.
+            </h5>
+            <h5>
+                Jest to selekcja jednokrotna, losowa. Każdy osobnik z populacji ma przyporządkowany rozkład prawdopodobieństwa - w tym przypadku jest to % przystosowania. 
+                W momencie naciśnięcia przycisku PLAY - animacja samoistnie po krótkim czasie wylosuje obiekt oraz wskaże jego właściwości na tabeli.
+            </h5>
             <NavigationButtons
                 ref={this.navigationButtons}
                 mainArea={this.mainArea}
