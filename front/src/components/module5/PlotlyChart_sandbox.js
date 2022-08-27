@@ -4,6 +4,11 @@ import Plot from "react-plotly.js";
 import MySlider from "../common/MySlider";
 var nj = require('numjs');
 
+
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+}
+
 const graphData = {
   masterGraph: {
     xAxis: "X-Axis",
@@ -30,19 +35,56 @@ class PlotlyChart_sandbox extends React.Component {
         this.state = {
             data: this.generateData(),
             squareArea: areaPoints,
-            numOfObjects : 5,
+            numOfObjects : 5,// aktualna wielkosc populacji
             objectsPoints: {
                 x:[],
                 y:[],
                 z:[],
             },
-            sliderPopSizeValuePT: 0.5,
-            sliderPopSizeValuePCross: 0.5
+            sliderPopSizeValuePT: 0.5,//prawd mutacji 
+            sliderPopSizeValuePCross: 0.5,// prawdopodobienstwo krzyzowania 
+            gen_num: 0,  // numeruje kolejne pokolenia                                                           
+            sum_fitness: 0, // suma funkcji dostosowania wszystkich osobnikow, potrzebna przy selekcji do nowej populacji
+
+            // Dwie zmienne ponizej, nie sa potrzebne do pracy programu. Moga sie jednak przydac podczas debugowania.
+            n_mutation: 0,  // liczba mutacji w ostatnim pokoleniu                    
+            n_cross: 0,    // liczba krzyz
         }
         this.sliderPopSize = React.createRef()
-        
+        this.sliderPopSizeObj = React.createRef()
         this.generateData = this.generateData.bind(this);
-        this.moveSquareOnChartTowardsExtremum = this.moveSquareOnChartTowardsExtremum.bind(this);
+        // this.moveSquareOnChartTowardsExtremum = this.moveSquareOnChartTowardsExtremum.bind(this);
+    }
+
+    //zwraca wartość binarna z liczby
+    dec2bin = (dec) => {
+        let binaryValue = (dec >>> 0).toString(2);
+        while(binaryValue.length <= 10){
+            binaryValue = '0' + binaryValue
+        }
+        return binaryValue
+    }
+    //zwaraca wartosc decymalną z binarnej
+    bin2dec = (bin) => {
+       return parseInt(bin, 2);
+    }
+
+    mutateDec = (dec, punkt) => {
+        let bin = this.dec2bin(dec)
+        let pojedynczyChar = bin.charAt(punkt)
+        bin = bin.replaceAt(punkt, pojedynczyChar == '1'?  '0': '1')
+        return this.bin2dec(bin)
+    }
+    mutateBin = (bin, punkt) => {
+        let pojedynczyChar = bin.charAt(punkt)
+        bin = bin.replaceAt(punkt, pojedynczyChar == '1'?  '0': '1')
+        return this.bin2dec(bin)
+    }
+
+    krzyzowanieJednopunktBin = (ob1, ob2, punkt) => {
+        let newOb1 = ob1.slice(0, punkt) + ob2.slice(punkt, ob1.length)
+        let newOb2 = ob2.slice(0, punkt) + ob1.slice(punkt, ob1.length)
+        return [newOb1, newOb2]
     }
 
     onChangeSliderPopSizePT = (v) => {
@@ -52,6 +94,7 @@ class PlotlyChart_sandbox extends React.Component {
             sliderPopSizeValuePT: v,
         });
     }
+
     onChangeSliderPopSizePCross = (v) => {
         // this.disableOperatorsButtons()
 
@@ -59,6 +102,7 @@ class PlotlyChart_sandbox extends React.Component {
             sliderPopSizeValuePCross: v,
         });
     }
+
     setDefaultGlobalVariables() {
         let minValue = Math.ceil(2)
         let maxValue = Math.floor(this.GRID_DENSITY - 1)
@@ -105,7 +149,6 @@ class PlotlyChart_sandbox extends React.Component {
                 randomNumbers[x][y] = computedValue
             }
         }
-
         this.setState({ data: randomNumbers })
         return randomNumbers
     }
@@ -133,25 +176,24 @@ class PlotlyChart_sandbox extends React.Component {
                 z: [...newObjectsZ],
             }
         })
-
     }
-    findNeighborsOfPoint = (x, y) => { // zwraca srodki sasiadow punktu ktory ma srodek w x,y
-        let neighbors = []
-        for (let i = x-1; i < x+2; i++) {
-            for (let j = y-1; j < y+2; j++) {
-                if ((-1 < x && x <= this.GRID_DENSITY)    &&
-                    (-1 < y && y <= this.GRID_DENSITY)    &&
-                    (x != i || y != j)              &&
-                    (0 <= i && i <= this.GRID_DENSITY) &&
-                    (0 <= j && j <= this.GRID_DENSITY)) {
-                        // console.log(i, j)
-                        neighbors.push([i, j])
-                }
-            }
-        }
-        // console.log(neighbors)
-        return neighbors
-    }
+    // findNeighborsOfPoint = (x, y) => { // zwraca srodki sasiadow punktu ktory ma srodek w x,y
+    //     let neighbors = []
+    //     for (let i = x-1; i < x+2; i++) {
+    //         for (let j = y-1; j < y+2; j++) {
+    //             if ((-1 < x && x <= this.GRID_DENSITY)    &&
+    //                 (-1 < y && y <= this.GRID_DENSITY)    &&
+    //                 (x != i || y != j)              &&
+    //                 (0 <= i && i <= this.GRID_DENSITY) &&
+    //                 (0 <= j && j <= this.GRID_DENSITY)) {
+    //                     // console.log(i, j)
+    //                     neighbors.push([i, j])
+    //             }
+    //         }
+    //     }
+    //     // console.log(neighbors)
+    //     return neighbors
+    // }
 
     findFourPointsOfCenter = (x, y) => { // zwraca punkty, ktore tworza obszar o danym srodku w punkcie x,y
         let points = [
@@ -163,57 +205,63 @@ class PlotlyChart_sandbox extends React.Component {
         // console.log('findFourPointsOfCenter:', points)
         return points
     }
+    onChangePopSizeAmountObj = (v) => {
+        // this.disableOperatorsButtons()
 
-    moveSquareOnChartTowardsExtremum = () => {
-        const neighborsCenters = this.findNeighborsOfPoint(squareCenterPosition[0], squareCenterPosition[1])
-        let isHigherValueFound = false
-
-        for (const neighbor of neighborsCenters) {
-            let points = this.findFourPointsOfCenter(neighbor[0], neighbor[1])
-            let sumOfPoints = 0
-            for (const point of points) {
-                if (typeof this.state.data[point[0]] === 'undefined') { // sasiedztwo 8 komorek dookola, dotarlismy do ekstremum
-                    this.props.onSimulationEnd()
-                    return
-                }
-
-                sumOfPoints += this.state.data[point[0]][point[1]]
-            }
-
-            if (sumOfPoints > maximum) {
-                isHigherValueFound = true
-
-                squareCenterPosition = [neighbor[0], neighbor[1]]
-                areaPoints = [...points]
-                maximum = sumOfPoints
-                console.log(maximum)
-            }
-        }
-
-        if (!isHigherValueFound) {
-            this.props.onSimulationEnd()
-            return
-        }
-
-        // console.log(areaPoints)
-        // console.log(this.state.data)
-
-        let zValues = [] // tablica czterech wartosci z wykresu 3D, na ktorych aktualnie jest malowany obszar poszukujacy ekstremum
-        for (const point of areaPoints) {
-            zValues.push(this.state.data[point[0]][point[1]] + 0.1) // dodaje 0.1 zeby obszar nie nachodzil na wykres
-        }
-
-        let newww = new Array(4).fill(0).map(() => new Array(4).fill(0)) // tablica 4x4, aby dobrze rysowal sie obszar szukajacy ekstremum
-    
-        for (let i = 0; i < newww.length; i++) {
-            for (let j = 0; j < newww[i].length; j++) {
-                newww[i][j] = zValues[i]
-            }
-        }
-
-        // console.log(newww)
-        this.setState({squareArea: newww})
+        this.setState({
+            numOfObjects: v,
+        });
     }
+    // moveSquareOnChartTowardsExtremum = () => {
+    //     const neighborsCenters = this.findNeighborsOfPoint(squareCenterPosition[0], squareCenterPosition[1])
+    //     let isHigherValueFound = false
+
+    //     for (const neighbor of neighborsCenters) {
+    //         let points = this.findFourPointsOfCenter(neighbor[0], neighbor[1])
+    //         let sumOfPoints = 0
+    //         for (const point of points) {
+    //             if (typeof this.state.data[point[0]] === 'undefined') { // sasiedztwo 8 komorek dookola, dotarlismy do ekstremum
+    //                 this.props.onSimulationEnd()
+    //                 return
+    //             }
+
+    //             sumOfPoints += this.state.data[point[0]][point[1]]
+    //         }
+
+    //         if (sumOfPoints > maximum) {
+    //             isHigherValueFound = true
+
+    //             squareCenterPosition = [neighbor[0], neighbor[1]]
+    //             areaPoints = [...points]
+    //             maximum = sumOfPoints
+    //             console.log(maximum)
+    //         }
+    //     }
+
+    //     if (!isHigherValueFound) {
+    //         this.props.onSimulationEnd()
+    //         return
+    //     }
+
+    //     // console.log(areaPoints)
+    //     // console.log(this.state.data)
+
+    //     let zValues = [] // tablica czterech wartosci z wykresu 3D, na ktorych aktualnie jest malowany obszar poszukujacy ekstremum
+    //     for (const point of areaPoints) {
+    //         zValues.push(this.state.data[point[0]][point[1]] + 0.1) // dodaje 0.1 zeby obszar nie nachodzil na wykres
+    //     }
+
+    //     let newww = new Array(4).fill(0).map(() => new Array(4).fill(0)) // tablica 4x4, aby dobrze rysowal sie obszar szukajacy ekstremum
+    
+    //     for (let i = 0; i < newww.length; i++) {
+    //         for (let j = 0; j < newww[i].length; j++) {
+    //             newww[i][j] = zValues[i]
+    //         }
+    //     }
+
+    //     // console.log(newww)
+    //     this.setState({squareArea: newww})
+    // }
 
     render() {
         const CHART_MARGIN = 5
@@ -227,13 +275,13 @@ class PlotlyChart_sandbox extends React.Component {
 
             </div>
             <div>
-                
+            <MySlider min={0} max={30} defaultValue={5} sliderSize={4} step={1} ref={this.sliderPopSizeObj} text={"Ilość populacji"} passValueToParent={this.onChangePopSizeAmountObj}></MySlider>   
             </div>
             <div>
-            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"P(t)"} passValueToParent={this.onChangeSliderPopSizePT}></MySlider>
+            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"Prawdopodobnieństwo mutacji"} passValueToParent={this.onChangeSliderPopSizePT}></MySlider>
             </div>
             <div>
-            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"P(cross)"} passValueToParent={this.onChangeSliderPopSizePCross}></MySlider>
+            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"Prawdopobieństwo krzyżowania"} passValueToParent={this.onChangeSliderPopSizePCross}></MySlider>
             </div>
             
             <Plot
@@ -252,7 +300,7 @@ class PlotlyChart_sandbox extends React.Component {
                     type: 'scatter3d',
                     name: "obiekty",
                     marker: {
-                    color: 'rgb(23, 190, 207)',
+                    color: 'yellow',
                     size: 8,
                     line: {
                         color: 'rgb(204, 204, 204)',
