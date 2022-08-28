@@ -42,8 +42,8 @@ class PlotlyChart_sandbox extends React.Component {
                 y:[],
                 z:[],
             },
-            sliderPopSizeValuePT: 0.5,//prawd mutacji 
-            sliderPopSizeValuePCross: 0.5,// prawdopodobienstwo krzyzowania 
+            sliderPopSizeValuePMutation: 0.5,//prawd mutacji 
+            sliderPopSizeValuePKrzyzowanie: 0.5,// prawdopodobienstwo krzyzowania 
             gen_num: 0,  // numeruje kolejne pokolenia                                                           
             sum_fitness: 0, // suma funkcji dostosowania wszystkich osobnikow, potrzebna przy selekcji do nowej populacji
 
@@ -94,19 +94,63 @@ class PlotlyChart_sandbox extends React.Component {
         return [newOb1, newOb2]
     }
 
-    onChangeSliderPopSizePT = (v) => {
+    onChangeProbabilityMutation = (v) => {
         // this.disableOperatorsButtons()
 
         this.setState({
-            sliderPopSizeValuePT: v,
+            sliderPopSizeValuePMutation: v,
         });
     }
 
-    onChangeSliderPopSizePCross = (v) => {
+    mutation = (x, y) => {
+        let random_mutation = Math.random()
+        if(random_mutation < this.state.sliderPopSizeValuePMutation ){
+            let min = 0
+            let max = 10
+            // [min, max)
+            let random_point = Math.floor(Math.random() * (max - min)) + min;
+            x = this.mutateBin(x, random_point)
+        }
+        random_mutation = Math.random()
+        if(random_mutation < this.state.sliderPopSizeValuePMutation ){
+            let min = 0
+            let max = 10
+            // [min, max)
+            let random_point = Math.floor(Math.random() * (max - min)) + min;
+            y = this.mutateBin(y, random_point)
+        }
+        
+        return [x, y]
+    }
+
+    cross_over = (ob1X, ob1Y, ob2X, ob2Y) => {
+        let random_cross = Math.random()
+        let ob12_listX = [ob1X, ob2X]
+        let ob12_listY = [ob1Y, ob2Y]
+        if(random_cross < this.state.sliderPopSizeValuePKrzyzowanie ){
+            let min = 0
+            let max = 10
+            // [min, max)
+            let random_point = Math.floor(Math.random() * (max - min)) + min;
+            ob12_listX = this.krzyzowanieJednopunktBin(this.dec2bin(ob1X), this.dec2bin(ob2X), random_point)
+        }
+        random_cross = Math.random()
+        if(random_cross < this.state.sliderPopSizeValuePKrzyzowanie ){
+            let min = 0
+            let max = 10
+            // [min, max)
+            let random_point = Math.floor(Math.random() * (max - min)) + min;
+            ob12_listY = this.krzyzowanieJednopunktBin(this.dec2bin(ob1Y), this.dec2bin(ob2Y), random_point)
+        }
+        return [ob12_listX, ob12_listY]
+    }
+
+    
+    onChangeProbabilityKrzyzowanie = (v) => {
         // this.disableOperatorsButtons()
 
         this.setState({
-            sliderPopSizeValuePCross: v,
+            sliderPopSizeValuePKrzyzowanie: v,
         });
     }
 
@@ -134,7 +178,7 @@ class PlotlyChart_sandbox extends React.Component {
         let xymin = -5.12
         let xymax = 5.12
         let dis = (xymax - xymin )/this.GRID_DENSITY
-        let values = nj.arange(xymin, xymax,dis)
+        let values = nj.arange(xymin, xymax, dis)
         //siatka
         var randomNumbers = Array.from(Array(this.GRID_DENSITY), () => new Array(this.GRID_DENSITY*this.GRID_DENSITY))
         for (let x = 0; x < this.GRID_DENSITY; x++) {
@@ -184,23 +228,6 @@ class PlotlyChart_sandbox extends React.Component {
             }
         })
     }
-    // findNeighborsOfPoint = (x, y) => { // zwraca srodki sasiadow punktu ktory ma srodek w x,y
-    //     let neighbors = []
-    //     for (let i = x-1; i < x+2; i++) {
-    //         for (let j = y-1; j < y+2; j++) {
-    //             if ((-1 < x && x <= this.GRID_DENSITY)    &&
-    //                 (-1 < y && y <= this.GRID_DENSITY)    &&
-    //                 (x != i || y != j)              &&
-    //                 (0 <= i && i <= this.GRID_DENSITY) &&
-    //                 (0 <= j && j <= this.GRID_DENSITY)) {
-    //                     // console.log(i, j)
-    //                     neighbors.push([i, j])
-    //             }
-    //         }
-    //     }
-    //     // console.log(neighbors)
-    //     return neighbors
-    // }
 
     findFourPointsOfCenter = (x, y) => { // zwraca punkty, ktore tworza obszar o danym srodku w punkcie x,y
         let points = [
@@ -219,64 +246,12 @@ class PlotlyChart_sandbox extends React.Component {
             numOfObjects: v,
         });
     }
-    // moveSquareOnChartTowardsExtremum = () => {
-    //     const neighborsCenters = this.findNeighborsOfPoint(squareCenterPosition[0], squareCenterPosition[1])
-    //     let isHigherValueFound = false
 
-    //     for (const neighbor of neighborsCenters) {
-    //         let points = this.findFourPointsOfCenter(neighbor[0], neighbor[1])
-    //         let sumOfPoints = 0
-    //         for (const point of points) {
-    //             if (typeof this.state.data[point[0]] === 'undefined') { // sasiedztwo 8 komorek dookola, dotarlismy do ekstremum
-    //                 this.props.onSimulationEnd()
-    //                 return
-    //             }
-
-    //             sumOfPoints += this.state.data[point[0]][point[1]]
-    //         }
-
-    //         if (sumOfPoints > maximum) {
-    //             isHigherValueFound = true
-
-    //             squareCenterPosition = [neighbor[0], neighbor[1]]
-    //             areaPoints = [...points]
-    //             maximum = sumOfPoints
-    //             console.log(maximum)
-    //         }
-    //     }
-
-    //     if (!isHigherValueFound) {
-    //         this.props.onSimulationEnd()
-    //         return
-    //     }
-
-    //     // console.log(areaPoints)
-    //     // console.log(this.state.data)
-
-    //     let zValues = [] // tablica czterech wartosci z wykresu 3D, na ktorych aktualnie jest malowany obszar poszukujacy ekstremum
-    //     for (const point of areaPoints) {
-    //         zValues.push(this.state.data[point[0]][point[1]] + 0.1) // dodaje 0.1 zeby obszar nie nachodzil na wykres
-    //     }
-
-    //     let newww = new Array(4).fill(0).map(() => new Array(4).fill(0)) // tablica 4x4, aby dobrze rysowal sie obszar szukajacy ekstremum
-    
-    //     for (let i = 0; i < newww.length; i++) {
-    //         for (let j = 0; j < newww[i].length; j++) {
-    //             newww[i][j] = zValues[i]
-    //         }
-    //     }
-
-    //     // console.log(newww)
-    //     this.setState({squareArea: newww})
-    // }
 
     sukcesjaElitarnaCheckbox_onChange = (e) => {
         this.setState({
             sukcesjaElitarna: !this.state.sukcesjaElitarna
         })
-
-
-
     }
 
     onChangeSliderGElite = (v) =>{
@@ -299,10 +274,37 @@ class PlotlyChart_sandbox extends React.Component {
     }
 
     evolution = () => {
-        if(this.state.gen_num<100){
+        if(currentGenerationsCount<100){
+
+
             console.log(currentGenerationsCount++)
         // console.log(this.state.gen_num)
         // this.setState({gen_num: this.state.gen_num + 1})
+
+
+        // reproduction
+        // var newX = []
+        // var newY = []
+        // var newZ = []
+        // for (let i = 0; i < newPopulationIfKilled.length; i++) {
+        //     if (newPopulationIfKilled[i] == false) {
+        //         newX.push(xxx[i])
+        //         newY.push(yyy[i])
+        //         newZ.push(rastrigin(xxx[i], yyy[i]))
+        //     }
+        // }
+
+        // newPopulationIfKilled = []
+        // for (let i = 0; i < newX.length; i++) {
+        //     newPopulationIfKilled.push(false)
+        // }
+
+        // this.setState(prevState => ({
+        //     populationXcoord: newX,
+        //     populationYcoord: newY,
+        //     populationZcoord: newZ,
+        //     populationIfKilled: newPopulationIfKilled,
+        // }))
         }
         else{
             this.onSimulationEnd()
@@ -327,17 +329,17 @@ class PlotlyChart_sandbox extends React.Component {
             <MySlider min={0} max={30} defaultValue={5} sliderSize={4} step={1} ref={this.sliderPopSizeObj} text={"Ilość populacji"} passValueToParent={this.onChangePopSizeAmountObj}></MySlider>   
             </div>
             <div>
-            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"Prawdopodobnieństwo mutacji"} passValueToParent={this.onChangeSliderPopSizePT}></MySlider>
+            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"Prawdopodobnieństwo mutacji"} passValueToParent={this.onChangeProbabilityMutation}></MySlider>
             </div>
             <div>
-            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"Prawdopobieństwo krzyżowania"} passValueToParent={this.onChangeSliderPopSizePCross}></MySlider>
+            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"Prawdopobieństwo krzyżowania"} passValueToParent={this.onChangeProbabilityKrzyzowanie}></MySlider>
             </div>
             <div>
             <Checkbox onChange={this.sukcesjaElitarnaCheckbox_onChange} style={{color:'white'}} defaultChecked={true} >Metoda selekcji - sukcesja elitarna</Checkbox>
             </div>
             {this.state.sukcesjaElitarna?
             <div>
-            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderGElite} text={"Współczynnik sukcesji elitarnej"} passValueToParent={this.onChangeSliderPopSizePCross}></MySlider>
+            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderGElite} text={"Współczynnik sukcesji elitarnej"} passValueToParent={this.onChangeSliderGElite}></MySlider>
             </div>
             :
             <div/>
