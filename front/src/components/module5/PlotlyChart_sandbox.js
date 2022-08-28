@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Checkbox } from "antd";
 import React from "react";
 import Plot from "react-plotly.js";
 import MySlider from "../common/MySlider";
@@ -49,6 +49,9 @@ class PlotlyChart_sandbox extends React.Component {
             // Dwie zmienne ponizej, nie sa potrzebne do pracy programu. Moga sie jednak przydac podczas debugowania.
             n_mutation: 0,  // liczba mutacji w ostatnim pokoleniu                    
             n_cross: 0,    // liczba krzyz
+            sukcesjaElitarna: true, //checkbox rodzaju selekcji
+            GsukcesjiElitarnej: 0.5, //współczynnik selekcji
+
         }
         this.sliderPopSize = React.createRef()
         this.sliderPopSizeObj = React.createRef()
@@ -263,6 +266,20 @@ class PlotlyChart_sandbox extends React.Component {
     //     this.setState({squareArea: newww})
     // }
 
+    sukcesjaElitarnaCheckbox_onChange = (e) => {
+        this.setState({
+            sukcesjaElitarna: !this.state.sukcesjaElitarna
+        })
+
+
+
+    }
+
+    onChangeSliderGElite = (e) =>{
+        
+
+    }
+
     render() {
         const CHART_MARGIN = 5
 
@@ -271,9 +288,7 @@ class PlotlyChart_sandbox extends React.Component {
             <div>
             <Button type="primary" onClick={() => this.generateRandomObjects()}>Generuj populację</Button>
             </div> 
-            <div>
-
-            </div>
+            
             <div>
             <MySlider min={0} max={30} defaultValue={5} sliderSize={4} step={1} ref={this.sliderPopSizeObj} text={"Ilość populacji"} passValueToParent={this.onChangePopSizeAmountObj}></MySlider>   
             </div>
@@ -283,7 +298,16 @@ class PlotlyChart_sandbox extends React.Component {
             <div>
             <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"Prawdopobieństwo krzyżowania"} passValueToParent={this.onChangeSliderPopSizePCross}></MySlider>
             </div>
-            
+            <div>
+            <Checkbox onChange={this.sukcesjaElitarnaCheckbox_onChange} style={{color:'white'}} defaultChecked={true} >Metoda selekcji - sukcesja elitarna</Checkbox>
+            </div>
+            {this.state.sukcesjaElitarna?
+            <div>
+            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderGElite} text={"Współczynnik sukcesji elitarnej"} passValueToParent={this.onChangeSliderPopSizePCross}></MySlider>
+            </div>
+            :
+            <div/>
+            }
             <Plot
                 data={[
                 {
