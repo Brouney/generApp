@@ -17,6 +17,7 @@ const graphData = {
   }
 };
 
+var currentGenerationsCount = 0
 const GRID_DISTANCE_BETWEEN_POINTS = 0.5
 const SQUARE_CENTER_POSITION_DEFAULT = [5.5, 5.5] // chcac miec obszar najpierw na srodku, trzeba to ustawic (props.gridDensity / 2)
 const AREA_POINTS_DEFAULT = [[5,5],[5,6],[6,5],[6,6]]
@@ -31,7 +32,7 @@ class PlotlyChart_sandbox extends React.Component {
     constructor(props) {
         super(props)
         this.GRID_DENSITY = props.gridDensity
-
+        this.simulationRunning = false
         this.state = {
             data: this.generateData(),
             squareArea: areaPoints,
@@ -51,13 +52,16 @@ class PlotlyChart_sandbox extends React.Component {
             n_cross: 0,    // liczba krzyz
             sukcesjaElitarna: true, //checkbox rodzaju selekcji
             GsukcesjiElitarnej: 0.5, //współczynnik selekcji
-
+            timerID: null,
         }
         this.sliderPopSize = React.createRef()
         this.sliderPopSizeObj = React.createRef()
         this.generateData = this.generateData.bind(this);
+        // this.evolution = this.evolution.bind(this);
         // this.moveSquareOnChartTowardsExtremum = this.moveSquareOnChartTowardsExtremum.bind(this);
     }
+
+
 
     //zwraca wartość binarna z liczby
     dec2bin = (dec) => {
@@ -275,9 +279,39 @@ class PlotlyChart_sandbox extends React.Component {
 
     }
 
-    onChangeSliderGElite = (e) =>{
-        
+    onChangeSliderGElite = (v) =>{
+        this.setState({
+            GsukcesjiElitarnej: v
+        })
 
+    }
+
+    handleStartStop = (simulationStopped) => { // name = (param) => 
+        if (simulationStopped) {
+            clearInterval(this.timerId)
+        }
+        else {
+            console.log("START")
+            this.timerId = setInterval(() => {
+                this.evolution()
+            }, 100);
+        }
+    }
+
+    evolution = () => {
+        if(this.state.gen_num<100){
+            console.log(currentGenerationsCount++)
+        // console.log(this.state.gen_num)
+        // this.setState({gen_num: this.state.gen_num + 1})
+        }
+        else{
+            this.onSimulationEnd()
+        }
+    }
+
+    onSimulationEnd = () => {
+        this.handleStartStop(true)
+        this.navigationButtons.current.enableNavigationButtons()
     }
 
     render() {

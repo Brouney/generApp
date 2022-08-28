@@ -15,9 +15,13 @@ class Slide51A extends Component {
         this.quizTemplate = React.createRef()
     }
 
-    onSimulationEnd = () => {
-        this.handleStartStop(true)
-        this.navigationButtons.current.enableNavigationButtons()
+    handleStartStop = (simulationStopped) => { // name = (param) => 
+        if (simulationStopped) {
+            this.plotlyChart_sandbox.current.handleStartStop(true)
+        }
+        else {
+            this.plotlyChart_sandbox.current.handleStartStop(false)
+        }
     }
 
     render(){
@@ -36,7 +40,7 @@ class Slide51A extends Component {
                 </div>
 
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={1} slidesInModuleCounter={MODULE_5_SLIDES_COUNT}
-                               current={this}
+                               current={this} onStartStop={this.handleStartStop}
             ></NavigationButtons>
         </div>
         )
