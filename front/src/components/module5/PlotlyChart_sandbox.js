@@ -102,6 +102,7 @@ class PlotlyChart_sandbox extends React.Component {
         });
     }
 
+    //x y dec
     mutation = (x, y) => {
         let random_mutation = Math.random()
         if(random_mutation < this.state.sliderPopSizeValuePMutation ){
@@ -109,7 +110,7 @@ class PlotlyChart_sandbox extends React.Component {
             let max = 10
             // [min, max)
             let random_point = Math.floor(Math.random() * (max - min)) + min;
-            x = this.mutateBin(x, random_point)
+            x = this.mutateDec(x, random_point)
         }
         random_mutation = Math.random()
         if(random_mutation < this.state.sliderPopSizeValuePMutation ){
@@ -117,7 +118,7 @@ class PlotlyChart_sandbox extends React.Component {
             let max = 10
             // [min, max)
             let random_point = Math.floor(Math.random() * (max - min)) + min;
-            y = this.mutateBin(y, random_point)
+            y = this.mutateDec(y, random_point)
         }
         
         return [x, y]
@@ -145,7 +146,7 @@ class PlotlyChart_sandbox extends React.Component {
         return [ob12_listX, ob12_listY]
     }
 
-    
+
     onChangeProbabilityKrzyzowanie = (v) => {
         // this.disableOperatorsButtons()
 
@@ -171,7 +172,7 @@ class PlotlyChart_sandbox extends React.Component {
         this.setDefaultGlobalVariables()
     }
 
-    generateData = (dataFunction3d = 'saddle') => {
+    generateData = (dataFunction3d = 'Rastrigin') => {
         this.setDefaultGlobalVariables()
 
         let genRastriginsFunc = (x, y) => 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)
@@ -189,7 +190,7 @@ class PlotlyChart_sandbox extends React.Component {
                 let xxx = values.get(y)
                 let computedValue
 
-                if (dataFunction3d === 'saddle') {
+                if (dataFunction3d === 'Rastrigin') {
                     // computedValue = saddleFormula(xxx, yyy)
                     computedValue = genRastriginsFunc(xxx, yyy)
                 }
@@ -275,9 +276,23 @@ class PlotlyChart_sandbox extends React.Component {
 
     evolution = () => {
         if(currentGenerationsCount<100){
+            //selekcja
+            //wybrac temp population - najmocniejszych - sortowanie i wywalenie najslabszych paru
+
+            //potem metoda ruletki - sposob z LAB - posortowac temp z, nastepnie gdy jest jedno ponad 
+            //wylosowane ponad, to jest to
 
 
-            console.log(currentGenerationsCount++)
+            //krzyzowanie
+            //krzyzowanie najmocniejszych obok siebie
+
+
+
+            //mutacja
+            //ew mutacje
+
+
+            // console.log(currentGenerationsCount++)
         // console.log(this.state.gen_num)
         // this.setState({gen_num: this.state.gen_num + 1})
 
