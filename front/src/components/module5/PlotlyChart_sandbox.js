@@ -66,7 +66,7 @@ class PlotlyChart_sandbox extends React.Component {
     //zwraca wartość binarna z liczby
     dec2bin = (dec) => {
         let binaryValue = (dec >>> 0).toString(2);
-        while(binaryValue.length <= 9){
+        while(binaryValue.length <= 7){
             binaryValue = '0' + binaryValue
         }
         return binaryValue
@@ -106,16 +106,16 @@ class PlotlyChart_sandbox extends React.Component {
     mutation = (x, y) => {
         let random_mutation = Math.random()
         if(random_mutation < this.state.sliderPopSizeValuePMutation ){
-            let min = 0
-            let max = 10
+            let min = 1
+            let max = 8
             // [min, max)
             let random_point = Math.floor(Math.random() * (max - min)) + min;
             x = this.mutateDec(x, random_point)
         }
         random_mutation = Math.random()
         if(random_mutation < this.state.sliderPopSizeValuePMutation ){
-            let min = 0
-            let max = 10
+            let min = 1
+            let max = 8
             // [min, max)
             let random_point = Math.floor(Math.random() * (max - min)) + min;
             y = this.mutateDec(y, random_point)
@@ -129,16 +129,16 @@ class PlotlyChart_sandbox extends React.Component {
         let ob12_listX = [ob1X, ob2X]
         let ob12_listY = [ob1Y, ob2Y]
         if(random_cross < this.state.sliderPopSizeValuePKrzyzowanie ){
-            let min = 0
-            let max = 10
+            let min = 1
+            let max = 8
             // [min, max)
             let random_point = Math.floor(Math.random() * (max - min)) + min;
             ob12_listX = this.krzyzowanieJednopunktBin(this.dec2bin(ob1X), this.dec2bin(ob2X), random_point)
         }
         random_cross = Math.random()
         if(random_cross < this.state.sliderPopSizeValuePKrzyzowanie ){
-            let min = 0
-            let max = 10
+            let min = 1
+            let max = 8
             // [min, max)
             let random_point = Math.floor(Math.random() * (max - min)) + min;
             ob12_listY = this.krzyzowanieJednopunktBin(this.dec2bin(ob1Y), this.dec2bin(ob2Y), random_point)
@@ -206,7 +206,6 @@ class PlotlyChart_sandbox extends React.Component {
         this.setState({ data: randomNumbers })
         return randomNumbers
     }
-
     generateRandomObjects = () => {
         currentGenerationsCount = 0
         //generowanie punktów na funkcji
@@ -233,16 +232,7 @@ class PlotlyChart_sandbox extends React.Component {
         })
     }
 
-    findFourPointsOfCenter = (x, y) => { // zwraca punkty, ktore tworza obszar o danym srodku w punkcie x,y
-        let points = [
-            [Math.abs(Math.round(x + 0.5)), Math.abs(Math.round(y + 0.5))],
-            [Math.abs(Math.round(x - 0.5)), Math.abs(Math.round(y + 0.5))],
-            [Math.abs(Math.round(x + 0.5)), Math.abs(Math.round(y - 0.5))],
-            [Math.abs(Math.round(x - 0.5)), Math.abs(Math.round(y - 0.5))],
-        ]
-        // console.log('findFourPointsOfCenter:', points)
-        return points
-    }
+
     onChangePopSizeAmountObj = (v) => {
         // this.disableOperatorsButtons()
 
@@ -307,20 +297,25 @@ class PlotlyChart_sandbox extends React.Component {
             //krzyzowanie najmocniejszych obok siebie
             for (let i=0; i<temp_pop.length && (i+1)<temp_pop.length; i=i+2){
                 let crossed_elements = this.cross_over(temp_pop[i][0],temp_pop[i][1],temp_pop[i+1][0],temp_pop[i+1][1])
-                console.log(crossed_elements)
                 temp_pop[i][0] = crossed_elements[0][0]
                 temp_pop[i][1] = crossed_elements[0][1]
                 temp_pop[i+1][0] = crossed_elements[1][0]
                 temp_pop[i+1][1] = crossed_elements[1][1]
             }       
+             //mutacja
+            //ew mutacje
+            for(let i = 0; i < temp_pop.length; ++i){
+                let mutated = this.mutation(temp_pop[i][0], temp_pop[i][1])
+                temp_pop[i][0] = mutated[0]
+                temp_pop[i][1] = mutated[1]
+            }
             
             //dodanie najlepszych bez krzyzowania obiektow ze starej populacji
             for(let el = 0; el< Math.floor(this.state.GsukcesjiElitarnej * this.state.objectsPoints.z.length); ++el){
                 let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_posortowane[stare_posortowane.length - el - 1])
                 temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
             }
-            //mutacja
-            //ew mutacje
+           
 
 
             // console.log(currentGenerationsCount++)
@@ -341,7 +336,7 @@ class PlotlyChart_sandbox extends React.Component {
             newZ.push(this.genRastriginsFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1])))
         }
 
-        console.log(newX,newY,newZ )
+        // console.log(newX,newY,newZ )
         this.setState(prevState => ({
             objectsPoints: {
                 x: [...newX],
@@ -371,7 +366,7 @@ class PlotlyChart_sandbox extends React.Component {
             </div> 
             
             <div>
-            <MySlider min={0} max={30} defaultValue={5} sliderSize={4} step={1} ref={this.sliderPopSizeObj} text={"Ilość populacji"} passValueToParent={this.onChangePopSizeAmountObj}></MySlider>   
+            <MySlider min={0} max={40} defaultValue={15} sliderSize={4} step={1} ref={this.sliderPopSizeObj} text={"Ilość populacji"} passValueToParent={this.onChangePopSizeAmountObj}></MySlider>   
             </div>
             <div>
             <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"Prawdopodobnieństwo mutacji"} passValueToParent={this.onChangeProbabilityMutation}></MySlider>
