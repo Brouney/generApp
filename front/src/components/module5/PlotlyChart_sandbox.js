@@ -91,7 +91,7 @@ class PlotlyChart_sandbox extends React.Component {
     krzyzowanieJednopunktBin = (ob1, ob2, punkt) => {
         let newOb1 = ob1.slice(0, punkt) + ob2.slice(punkt, ob1.length)
         let newOb2 = ob2.slice(0, punkt) + ob1.slice(punkt, ob1.length)
-        return [newOb1, newOb2]
+        return [this.bin2dec(newOb1), this.bin2dec(newOb2)]
     }
 
     onChangeProbabilityMutation = (v) => {
@@ -172,10 +172,12 @@ class PlotlyChart_sandbox extends React.Component {
         this.setDefaultGlobalVariables()
     }
 
+    genRastriginsFunc = (x, y) => { return 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)}
+
     generateData = (dataFunction3d = 'Rastrigin') => {
         this.setDefaultGlobalVariables()
 
-        let genRastriginsFunc = (x, y) => 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)
+        // let genRastriginsFunc = (x, y) => 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)
         let xymin = -5.12
         let xymax = 5.12
         let dis = (xymax - xymin )/this.GRID_DENSITY
@@ -192,7 +194,7 @@ class PlotlyChart_sandbox extends React.Component {
 
                 if (dataFunction3d === 'Rastrigin') {
                     // computedValue = saddleFormula(xxx, yyy)
-                    computedValue = genRastriginsFunc(xxx, yyy)
+                    computedValue = this.genRastriginsFunc(xxx, yyy)
                 }
                 // else if (dataFunction3d === 'paraboloid') {
                 //     computedValue = paraboloidFormula(xxx, yyy)
@@ -206,6 +208,7 @@ class PlotlyChart_sandbox extends React.Component {
     }
 
     generateRandomObjects = () => {
+        currentGenerationsCount = 0
         //generowanie punktów na funkcji
         let newObjectsX = []
         let newObjectsY = []
@@ -274,20 +277,48 @@ class PlotlyChart_sandbox extends React.Component {
         }
     }
 
+    sortNum = (a, b) => {
+        return a - b;
+    }
+
     evolution = () => {
         if(currentGenerationsCount<100){
-            //selekcja
+            //selekcja - elitarna - czesciowe zastepowanie
+
+            //przypisanie odpowiednich przystosowan, posortowanie i odrzucenie najmniejszych
+            let stare_przystosowanie = this.state.objectsPoints.z
+            stare_przystosowanie = stare_przystosowanie.sort(this.sortNum)
+            stare_przystosowanie = stare_przystosowanie.slice( Math.floor(this.state.GsukcesjiElitarnej * stare_przystosowanie.length),
+                                    stare_przystosowanie.length)
             //wybrac temp population - najmocniejszych - sortowanie i wywalenie najslabszych paru
+            let temp_pop = []
+            for(let el of stare_przystosowanie){
+                let index_z = this.state.objectsPoints.z.findIndex(element => element === el)
+                temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
+            }
 
-            //potem metoda ruletki - sposob z LAB - posortowac temp z, nastepnie gdy jest jedno ponad 
+
+
+            //potem metoda ruletki - sposob z LAB - posortowac temp z, nastepnie gdy jest jedno  
             //wylosowane ponad, to jest to
-
+            
 
             //krzyzowanie
             //krzyzowanie najmocniejszych obok siebie
-
-
-
+            for (let i=0; i<temp_pop.length && (i+1)<temp_pop.length; i=i+2){
+                let crossed_elements = this.cross_over(temp_pop[i][0],temp_pop[i][1],temp_pop[i+1][0],temp_pop[i+1][1])
+                console.log(crossed_elements)
+                temp_pop[i][0] = crossed_elements[0][0]
+                temp_pop[i][1] = crossed_elements[0][1]
+                temp_pop[i+1][0] = crossed_elements[1][0]
+                temp_pop[i+1][1] = crossed_elements[1][1]
+            }       
+            
+            //dodanie najlepszych bez krzyzowania obiektow ze starej populacji
+            for(let el = 0; el< Math.floor(this.state.GsukcesjiElitarnej * stare_przystosowanie.length); ++el){
+                let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_przystosowanie[stare_przystosowanie.length - el - 1])
+                temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
+            }
             //mutacja
             //ew mutacje
 
@@ -296,30 +327,29 @@ class PlotlyChart_sandbox extends React.Component {
         // console.log(this.state.gen_num)
         // this.setState({gen_num: this.state.gen_num + 1})
 
-
+        let xymin = -5.12
+        let xymax = 5.12
+        let dis = (xymax - xymin )/this.GRID_DENSITY
+        let values = nj.arange(xymin, xymax, dis)
         // reproduction
-        // var newX = []
-        // var newY = []
-        // var newZ = []
-        // for (let i = 0; i < newPopulationIfKilled.length; i++) {
-        //     if (newPopulationIfKilled[i] == false) {
-        //         newX.push(xxx[i])
-        //         newY.push(yyy[i])
-        //         newZ.push(rastrigin(xxx[i], yyy[i]))
-        //     }
-        // }
+        var newX = []
+        var newY = []
+        var newZ = []
+        for (let i = 0; i <temp_pop.length; i++) {
+            newX.push(temp_pop[i][0])
+            newY.push(temp_pop[i][1])
+            newZ.push(this.genRastriginsFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1])))
+        }
 
-        // newPopulationIfKilled = []
-        // for (let i = 0; i < newX.length; i++) {
-        //     newPopulationIfKilled.push(false)
-        // }
-
-        // this.setState(prevState => ({
-        //     populationXcoord: newX,
-        //     populationYcoord: newY,
-        //     populationZcoord: newZ,
-        //     populationIfKilled: newPopulationIfKilled,
-        // }))
+        console.log(newX,newY )
+        this.setState(prevState => ({
+            objectsPoints: {
+                x: [...newX],
+                y: [...newY],
+                z: [...newZ],
+            }
+        }))
+        currentGenerationsCount++
         }
         else{
             this.onSimulationEnd()
@@ -439,6 +469,9 @@ class PlotlyChart_sandbox extends React.Component {
 
                 }}
             />
+            <h3>
+                populacja: {currentGenerationsCount}
+            </h3>
         </div>  
         );
     }
