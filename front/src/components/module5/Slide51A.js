@@ -35,7 +35,7 @@ class Slide51A extends Component {
                         ref={this.plotlyChart_sandbox}
                         title='Poszukiwanie ekstremum globalnego funkcji'
                         onSimulationEnd={this.onSimulationEnd}
-                        gridDensity={160}
+                        gridDensity={128}
                     />
                 </div>
 

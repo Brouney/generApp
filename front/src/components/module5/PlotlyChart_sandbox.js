@@ -66,7 +66,7 @@ class PlotlyChart_sandbox extends React.Component {
     //zwraca wartość binarna z liczby
     dec2bin = (dec) => {
         let binaryValue = (dec >>> 0).toString(2);
-        while(binaryValue.length <= 10){
+        while(binaryValue.length <= 9){
             binaryValue = '0' + binaryValue
         }
         return binaryValue
@@ -287,9 +287,9 @@ class PlotlyChart_sandbox extends React.Component {
 
             //przypisanie odpowiednich przystosowan, posortowanie i odrzucenie najmniejszych
             let stare_przystosowanie = this.state.objectsPoints.z
-            stare_przystosowanie = stare_przystosowanie.sort(this.sortNum)
-            stare_przystosowanie = stare_przystosowanie.slice( Math.floor(this.state.GsukcesjiElitarnej * stare_przystosowanie.length),
-                                    stare_przystosowanie.length)
+            let stare_posortowane = stare_przystosowanie.sort(this.sortNum)
+            stare_przystosowanie = stare_posortowane.slice( Math.floor(this.state.GsukcesjiElitarnej * stare_posortowane.length),
+            stare_posortowane.length)
             //wybrac temp population - najmocniejszych - sortowanie i wywalenie najslabszych paru
             let temp_pop = []
             for(let el of stare_przystosowanie){
@@ -315,8 +315,8 @@ class PlotlyChart_sandbox extends React.Component {
             }       
             
             //dodanie najlepszych bez krzyzowania obiektow ze starej populacji
-            for(let el = 0; el< Math.floor(this.state.GsukcesjiElitarnej * stare_przystosowanie.length); ++el){
-                let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_przystosowanie[stare_przystosowanie.length - el - 1])
+            for(let el = 0; el< Math.floor(this.state.GsukcesjiElitarnej * this.state.objectsPoints.z.length); ++el){
+                let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_posortowane[stare_posortowane.length - el - 1])
                 temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
             }
             //mutacja
@@ -341,7 +341,7 @@ class PlotlyChart_sandbox extends React.Component {
             newZ.push(this.genRastriginsFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1])))
         }
 
-        console.log(newX,newY )
+        console.log(newX,newY,newZ )
         this.setState(prevState => ({
             objectsPoints: {
                 x: [...newX],
