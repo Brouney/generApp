@@ -44,15 +44,20 @@ function calculate_frac_n_A(individual) {
     individual.frac_n_A = frac_n_A
     return frac_n_A
 }
+
+function create_int_n_A(individual) {
+// TODO
+    return 0
+}
 // END ALGO FUNCTIONS
 
 
 
 class ReproductionType {
-    constructor(algoText, algoStepsCount, step_1, step_2, step_3, step_4, step_5, step_6) {
+    constructor(algoText, algoStepsCount, step_1, step_2, step_3, step_4, step_5, step_6, step_7) {
         this.algoText = algoText
         this.algoStepsCount = algoStepsCount
-        this.algoStepsList = [step_1, step_2, step_3, step_4, step_5, step_6]
+        this.algoStepsList = [step_1, step_2, step_3, step_4, step_5, step_6, step_7]
     }
 }
 
@@ -76,30 +81,33 @@ const Slide34A_DETERMINISTIC_ALGO_TEXT =
 <ol>
     <li id="0">Obliczamy <span style={{color: "yellow"}}><Latex>{"${p_r(A) = \\frac{f(A)}{\\sum_i f_i}}$"}</Latex></span></li><br></br>
     <li id="1">Obliczamy <span style={{color: "yellow"}}><Latex>{"${n(A) = E[n(A)] = N\\cdot p_r(A)}$"}</Latex></span></li><br></br>
-    <li id="2">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="2">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
     <li id="3">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
-    <li id="4">Sortujemy osobniki wg malejącej <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
-    <li id="5">Uzupełniamy braki w populacji od góry listy z punktu 5</li>
+    <li id="4">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="5">Sortujemy osobniki wg malejącej <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="6">Uzupełniamy braki w populacji od góry listy z punktu 6</li>
 </ol>
 
 const Slide34A_RANDOM_WITH_REPETITIONS_ALGO_TEXT = 
 <ol>
     <li id="0">Obliczamy <span style={{color: "yellow"}}><Latex>{"${p_r(A) = \\frac{f(A)}{\\sum_i f_i}}$"}</Latex></span></li><br></br>
     <li id="1">Obliczamy <span style={{color: "yellow"}}><Latex>{"${n(A) = E[n(A)] = N\\cdot p_r(A)}$"}</Latex></span></li><br></br>
-    <li id="2">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="2">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
     <li id="3">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
-    <li id="4">Wartości <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span> używamy do wykalibrowania koła ruletki</li><br></br>
-    <li id="5">Brakujące osobniki losujemy metodą ruletki</li>
+    <li id="4">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="5">Wartości <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span> używamy do wykalibrowania koła ruletki</li><br></br>
+    <li id="6">Brakujące osobniki losujemy metodą ruletki</li>
 </ol>
 
 const Slide34A_RANDOM_WITHOUT_REPETITIONS_ALGO_TEXT = 
 <ol>
     <li id="0">Obliczamy <span style={{color: "yellow"}}><Latex>{"${p_r(A) = \\frac{f(A)}{\\sum_i f_i}}$"}</Latex></span></li><br></br>
     <li id="1">Obliczamy <span style={{color: "yellow"}}><Latex>{"${n(A) = E[n(A)] = N\\cdot p_r(A)}$"}</Latex></span></li><br></br>
-    <li id="2">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="2">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
     <li id="3">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
-    <li id="4">Wartości <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span> są prawdopodobieństwami sukcesu w próbach Bernoulliego</li><br></br>
-    <li id="5">Losujemy poszczególne osobniki aż do zapełnienia populacji</li>
+    <li id="4">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
+    <li id="5">Wartości <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span> są prawdopodobieństwami sukcesu w próbach Bernoulliego</li><br></br>
+    <li id="6">Losujemy poszczególne osobniki aż do zapełnienia populacji</li>
 </ol>
 
 const Slide34A_RANK_ALGO_TEXT = 'Rankingowa TODO'
@@ -107,21 +115,27 @@ const Slide34A_TOURNAMENT_ALGO_TEXT = 'Turniejowa TODO'
 const Slide34A_DUEL_ALGO_TEXT = 'Pojedynkowa TODO'
 const Slide34A_THRESHOLD_ALGO_TEXT = 'Progowa TODO'
 
-var Slide34A_DETERMINISTIC = new ReproductionType(Slide34A_DETERMINISTIC_ALGO_TEXT, 6,
+var Slide34A_DETERMINISTIC = new ReproductionType(Slide34A_DETERMINISTIC_ALGO_TEXT, 7,
     calculate_p_r_A,
     calculate_n_A,
     calculate_int_n_A,
-    calculate_frac_n_A)
-var Slide34A_RANDOM_WITH_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITH_REPETITIONS_ALGO_TEXT, 6,
+    calculate_frac_n_A,
+    create_int_n_A,
+)
+var Slide34A_RANDOM_WITH_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITH_REPETITIONS_ALGO_TEXT, 7,
     calculate_p_r_A,
     calculate_n_A,
     calculate_int_n_A,
-    calculate_frac_n_A)
-var Slide34A_RANDOM_WITHOUT_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITHOUT_REPETITIONS_ALGO_TEXT, 6,
+    calculate_frac_n_A,
+    create_int_n_A,
+)
+var Slide34A_RANDOM_WITHOUT_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITHOUT_REPETITIONS_ALGO_TEXT, 7,
     calculate_p_r_A,
     calculate_n_A,
     calculate_int_n_A,
-    calculate_frac_n_A)
+    calculate_frac_n_A,
+    create_int_n_A,
+)
 
 var Slide34A_RANK = new ReproductionType(Slide34A_RANK_ALGO_TEXT)
 var Slide34A_TOURNAMENT = new ReproductionType(Slide34A_TOURNAMENT_ALGO_TEXT)
@@ -203,8 +217,6 @@ class Slide34A extends Component {
     }
 
     algoStep = () => {
-        // TODO wyliczanie krok po kroku i update tabeli po jednej komorce
-
         console.log(this.state.chosenReproductionType.algoStepsList[this.state.currentAlgoStepIndex])
 
         if (this.state.currentAlgoStepIndex == this.state.chosenReproductionType.algoStepsCount) {
@@ -212,28 +224,44 @@ class Slide34A extends Component {
             return
         }
 
-        document.getElementById(this.state.currentAlgoStepIndex).style = "color: cyan; font-weight: 800"
-
         var idx = this.state.currentIndividualIndex
         var currentIndicatorIdx = this.state.currentAlgoStepIndex
         var func = this.state.chosenReproductionType.algoStepsList[currentIndicatorIdx]
         
         if (func !== undefined) {
 
-            // if (pierwszyZCzterechKrokow) {
+            if (currentIndicatorIdx == 0 ||
+                currentIndicatorIdx == 1 ||
+                currentIndicatorIdx == 2 ||
+                currentIndicatorIdx == 3) { // pierwszy z czterech krokow dla Slide34A_DETERMINISTIC, Slide34A_RANDOM_WITH_REPETITIONS, Slide34A_RANDOM_WITHOUT_REPETITIONS
+
+                //podswietlanie komorek w tabeli i algorytmu
+                if (document.getElementById(this.state.currentAlgoStepIndex) != null) {
+                    document.getElementById(this.state.currentAlgoStepIndex).style = "color: cyan; font-weight: 800"  //podswietlenie obecnego kroku algorytmu
+                }
+        
+                if (this.state.currentIndividualIndex == 0) {
+                    document.getElementById('00').style = "background-color: cyan; font-weight: 800"
+                    document.getElementById('90').style = "style"
+                }
+                else {
+                    document.getElementById(this.state.currentIndividualIndex + '0').style = "background-color: cyan; font-weight: 800"
+                    document.getElementById(this.state.currentIndividualIndex-1 + '0').style = ""
+                }
+                //koniec podswietlania komorek w tabeli i algorytmu
+
                 var calculatedValue = func(this.state.individuals[idx])
                 this.state.individuals[idx].indicators[currentIndicatorIdx] = calculatedValue
-            // }
-            // } else {
-            // 
-            // }
-            
-            this.setState(prevState => {
-                return {
-                    individuals: prevState.individuals,
-                    currentIndividualIndex: prevState.currentIndividualIndex+1
-                }
-            });
+
+                this.setState(prevState => {
+                    return {
+                        individuals: prevState.individuals,
+                        currentIndividualIndex: prevState.currentIndividualIndex+1
+                    }
+                });
+            } else {
+                console.log('od piatego kroku')
+            }
         }
 
         if (this.state.currentIndividualIndex == Slide34A_POPULATION_SIZE) {
@@ -243,7 +271,7 @@ class Slide34A extends Component {
         }
 
         if (this.state.stepEnded) {
-            document.getElementById(this.state.currentAlgoStepIndex).style = ""
+            document.getElementById(this.state.currentAlgoStepIndex).style = "" // wylaczenie podswietlania obecnego kroku algorytmu
     
             this.setState(prevState => {
                 return {
@@ -270,7 +298,7 @@ class Slide34A extends Component {
         Slide34A_sum_f_i = 0
 
         for (let i = 0; i < this.state.chosenReproductionType.algoStepsCount; ++i) {
-            document.getElementById(i).style = ""
+            document.getElementById(i).style = "" // wylaczenie podswietlen wszystkich krokow algorytmu
         }
 
         // generate population
@@ -316,9 +344,11 @@ class Slide34A extends Component {
     renderIndividualTableData(array) {
         return array.map((individual, index) => {
            const { LP, Genotyp, Fenotyp, Dostosowanie, indicators } = individual //destructuring
+
            return (
+            // document.getElementById('00').style = "background-color: cyan; font-weight: 800"
                 <tr>
-                    <td>{LP}</td>
+                    <td id={index + '0'}>{LP}</td>
                     <td><tt>{Genotyp}</tt></td>
                     <td><tt>{Fenotyp}</tt></td>
                     <td><tt>{Dostosowanie}</tt></td>
@@ -334,7 +364,7 @@ class Slide34A extends Component {
 
     onReproductionTypeChange = (event) => {
         for (let i = 0; i < this.state.chosenReproductionType.algoStepsCount; ++i) {
-            document.getElementById(i).style = ""
+            document.getElementById(i).style = "" // wylaczenie podswietlen wszystkich krokow algorytmu
         }
 
         switch (event.target.value) {
