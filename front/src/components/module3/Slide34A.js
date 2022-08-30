@@ -21,20 +21,28 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 
 // ALGO FUNCTIONS
-function calculate_p_r_A(f_A, sum_f_i) {
-    return (f_A / sum_f_i)
+function calculate_p_r_A(individual) {
+    var p_r_A = (individual.Dostosowanie / Slide34A_sum_f_i).toFixed(3)
+    individual.p_r_A = p_r_A
+    return p_r_A
 }
 
-function calculate_n_A(p_r_A) {
-    return (Slide34A_POPULATION_SIZE * p_r_A)
+function calculate_n_A(individual) {
+    var n_A = (Slide34A_POPULATION_SIZE * individual.p_r_A).toFixed(2)
+    individual.n_A = n_A
+    return n_A
 }
 
-function calculate_int_n_A(n_A) {
-    return Math.floor(n_A)
+function calculate_int_n_A(individual) {
+    var int_n_A = Math.floor(individual.n_A)
+    individual.int_n_A = int_n_A
+    return int_n_A
 }
 
-function calculate_frac_n_A(n_A) {
-    return (n_A - parseInt(n_A))
+function calculate_frac_n_A(individual) {
+    var frac_n_A = Math.floor((individual.n_A - parseInt(individual.n_A)).toFixed(3) * 100)
+    individual.frac_n_A = frac_n_A
+    return frac_n_A
 }
 // END ALGO FUNCTIONS
 
@@ -55,10 +63,12 @@ class Individual {
         this.Fenotyp = Fenotyp
         this.Dostosowanie = Dostosowanie
 
-        this.p_r_A = 0
-        this.n_A = 0
-        this.int_n_A = 0
-        this.frac_n_A = 0
+        this.indicators = [0,0,0,0] // p_r_A, n_A, int_n_A, frac_n_A
+
+        this.p_r_A = null
+        this.n_A = null
+        this.int_n_A = null
+        this.frac_n_A = null
     }
 }
 
@@ -122,9 +132,12 @@ const Slide34A_POPULATION_SIZE = 10
 const Slide34A_INDIVIDUAL_GENOTYPE_LENGTH = 6
 const Slide34A_INDIVIDUAL_MAX_FITNESS = 2**Slide34A_INDIVIDUAL_GENOTYPE_LENGTH - 1
 
+const Slide34A_ALGO_STEP_TIMEOUT = 200
+
 const Slide34A_FITNESS_FUNCTION = (x) => x*x
 
-var Slide34A_counter = 0
+var Slide34A_sum_f_i = 0
+
 
 class Slide34A extends Component {
 
@@ -139,6 +152,9 @@ class Slide34A extends Component {
         this.navigationButtons = React.createRef();
 
         let tmpIndividuals = []
+
+        Slide34A_sum_f_i = 0
+
         for (let i = 0; i < Slide34A_POPULATION_SIZE; ++i) {
             var genotype = randomBinary(0, Slide34A_INDIVIDUAL_MAX_FITNESS)
             var fenotype = bin2dec(genotype)
@@ -150,12 +166,15 @@ class Slide34A extends Component {
             while(tmpIndividuals[i].Genotyp.length < Slide34A_INDIVIDUAL_GENOTYPE_LENGTH) {
                 tmpIndividuals[i].Genotyp = "0" + tmpIndividuals[i].Genotyp // dodanie leading zeros
             }
+
+            Slide34A_sum_f_i += fitness
         }
 
         this.state = {
             chosenReproductionType: Slide34A_DETERMINISTIC,
             individuals: tmpIndividuals,
             currentAlgoStepIndex: 0,
+            currentIndividualIndex: 0,
             stepEnded: false
         }
     }
@@ -179,12 +198,11 @@ class Slide34A extends Component {
 
             this.timerId = setInterval(() => {
                 this.algoStep()
-            }, 1000);
+            }, Slide34A_ALGO_STEP_TIMEOUT);
         }
     }
 
     algoStep = () => {
-        // TODO Slide34A_counter zastapic obliczeniami
         // TODO wyliczanie krok po kroku i update tabeli po jednej komorce
 
         console.log(this.state.chosenReproductionType.algoStepsList[this.state.currentAlgoStepIndex])
@@ -195,28 +213,34 @@ class Slide34A extends Component {
         }
 
         document.getElementById(this.state.currentAlgoStepIndex).style = "color: cyan; font-weight: 800"
-        var tmpIndividuals = []
 
-        if (Slide34A_counter == 2) {
-            Slide34A_counter = 0
+        var idx = this.state.currentIndividualIndex
+        var currentIndicatorIdx = this.state.currentAlgoStepIndex
+        var func = this.state.chosenReproductionType.algoStepsList[currentIndicatorIdx]
+        
+        if (func !== undefined) {
+
+            // if (pierwszyZCzterechKrokow) {
+                var calculatedValue = func(this.state.individuals[idx])
+                this.state.individuals[idx].indicators[currentIndicatorIdx] = calculatedValue
+            // }
+            // } else {
+            // 
+            // }
+            
+            this.setState(prevState => {
+                return {
+                    individuals: prevState.individuals,
+                    currentIndividualIndex: prevState.currentIndividualIndex+1
+                }
+            });
+        }
+
+        if (this.state.currentIndividualIndex == Slide34A_POPULATION_SIZE) {
             this.setState({
                 stepEnded: true
             });
         }
-
-        Slide34A_counter++
-        // for (let i = 0; i < Slide34A_POPULATION_SIZE; ++i) {
-        //     var genotype = randomBinary(0, Slide34A_INDIVIDUAL_MAX_FITNESS)
-        //     var fenotype = bin2dec(genotype)
-        //     var fitness = Slide34A_FITNESS_FUNCTION(fenotype)
-
-        //     var newIndividual = new Individual(i+1, genotype, fenotype, fitness)
-        //     tmpIndividuals.push(newIndividual)
-
-        //     while(tmpIndividuals[i].Genotyp.length < Slide34A_INDIVIDUAL_GENOTYPE_LENGTH) {
-        //         tmpIndividuals[i].Genotyp = "0" + tmpIndividuals[i].Genotyp // dodanie leading zeros
-        //     }
-        // }
 
         if (this.state.stepEnded) {
             document.getElementById(this.state.currentAlgoStepIndex).style = ""
@@ -224,6 +248,7 @@ class Slide34A extends Component {
             this.setState(prevState => {
                 return {
                     currentAlgoStepIndex: prevState.currentAlgoStepIndex+1,
+                    currentIndividualIndex: 0,
                     stepEnded: false
                 }
             });
@@ -232,7 +257,9 @@ class Slide34A extends Component {
 
     onSimulationEnd = () => {
         this.setState({
-            currentAlgoStepIndex: 0
+            currentAlgoStepIndex: 0,
+            currentIndividualIndex: 0,
+            stepEnded: false
         });
         this.handleStartStop(true)
         this.navigationButtons.current.enableNavigationButtons()
@@ -240,14 +267,11 @@ class Slide34A extends Component {
 
     generatePopulation = () => {
         //resetting whole slide
+        Slide34A_sum_f_i = 0
+
         for (let i = 0; i < this.state.chosenReproductionType.algoStepsCount; ++i) {
             document.getElementById(i).style = ""
         }
-
-        Slide34A_counter = 0
-        this.setState({
-            currentAlgoStepIndex: 0,
-        });
 
         // generate population
         let tmpIndividuals = []
@@ -262,9 +286,16 @@ class Slide34A extends Component {
             while(tmpIndividuals[i].Genotyp.length < Slide34A_INDIVIDUAL_GENOTYPE_LENGTH) {
                 tmpIndividuals[i].Genotyp = "0" + tmpIndividuals[i].Genotyp // dodanie leading zeros
             }
+
+            Slide34A_sum_f_i += fitness
         }
 
-        this.setState({individuals: tmpIndividuals})
+        this.setState({
+            currentAlgoStepIndex: 0,
+            currentIndividualIndex: 0,
+            stepEnded: false,
+            individuals: tmpIndividuals
+        })
     }
 
     renderTableHeader(array) {
@@ -277,23 +308,24 @@ class Slide34A extends Component {
            key == 'Dostosowanie' ? <th>{key} <Latex>{"${f(x) = x^2}$"}</Latex></th> : 
            key == 'p_r_A' ? <th><Latex>{"${p_r(A)}$"}</Latex></th> : 
            key == 'n_A' ? <th><Latex>{"${n(A)}$"}</Latex></th> : 
-           key == 'int_n_A' ? <th><Latex>{"int${(n(A))}$"}</Latex></th> : <th><Latex>{"frac${(n(A))}$"}</Latex></th>
+           key == 'int_n_A' ? <th><Latex>{"int${(n(A))}$"}</Latex></th> :
+           key == 'frac_n_A' ? <th><Latex>{"frac${(n(A))}$"}</Latex></th> : null
         })
      }
 
     renderIndividualTableData(array) {
         return array.map((individual, index) => {
-           const { LP, Genotyp, Fenotyp, Dostosowanie, p_r_A, n_A, int_n_A, frac_n_A } = individual //destructuring
+           const { LP, Genotyp, Fenotyp, Dostosowanie, indicators } = individual //destructuring
            return (
                 <tr>
                     <td>{LP}</td>
                     <td><tt>{Genotyp}</tt></td>
                     <td><tt>{Fenotyp}</tt></td>
                     <td><tt>{Dostosowanie}</tt></td>
-                    <td><tt>{p_r_A}</tt></td>
-                    <td><tt>{n_A}</tt></td>
-                    <td><tt>{int_n_A}</tt></td>
-                    <td><tt>{frac_n_A}</tt></td>
+                    <td><tt>{indicators[0]}</tt></td>
+                    <td><tt>{indicators[1]}</tt></td>
+                    <td><tt>{indicators[2]}</tt></td>
+                    <td><tt>{indicators[3]}</tt></td>
                 </tr>
            )
         })
@@ -304,12 +336,6 @@ class Slide34A extends Component {
         for (let i = 0; i < this.state.chosenReproductionType.algoStepsCount; ++i) {
             document.getElementById(i).style = ""
         }
-
-        Slide34A_counter = 0
-        this.setState({
-            currentAlgoStepIndex: 0,
-        });
-
 
         switch (event.target.value) {
             case '1':
@@ -334,6 +360,8 @@ class Slide34A extends Component {
                 this.setState({chosenReproductionType: Slide34A_THRESHOLD})
                 break
         }
+
+        this.generatePopulation()
     }
 
 
@@ -346,7 +374,8 @@ class Slide34A extends Component {
             <div className="row">
                 
                 <div className="col-4 tableFixHead">
-                    <h5><div style={{borderStyle: "double", display: "inline-block", padding:8}}>Osobniki</div> <button ref={this.generateButton} type="submit" className="btn btn-primary" onClick={this.generatePopulation}>Wygeneruj populację</button><br></br></h5>
+                    <h5><div style={{borderStyle: "double", display: "inline-block", padding:8}}>Osobniki</div>
+                    <button ref={this.generateButton} type="submit" className="btn btn-primary" onClick={this.generatePopulation}>Wygeneruj populację</button><br></br></h5>
                     <table id='individuals'>
                         <thead>
                             <tr>{this.renderTableHeader(this.state.individuals)}</tr>
