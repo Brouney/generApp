@@ -22,7 +22,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 // ALGO FUNCTIONS
 function calculate_p_r_A(individual) {
-    var p_r_A = (individual.Dostosowanie / Slide34A_sum_f_i).toFixed(3)
+    var p_r_A = (individual.Dostosowanie / Slide34A_sum_f_i_onLoad).toFixed(3)
     individual.p_r_A = p_r_A
     return p_r_A
 }
@@ -67,19 +67,96 @@ function last_step_deterministic(oldIndividual) {
     }
 }
 
-function calibrate_frac_n_A_roulette() {
+function calibrate_frac_n_A_roulette(oldIndividual) {
+    var tmpIndividual = Object.assign({}, oldIndividual)
 
+    if (tmpIndividual.Genotyp !== undefined && !Slide34A_calibrate_frac_n_A_roulette.hasOwnProperty(tmpIndividual.Genotyp)) {
+        Slide34A_calibrate_frac_n_A_roulette[tmpIndividual.Genotyp] = tmpIndividual.frac_n_A 
+    }
 }
 
-function generate_new_individuals_using_roulette() {
+function generate_new_individuals_using_roulette(oldIndividual) {
+    let sumFrac_n_A = 0;
+    for (let frac_n_A of Object.values(Slide34A_calibrate_frac_n_A_roulette)) {
+        sumFrac_n_A += frac_n_A;
+    }
 
+    var probabilities = []
+    var genotypesToDraw = []
+    var chosenGenotype = null
+
+    Object.entries(Slide34A_calibrate_frac_n_A_roulette).forEach(([genotype, frac_n_A]) => {
+        probabilities.push(frac_n_A / sumFrac_n_A)
+        genotypesToDraw.push(genotype)
+    })
+
+    
+    var randomRouletteDraw = Math.random()
+    var sumProb = 0
+    var lastIndex = probabilities.length - 1;
+
+    for (var i = 0; i < lastIndex; ++i) {
+        sumProb += probabilities[i];
+        if (randomRouletteDraw < sumProb) {
+            chosenGenotype = genotypesToDraw[i]
+        }
+    }
+    
+    if (chosenGenotype == null) {
+        chosenGenotype = genotypesToDraw[lastIndex]
+    }
+    
+    var currentSumFitness = Slide34A_create_int_n_A.reduce((total, obj) => obj.Dostosowanie + total, 0)
+    
+    if (Slide34A_create_int_n_A.length < Slide34A_POPULATION_SIZE) {
+        var fenotype = bin2dec(chosenGenotype)
+        var fitness = Slide34A_FITNESS_FUNCTION(fenotype)
+        var tmpIndividual = new Individual(Slide34A_create_int_n_A.length + 1, chosenGenotype, fenotype, fitness)
+
+
+        tmpIndividual.p_r_A = calculate_p_r_A(tmpIndividual)
+        tmpIndividual.n_A = calculate_n_A(tmpIndividual)
+        tmpIndividual.int_n_A = calculate_int_n_A(tmpIndividual)
+        tmpIndividual.frac_n_A = calculate_frac_n_A(tmpIndividual)
+
+        tmpIndividual.indicators = [
+            tmpIndividual.p_r_A,
+            tmpIndividual.n_A,
+            tmpIndividual.int_n_A,
+            tmpIndividual.frac_n_A
+        ]
+
+        Slide34A_create_int_n_A.push(tmpIndividual)
+    }
+
+    if (Slide34A_create_int_n_A.length == Slide34A_POPULATION_SIZE) {
+        calculateAllIndicatorsForPopulation(currentSumFitness)
+    }
 }
 
 function bernoulli_frac_n_A() {
-
+    //TODO
 }
 // END ALGO FUNCTIONS
 
+
+function calculateAllIndicatorsForPopulation(currentSumFitness) {
+    for (let i = 0; i < Slide34A_create_int_n_A.length; ++i) {
+        Slide34A_create_int_n_A[i].p_r_A = (Slide34A_create_int_n_A[i].Dostosowanie / currentSumFitness).toFixed(3)
+        Slide34A_create_int_n_A[i].n_A = calculate_n_A(Slide34A_create_int_n_A[i])
+        Slide34A_create_int_n_A[i].int_n_A = calculate_int_n_A(Slide34A_create_int_n_A[i])
+        Slide34A_create_int_n_A[i].frac_n_A = calculate_frac_n_A(Slide34A_create_int_n_A[i])
+
+        Slide34A_create_int_n_A[i].indicators = [
+            Slide34A_create_int_n_A[i].p_r_A,
+            Slide34A_create_int_n_A[i].n_A,
+            Slide34A_create_int_n_A[i].int_n_A,
+            Slide34A_create_int_n_A[i].frac_n_A
+        ]
+    }
+
+    Slide34A_sum_f_i = currentSumFitness // w przypadku uruchomienia symulacji drugi raz, po zakonczeniu pierwszego razu bez zmiany operatora
+}
 
 
 class ReproductionType {
@@ -186,7 +263,9 @@ const Slide34A_ALGO_STEP_TIMEOUT = 200
 const Slide34A_FITNESS_FUNCTION = (x) => x*x
 
 var Slide34A_sum_f_i = 0
+var Slide34A_sum_f_i_onLoad = 0
 var Slide34A_create_int_n_A = []
+var Slide34A_calibrate_frac_n_A_roulette = {} // slownik --> genotyp: frac_n_A
 
 
 class Slide34A extends Component {
@@ -204,7 +283,9 @@ class Slide34A extends Component {
         let tmpIndividuals = []
 
         Slide34A_sum_f_i = 0
+        Slide34A_sum_f_i_onLoad = 0
         Slide34A_create_int_n_A = []
+        Slide34A_calibrate_frac_n_A_roulette = {}
 
         for (let i = 0; i < Slide34A_POPULATION_SIZE; ++i) {
             var genotype = randomBinary(0, Slide34A_INDIVIDUAL_MAX_FITNESS)
@@ -219,6 +300,7 @@ class Slide34A extends Component {
             }
 
             Slide34A_sum_f_i += fitness
+            Slide34A_sum_f_i_onLoad += fitness
         }
 
         this.state = {
@@ -346,11 +428,13 @@ class Slide34A extends Component {
         this.handleStartStop(true)
         this.navigationButtons.current.enableNavigationButtons()
         Slide34A_create_int_n_A = []
+        Slide34A_calibrate_frac_n_A_roulette = {}
     }
 
     generatePopulation = () => {
         //resetting whole slide
         Slide34A_sum_f_i = 0
+        Slide34A_sum_f_i_onLoad = 0
         Slide34A_create_int_n_A = []
 
         for (let i = 0; i < this.state.chosenReproductionType.algoStepsCount; ++i) {
@@ -372,6 +456,7 @@ class Slide34A extends Component {
             }
 
             Slide34A_sum_f_i += fitness
+            Slide34A_sum_f_i_onLoad += fitness
         }
 
         this.setState({
@@ -461,7 +546,7 @@ class Slide34A extends Component {
                 
                 <div className="col-4 tableFixHead">
                     <h5><div style={{borderStyle: "double", display: "inline-block", padding:8}}>Osobniki</div>
-                    <button ref={this.generateButton} type="submit" className="btn btn-primary" onClick={this.generatePopulation}>Wygeneruj populację</button><br></br></h5>
+                    <button ref={this.generateButton} type="submit" className="btn btn-primary" onClick={this.generatePopulation}>Wygeneruj populację / resetuj postęp</button><br></br></h5>
                     <table id='individuals'>
                         <thead>
                             <tr>{this.renderTableHeader(this.state.individuals)}</tr>
@@ -493,7 +578,7 @@ class Slide34A extends Component {
             </div>
 
             <div className="row">
-                <h2>Początkowe średnie dostosowanie w populacji: <span style={{color: "yellow"}}>{(Slide34A_sum_f_i / Slide34A_POPULATION_SIZE).toFixed(3)}</span></h2>
+                <h2>Początkowe średnie dostosowanie w populacji: <span style={{color: "yellow"}}>{(Slide34A_sum_f_i_onLoad / Slide34A_POPULATION_SIZE).toFixed(3)}</span></h2>
                 <h2>Obecne średnie dostosowanie w populacji: <span style={{color: "lime"}}>{(this.state.individuals.reduce((total, obj) => obj.Dostosowanie + total, 0) / this.state.individuals.length).toFixed(3)}</span></h2>
             </div>
            
