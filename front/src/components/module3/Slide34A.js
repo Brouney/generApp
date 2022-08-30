@@ -49,6 +49,26 @@ function create_int_n_A(individual) {
 // TODO
     return 0
 }
+
+function sort_descending_frac_n_A() {
+
+}
+
+function last_step_deterministic() {
+
+}
+
+function calibrate_frac_n_A_roulette() {
+
+}
+
+function generate_new_individuals_using_roulette() {
+
+}
+
+function bernoulli_frac_n_A() {
+
+}
 // END ALGO FUNCTIONS
 
 
@@ -121,6 +141,8 @@ var Slide34A_DETERMINISTIC = new ReproductionType(Slide34A_DETERMINISTIC_ALGO_TE
     calculate_int_n_A,
     calculate_frac_n_A,
     create_int_n_A,
+    sort_descending_frac_n_A,
+    last_step_deterministic
 )
 var Slide34A_RANDOM_WITH_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITH_REPETITIONS_ALGO_TEXT, 7,
     calculate_p_r_A,
@@ -128,6 +150,8 @@ var Slide34A_RANDOM_WITH_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITH
     calculate_int_n_A,
     calculate_frac_n_A,
     create_int_n_A,
+    calibrate_frac_n_A_roulette,
+    generate_new_individuals_using_roulette
 )
 var Slide34A_RANDOM_WITHOUT_REPETITIONS = new ReproductionType(Slide34A_RANDOM_WITHOUT_REPETITIONS_ALGO_TEXT, 7,
     calculate_p_r_A,
@@ -135,6 +159,8 @@ var Slide34A_RANDOM_WITHOUT_REPETITIONS = new ReproductionType(Slide34A_RANDOM_W
     calculate_int_n_A,
     calculate_frac_n_A,
     create_int_n_A,
+    bernoulli_frac_n_A,
+    generate_new_individuals_using_roulette // TODO czy na pewno tez ruletka dla losowej bez powtorzen
 )
 
 var Slide34A_RANK = new ReproductionType(Slide34A_RANK_ALGO_TEXT)
@@ -230,25 +256,25 @@ class Slide34A extends Component {
         
         if (func !== undefined) {
 
+            //podswietlanie komorek w tabeli i algorytmu
+            if (document.getElementById(this.state.currentAlgoStepIndex) != null) {
+                document.getElementById(this.state.currentAlgoStepIndex).style = "color: cyan; font-weight: 800"  //podswietlenie obecnego kroku algorytmu
+            }
+    
+            if (this.state.currentIndividualIndex == 0) {
+                document.getElementById('00').style = "background-color: cyan; font-weight: 800"
+                document.getElementById('90').style = "style"
+            }
+            else {
+                document.getElementById(this.state.currentIndividualIndex + '0').style = "background-color: cyan; font-weight: 800"
+                document.getElementById(this.state.currentIndividualIndex-1 + '0').style = ""
+            }
+            //koniec podswietlania komorek w tabeli i algorytmu
+
             if (currentIndicatorIdx == 0 ||
                 currentIndicatorIdx == 1 ||
                 currentIndicatorIdx == 2 ||
                 currentIndicatorIdx == 3) { // pierwszy z czterech krokow dla Slide34A_DETERMINISTIC, Slide34A_RANDOM_WITH_REPETITIONS, Slide34A_RANDOM_WITHOUT_REPETITIONS
-
-                //podswietlanie komorek w tabeli i algorytmu
-                if (document.getElementById(this.state.currentAlgoStepIndex) != null) {
-                    document.getElementById(this.state.currentAlgoStepIndex).style = "color: cyan; font-weight: 800"  //podswietlenie obecnego kroku algorytmu
-                }
-        
-                if (this.state.currentIndividualIndex == 0) {
-                    document.getElementById('00').style = "background-color: cyan; font-weight: 800"
-                    document.getElementById('90').style = "style"
-                }
-                else {
-                    document.getElementById(this.state.currentIndividualIndex + '0').style = "background-color: cyan; font-weight: 800"
-                    document.getElementById(this.state.currentIndividualIndex-1 + '0').style = ""
-                }
-                //koniec podswietlania komorek w tabeli i algorytmu
 
                 var calculatedValue = func(this.state.individuals[idx])
                 this.state.individuals[idx].indicators[currentIndicatorIdx] = calculatedValue
@@ -260,6 +286,7 @@ class Slide34A extends Component {
                     }
                 });
             } else {
+                // TODO
                 console.log('od piatego kroku')
             }
         }
