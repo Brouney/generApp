@@ -46,10 +46,12 @@ function calculate_frac_n_A(individual) {
 }
 
 function create_int_n_A(oldIndividual) {
-    for (let k = 0; k < oldIndividual.int_n_A; ++k) {
-        var tmpIndividual = Object.assign({}, oldIndividual);
-        tmpIndividual.LP = Slide34A_create_int_n_A.length + 1
-        Slide34A_create_int_n_A.push(tmpIndividual)
+    if (Slide34A_create_int_n_A.length < Slide34A_POPULATION_SIZE) {
+        for (let k = 0; k < oldIndividual.int_n_A; ++k) {
+            var tmpIndividual = Object.assign({}, oldIndividual);
+            tmpIndividual.LP = Slide34A_create_int_n_A.length + 1
+            Slide34A_create_int_n_A.push(tmpIndividual)
+        }
     }
 }
 
@@ -334,15 +336,16 @@ class Slide34A extends Component {
     }
 
     onSimulationEnd = () => {
-        Slide34A_create_int_n_A = []
-
         this.setState({
             currentAlgoStepIndex: 0,
             currentIndividualIndex: 0,
+            individuals: Slide34A_create_int_n_A,
             stepEnded: false
         });
+
         this.handleStartStop(true)
         this.navigationButtons.current.enableNavigationButtons()
+        Slide34A_create_int_n_A = []
     }
 
     generatePopulation = () => {
