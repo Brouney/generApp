@@ -45,17 +45,24 @@ function calculate_frac_n_A(individual) {
     return frac_n_A
 }
 
-function create_int_n_A(individual) {
-// TODO
-    return 0
+function create_int_n_A(oldIndividual) {
+    for (let k = 0; k < oldIndividual.int_n_A; ++k) {
+        var tmpIndividual = Object.assign({}, oldIndividual);
+        tmpIndividual.LP = Slide34A_create_int_n_A.length + 1
+        Slide34A_create_int_n_A.push(tmpIndividual)
+    }
 }
 
-function sort_descending_frac_n_A() {
-
+function sort_descending_frac_n_A(oldIndividual) {
+    Slide34A_create_int_n_A.sort((a,b) => (a.frac_n_A < b.frac_n_A) ? 1 : ((b.frac_n_A < a.frac_n_A) ? -1 : 0))
 }
 
-function last_step_deterministic() {
-
+function last_step_deterministic(oldIndividual) {
+    if (Slide34A_create_int_n_A.length < Slide34A_POPULATION_SIZE) {
+        var tmpIndividual = Object.assign({}, oldIndividual);
+        tmpIndividual.LP = Slide34A_create_int_n_A.length + 1
+        Slide34A_create_int_n_A.push(tmpIndividual)
+    }
 }
 
 function calibrate_frac_n_A_roulette() {
@@ -105,7 +112,7 @@ const Slide34A_DETERMINISTIC_ALGO_TEXT =
     <li id="3">Dla każdego osobnika zapamiętujemy <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
     <li id="4">Tworzymy <span style={{color: "yellow"}}><Latex>{"int${(n(A))}$"}</Latex></span></li><br></br>
     <li id="5">Sortujemy osobniki wg malejącej <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li><br></br>
-    <li id="6">Uzupełniamy braki w populacji od góry listy z punktu 6</li>
+    <li id="6">Uzupełniamy populację od góry listy malejącego <span style={{color: "yellow"}}><Latex>{"frac${(n(A))}$"}</Latex></span></li>
 </ol>
 
 const Slide34A_RANDOM_WITH_REPETITIONS_ALGO_TEXT = 
@@ -177,6 +184,7 @@ const Slide34A_ALGO_STEP_TIMEOUT = 200
 const Slide34A_FITNESS_FUNCTION = (x) => x*x
 
 var Slide34A_sum_f_i = 0
+var Slide34A_create_int_n_A = []
 
 
 class Slide34A extends Component {
@@ -194,6 +202,7 @@ class Slide34A extends Component {
         let tmpIndividuals = []
 
         Slide34A_sum_f_i = 0
+        Slide34A_create_int_n_A = []
 
         for (let i = 0; i < Slide34A_POPULATION_SIZE; ++i) {
             var genotype = randomBinary(0, Slide34A_INDIVIDUAL_MAX_FITNESS)
@@ -253,28 +262,30 @@ class Slide34A extends Component {
         var idx = this.state.currentIndividualIndex
         var currentIndicatorIdx = this.state.currentAlgoStepIndex
         var func = this.state.chosenReproductionType.algoStepsList[currentIndicatorIdx]
+
+        if (document.getElementById(this.state.currentAlgoStepIndex) != null) {
+            document.getElementById(this.state.currentAlgoStepIndex).style = "color: cyan; font-weight: 800"  //podswietlenie obecnego kroku algorytmu
+        }
         
         if (func !== undefined) {
-
-            //podswietlanie komorek w tabeli i algorytmu
-            if (document.getElementById(this.state.currentAlgoStepIndex) != null) {
-                document.getElementById(this.state.currentAlgoStepIndex).style = "color: cyan; font-weight: 800"  //podswietlenie obecnego kroku algorytmu
-            }
-    
-            if (this.state.currentIndividualIndex == 0) {
-                document.getElementById('00').style = "background-color: cyan; font-weight: 800"
-                document.getElementById('90').style = "style"
-            }
-            else {
-                document.getElementById(this.state.currentIndividualIndex + '0').style = "background-color: cyan; font-weight: 800"
-                document.getElementById(this.state.currentIndividualIndex-1 + '0').style = ""
-            }
-            //koniec podswietlania komorek w tabeli i algorytmu
 
             if (currentIndicatorIdx == 0 ||
                 currentIndicatorIdx == 1 ||
                 currentIndicatorIdx == 2 ||
                 currentIndicatorIdx == 3) { // pierwszy z czterech krokow dla Slide34A_DETERMINISTIC, Slide34A_RANDOM_WITH_REPETITIONS, Slide34A_RANDOM_WITHOUT_REPETITIONS
+
+                //podswietlanie komorek w tabeli
+
+        
+                if (this.state.currentIndividualIndex == 0) {
+                    document.getElementById('00').style = "background-color: cyan; font-weight: 800"
+                    document.getElementById((this.state.individuals.length-1) + '0').style = "style"
+                }
+                else {
+                    document.getElementById(this.state.currentIndividualIndex + '0').style = "background-color: cyan; font-weight: 800"
+                    document.getElementById(this.state.currentIndividualIndex-1 + '0').style = ""
+                }
+                //koniec podswietlania komorek w tabeli i algorytmu
 
                 var calculatedValue = func(this.state.individuals[idx])
                 this.state.individuals[idx].indicators[currentIndicatorIdx] = calculatedValue
@@ -286,8 +297,20 @@ class Slide34A extends Component {
                     }
                 });
             } else {
-                // TODO
-                console.log('od piatego kroku')
+                func(this.state.individuals[idx])
+
+                this.setState(prevState => {
+                    return {
+                        currentIndividualIndex: prevState.currentIndividualIndex+1
+                    }
+                });
+
+                if (this.state.currentIndividualIndex == Slide34A_POPULATION_SIZE) {
+                    this.setState({
+                        stepEnded: true,
+                        individuals: Slide34A_create_int_n_A,
+                    });
+                }
             }
         }
 
@@ -311,6 +334,8 @@ class Slide34A extends Component {
     }
 
     onSimulationEnd = () => {
+        Slide34A_create_int_n_A = []
+
         this.setState({
             currentAlgoStepIndex: 0,
             currentIndividualIndex: 0,
@@ -323,6 +348,7 @@ class Slide34A extends Component {
     generatePopulation = () => {
         //resetting whole slide
         Slide34A_sum_f_i = 0
+        Slide34A_create_int_n_A = []
 
         for (let i = 0; i < this.state.chosenReproductionType.algoStepsCount; ++i) {
             document.getElementById(i).style = "" // wylaczenie podswietlen wszystkich krokow algorytmu
@@ -464,7 +490,8 @@ class Slide34A extends Component {
             </div>
 
             <div className="row">
-                <h1>symulacjo animacja TODO</h1>
+                <h2>Początkowe średnie dostosowanie w populacji: <span style={{color: "yellow"}}>{(Slide34A_sum_f_i / Slide34A_POPULATION_SIZE).toFixed(3)}</span></h2>
+                <h2>Obecne średnie dostosowanie w populacji: <span style={{color: "lime"}}>{(this.state.individuals.reduce((total, obj) => obj.Dostosowanie + total, 0) / this.state.individuals.length).toFixed(3)}</span></h2>
             </div>
            
            
