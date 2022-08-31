@@ -26,12 +26,15 @@ export let squareCenterPosition = SQUARE_CENTER_POSITION_DEFAULT      // punkt X
 export let areaPoints = AREA_POINTS_DEFAULT // obszar, ktory bladzi po wykresie szukajac ekstremum
 export let maximum = -9999
 
-
+var genfunctions = {
+    rastrigin: false,
+    beale: true,
+}
 class PlotlyChart_sandbox extends React.Component {
 
     constructor(props) {
         super(props)
-        this.GRID_DENSITY = props.gridDensity
+        this.GRID_DENSITY = 128
         this.simulationRunning = false
         this.state = {
             data: this.generateData(),
@@ -42,6 +45,7 @@ class PlotlyChart_sandbox extends React.Component {
                 y:[],
                 z:[],
             },
+            
             sliderPopSizeValuePMutation: 0.5,//prawd mutacji 
             sliderPopSizeValuePKrzyzowanie: 0.5,// prawdopodobienstwo krzyzowania 
             gen_num: 0,  // numeruje kolejne pokolenia                                                           
@@ -174,9 +178,11 @@ class PlotlyChart_sandbox extends React.Component {
 
     genRastriginsFunc = (x, y) => { return 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)}
 
+    genBealeFunc = (x, y) => {return Math.pow(1.5 - x + x*y,2) + Math.pow(2.25 - x + x*y*y, 2) + Math.pow(2.625 - x + x*y*y*y,2) } 
+
     generateData = (dataFunction3d = 'Rastrigin') => {
         this.setDefaultGlobalVariables()
-
+        console.log("XDDD")
         // let genRastriginsFunc = (x, y) => 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)
         let xymin = -5.12
         let xymax = 5.12
@@ -192,9 +198,13 @@ class PlotlyChart_sandbox extends React.Component {
                 let xxx = values.get(y)
                 let computedValue
 
-                if (dataFunction3d === 'Rastrigin') {
+                if (genfunctions.rastrigin === true) {
                     // computedValue = saddleFormula(xxx, yyy)
                     computedValue = this.genRastriginsFunc(xxx, yyy)
+                }
+                else if (genfunctions.beale === true) {
+                    // computedValue = saddleFormula(xxx, yyy)
+                    computedValue = this.genBealeFunc(xxx, yyy)
                 }
                 // else if (dataFunction3d === 'paraboloid') {
                 //     computedValue = paraboloidFormula(xxx, yyy)
@@ -263,7 +273,7 @@ class PlotlyChart_sandbox extends React.Component {
             console.log("START")
             this.timerId = setInterval(() => {
                 this.evolution()
-            }, 100);
+            }, 10);
         }
     }
 
@@ -333,7 +343,13 @@ class PlotlyChart_sandbox extends React.Component {
         for (let i = 0; i <temp_pop.length; i++) {
             newX.push(temp_pop[i][0])
             newY.push(temp_pop[i][1])
-            newZ.push(this.genRastriginsFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1])))
+            if (genfunctions.rastrigin) {
+                newZ.push(this.genRastriginsFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1])))
+            }
+            else if (genfunctions.beale) {
+                newZ.push(this.genBealeFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1]))) 
+            }
+            
         }
 
         // console.log(newX,newY,newZ )
@@ -438,27 +454,15 @@ class PlotlyChart_sandbox extends React.Component {
                     },
                     autosize: true,
                     scene: {
-                        aspectratio: {
-                            x: 1,
-                            y: 1,
-                            z: 1
-                        },
+                        
                         camera: {
-                            center: {
-                                x: 0,
-                                y: 0,
-                                z: 0
-                            },
+                            
                             eye: {
-                                x: 1.25,
-                                y: 1.25,
-                                z: 1.25
-                            },
-                            up: {
                                 x: 0,
                                 y: 0,
-                                z: 1
-                            }
+                                z: 2
+                            },
+                            
                         },
                     }
 
