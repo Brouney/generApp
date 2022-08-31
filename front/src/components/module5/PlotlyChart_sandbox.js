@@ -29,7 +29,7 @@ export let maximum = -9999
 
 var genfunctions = {
     rastrigin: true,
-    beale: false,
+    bukin: false,
     goldstein_price: false
 }
 class PlotlyChart_sandbox extends React.Component {
@@ -180,7 +180,8 @@ class PlotlyChart_sandbox extends React.Component {
 
     genRastriginsFunc = (x, y) => { return 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)}
 
-    genBealeFunc = (x, y) => {return Math.pow(1.5 - x + x*y,2) + Math.pow(2.25 - x + x*y*y, 2) + Math.pow(2.625 - x + x*y*y*y,2) } 
+    // genbukinFunc = (x, y) => {return Math.pow(1.5 - x + x*y,2) + Math.pow(2.25 - x + x*y*y, 2) + Math.pow(2.625 - x + x*y*y*y,2) } 
+    genbukinFunc = (x, y) => {return 100*Math.sqrt(Math.abs(y-0.01*x*x))+0.01*Math.abs(x+10) } 
 
     genGoldstein_Price = (X, Y) => {return (1+(X+Y+1)**2*(19-14*X+3*X**2-14*Y+6*X*Y+3*Y**2))*(30+(2*X-3*Y)**2*(18-32*X+12*X**2+48*Y-36*X*Y+27*Y**2))}
 
@@ -206,9 +207,9 @@ class PlotlyChart_sandbox extends React.Component {
                     // computedValue = saddleFormula(xxx, yyy)
                     computedValue = this.genRastriginsFunc(xxx, yyy)
                 }
-                else if (genfunctions.beale === true) {
+                else if (genfunctions.bukin === true) {
                     // computedValue = saddleFormula(xxx, yyy)
-                    computedValue = this.genBealeFunc(xxx, yyy)
+                    computedValue = this.genbukinFunc(xxx, yyy)
                 }
                 else if(genfunctions.goldstein_price ===true){
                     computedValue = this.genGoldstein_Price(xxx, yyy)
@@ -353,8 +354,8 @@ class PlotlyChart_sandbox extends React.Component {
             if (genfunctions.rastrigin) {
                 newZ.push(this.genRastriginsFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1])))
             }
-            else if (genfunctions.beale) {
-                newZ.push(this.genBealeFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1]))) 
+            else if (genfunctions.bukin) {
+                newZ.push(this.genbukinFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1]))) 
             }
             else if(genfunctions.goldstein_price){
                 newZ.push(this.genGoldstein_Price(values.get(temp_pop[i][0]), values.get(temp_pop[i][1]))) 
@@ -385,18 +386,18 @@ class PlotlyChart_sandbox extends React.Component {
     function_select = (v) => {
         if(v === "Rastrigin"){
             genfunctions.rastrigin = true;
-            genfunctions.beale = false;
+            genfunctions.bukin = false;
             genfunctions.goldstein_price = false;
             
         }
-        if(v === "Beale"){
+        if(v === "bukin"){
             genfunctions.rastrigin = false;
-            genfunctions.beale = true;
+            genfunctions.bukin = true;
             genfunctions.goldstein_price = false;
         }
         if(v === "Goldstein"){
             genfunctions.rastrigin = false;
-            genfunctions.beale = false;
+            genfunctions.bukin = false;
             genfunctions.goldstein_price = true;
         }
         this.setState({
@@ -430,7 +431,7 @@ class PlotlyChart_sandbox extends React.Component {
                     onChange={this.function_select}
                     >
                     <Option value="Rastrigin">Rastrigin</Option>
-                    <Option value="Beale">Beale</Option>
+                    <Option value="bukin">Bukin</Option>
                     <Option value="Goldstein" >
                         Goldstein - Price
                     </Option>
