@@ -1,9 +1,10 @@
-import { Button, Checkbox } from "antd";
+import { Button, Checkbox, Select } from "antd";
 import React from "react";
 import Plot from "react-plotly.js";
 import MySlider from "../common/MySlider";
 var nj = require('numjs');
 
+const { Option } = Select;
 
 String.prototype.replaceAt = function(index, replacement) {
     return this.substring(0, index) + replacement + this.substring(index + replacement.length);
@@ -381,6 +382,27 @@ class PlotlyChart_sandbox extends React.Component {
         this.navigationButtons.current.enableNavigationButtons()
     }
 
+    function_select = (v) => {
+        if(v === "Rastrigin"){
+            genfunctions.rastrigin = true;
+            genfunctions.beale = false;
+            genfunctions.goldstein_price = false;
+            
+        }
+        if(v === "Beale"){
+            genfunctions.rastrigin = false;
+            genfunctions.beale = true;
+            genfunctions.goldstein_price = false;
+        }
+        if(v === "Goldstein"){
+            genfunctions.rastrigin = false;
+            genfunctions.beale = false;
+            genfunctions.goldstein_price = true;
+        }
+        this.setState({
+            data: this.generateData()
+        })
+    }
     render() {
         const CHART_MARGIN = 5
 
@@ -400,14 +422,31 @@ class PlotlyChart_sandbox extends React.Component {
             <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"Prawdopobieństwo krzyżowania"} passValueToParent={this.onChangeProbabilityKrzyzowanie}></MySlider>
             </div>
             <div>
+                <Select
+                    defaultValue="Rastrigin"
+                    style={{
+                        width: 220,
+                    }}
+                    onChange={this.function_select}
+                    >
+                    <Option value="Rastrigin">Rastrigin</Option>
+                    <Option value="Beale">Beale</Option>
+                    <Option value="Goldstein" >
+                        Goldstein - Price
+                    </Option>
+                </Select>           
+             </div>
+            <div>
             <Checkbox onChange={this.sukcesjaElitarnaCheckbox_onChange} style={{color:'white'}} defaultChecked={true} >Metoda selekcji - sukcesja elitarna</Checkbox>
             </div>
+            
             {this.state.sukcesjaElitarna?
             <div>
             <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderGElite} text={"Współczynnik sukcesji elitarnej"} passValueToParent={this.onChangeSliderGElite}></MySlider>
             </div>
             :
             <div/>
+            
             }
             <Plot
                 data={[
