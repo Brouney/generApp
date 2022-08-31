@@ -12,7 +12,7 @@ class Slide25A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Description25 mainArea={this.mainArea}></Description25>
         this.next = <Description26 mainArea={this.mainArea}></Description26>
-        this.title = 'Terminologia algorytmów genetycznych - puzzle'
+        this.title = 'Biologiczne pojęcia algorytmów genetycznych - puzzle'
     }
 
     render(){

@@ -15,7 +15,7 @@ class Description25 extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide24A prev={<Description24></Description24>} next={<Description25></Description25>} mainArea={this.mainArea}></Slide24A>;
         this.next = <Slide25A prev={<Description25></Description25>} next={<Description26></Description26>} mainArea={this.mainArea}></Slide25A>
-        this.title = 'Terminologia algorytmów genetycznych - puzzle'
+        this.title = 'Biologiczne pojęcia algorytmów genetycznych - puzzle'
 
         this.navigationButtons = React.createRef();
     }

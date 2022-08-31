@@ -644,7 +644,7 @@ class Slide34A extends Component {
         
         return(
         <div>
-            <h1>Operatory reprodukcji</h1>
+            <h1>Wybrane operatory reprodukcji</h1>
 
             <div className="row">
                 
