@@ -57,6 +57,7 @@ class PlotlyChart_sandbox extends React.Component {
             n_mutation: 0,  // liczba mutacji w ostatnim pokoleniu                    
             n_cross: 0,    // liczba krzyz
             sukcesjaElitarna: true, //checkbox rodzaju selekcji
+            sukcesjaRuletkowa: false,
             GsukcesjiElitarnej: 0.5, //współczynnik selekcji
             timerID: null,
         }
@@ -260,10 +261,18 @@ class PlotlyChart_sandbox extends React.Component {
     }
 
 
-    sukcesjaElitarnaCheckbox_onChange = (e) => {
+    sukcesja_onChange = (e) => {
+        if(e === "Sukcesja_elitarna")
         this.setState({
-            sukcesjaElitarna: !this.state.sukcesjaElitarna
+            sukcesjaElitarna: true,
+            sukcesjaRuletkowa: false
         })
+        else{
+            this.setState({
+                sukcesjaElitarna: false,
+                sukcesjaRuletkowa: true
+            })
+        }
     }
 
     onChangeSliderGElite = (v) =>{
@@ -292,19 +301,48 @@ class PlotlyChart_sandbox extends React.Component {
     evolution = () => {
         if(currentGenerationsCount<100){
             //selekcja - elitarna - czesciowe zastepowanie
+            let temp_pop = []
 
             //przypisanie odpowiednich przystosowan, posortowanie i odrzucenie najmniejszych
             let stare_przystosowanie = this.state.objectsPoints.z
             let stare_posortowane = stare_przystosowanie.sort(this.sortNum)
-            stare_przystosowanie = stare_posortowane.slice( Math.floor(this.state.GsukcesjiElitarnej * stare_posortowane.length),
-            stare_posortowane.length)
-            //wybrac temp population - najmocniejszych - sortowanie i wywalenie najslabszych paru
-            let temp_pop = []
-            for(let el of stare_przystosowanie){
-                let index_z = this.state.objectsPoints.z.findIndex(element => element === el)
-                temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
-            }
 
+            if(this.sukcesjaElitarna){
+                stare_przystosowanie = stare_posortowane.slice( Math.floor(this.state.GsukcesjiElitarnej * stare_posortowane.length),
+                stare_posortowane.length)
+                //wybrac temp population - najmocniejszych - sortowanie i wywalenie najslabszych paru
+                
+                for(let el of stare_przystosowanie){
+                    let index_z = this.state.objectsPoints.z.findIndex(element => element === el)
+                    temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
+                }
+            }
+            else{
+                let prop_sum = 0
+                let propabilities = []
+                for(let el of stare_posortowane){
+                    prop_sum += el
+                }
+                for(let el of stare_posortowane){
+                    propabilities.push(el/prop_sum)
+                }
+                
+                for(let i = 0; i<stare_posortowane.length;i++){
+                    let ran =  Math.floor(Math.random() * (100 - 0 + 1) ) + 0;
+                    for(let j = 0; j<stare_posortowane.length;j++){
+                        if(propabilities[j] > ran){
+                            let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_posortowane[j])
+                            temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
+                            break;
+                        }
+                        if(j === (stare_posortowane.length-1) ){
+                            let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_posortowane[j])
+                            temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
+                        }
+                    }
+                }
+                    
+            }
 
 
             //potem metoda ruletki - sposob z LAB - posortowac temp z, nastepnie gdy jest jedno  
@@ -329,9 +367,11 @@ class PlotlyChart_sandbox extends React.Component {
             }
             
             //dodanie najlepszych bez krzyzowania obiektow ze starej populacji
-            for(let el = 0; el< Math.floor(this.state.GsukcesjiElitarnej * this.state.objectsPoints.z.length); ++el){
-                let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_posortowane[stare_posortowane.length - el - 1])
-                temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
+            if(this.sukcesjaElitarna){
+                for(let el = 0; el< Math.floor(this.state.GsukcesjiElitarnej * this.state.objectsPoints.z.length); ++el){
+                    let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_posortowane[stare_posortowane.length - el - 1])
+                    temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
+                }
             }
            
 
@@ -408,118 +448,133 @@ class PlotlyChart_sandbox extends React.Component {
         const CHART_MARGIN = 5
 
         return (
-        <div> 
-            <div>
-            <Button type="primary" onClick={() => this.generateRandomObjects()}>Generuj populację</Button>
-            </div> 
-            
-            <div>
-            <MySlider min={0} max={40} defaultValue={15} sliderSize={4} step={1} ref={this.sliderPopSizeObj} text={"Ilość populacji"} passValueToParent={this.onChangePopSizeAmountObj}></MySlider>   
-            </div>
-            <div>
-            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"Prawdopodobnieństwo mutacji"} passValueToParent={this.onChangeProbabilityMutation}></MySlider>
-            </div>
-            <div>
-            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"Prawdopobieństwo krzyżowania"} passValueToParent={this.onChangeProbabilityKrzyzowanie}></MySlider>
-            </div>
-            <div>
-                <Select
-                    defaultValue="Rastrigin"
-                    style={{
-                        width: 220,
-                    }}
-                    onChange={this.function_select}
-                    >
-                    <Option value="Rastrigin">Rastrigin</Option>
-                    <Option value="bukin">Bukin</Option>
-                    <Option value="Goldstein" >
-                        Goldstein - Price
-                    </Option>
-                </Select>           
-             </div>
-            <div>
-            <Checkbox onChange={this.sukcesjaElitarnaCheckbox_onChange} style={{color:'white'}} defaultChecked={true} >Metoda selekcji - sukcesja elitarna</Checkbox>
-            </div>
-            
-            {this.state.sukcesjaElitarna?
-            <div>
-            <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderGElite} text={"Współczynnik sukcesji elitarnej"} passValueToParent={this.onChangeSliderGElite}></MySlider>
-            </div>
-            :
-            <div/>
-            
-            }
-            <Plot
-                data={[
-                {
-                    type: "surface",
-                    name: '3D',
-                    z: this.state.data,
-                    showscale: false,
-                },
-                {
-                    x: [...this.state.objectsPoints.x],
-                    y: [...this.state.objectsPoints.y],
-                    z: [...this.state.objectsPoints.z],
-                    mode: 'markers',
-                    type: 'scatter3d',
-                    name: "obiekty",
-                    marker: {
-                        color: 'yellow',
-                        size: 8,
-                        line: {
-                            color: 'rgb(204, 204, 204)',
-                            width: 1},
-                        // opacity: 1
-                    }
-                },
-                ]}
-                config={{
-                    'displayModeBar': false, // wylaczenie kontrolek Plotly
-                    "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
-                }}
-                layout={{
-                    width: '100%',
-                    height: '100%',
-                    title: this.props.title,
-                    paper_bgcolor: '#d3d3d3',
-                    plot_bgcolor: '#343a40',
-                    xaxis: {
-                        showgrid: false,
-                        // zeroline: False
-                        visible: false
-                    },
-                    yaxis: {
-                        showgrid: false,
-                        // zeroline: False
-                        visible: false
-                    },
-                    margin: {
-                        l: CHART_MARGIN,
-                        r: CHART_MARGIN,
-                        b: CHART_MARGIN,
-                        t: CHART_MARGIN * 8,
-                        pad: 4
-                    },
-                    autosize: true,
-                    scene: {
+        <div className="row" >
+            <div className="col-7">
+                <div>
+                <Button type="primary" onClick={() => this.generateRandomObjects()}>Generuj populację</Button>
+                </div> 
+                
+                <div>
+                <MySlider min={0} max={40} defaultValue={15} sliderSize={4} step={1} ref={this.sliderPopSizeObj} text={"Ilość populacji"} passValueToParent={this.onChangePopSizeAmountObj}></MySlider>   
+                </div>
+                <div>
+                <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"Prawdopodobnieństwo mutacji"} passValueToParent={this.onChangeProbabilityMutation}></MySlider>
+                </div>
+                <div>
+                <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"Prawdopobieństwo krzyżowania"} passValueToParent={this.onChangeProbabilityKrzyzowanie}></MySlider>
+                </div>
+                <div>
+                    <Select
+                        defaultValue="Rastrigin"
+                        style={{
+                            width: 220,
+                        }}
+                        onChange={this.function_select}
+                        >
+                        <Option value="Rastrigin">Rastrigin</Option>
+                        <Option value="bukin">Bukin</Option>
+                        <Option value="Goldstein" >
+                            Goldstein - Price
+                        </Option>
+                    </Select>           
+                </div>
+                <div>
+                    <Select
+                        defaultValue="Sukcesja_elitarna"
+                        style={{
+                            width: 220,
+                        }}
+                        onChange={this.sukcesja_onChange}
+                        >
+                        <Option value="Sukcesja_elitarna">Sukcesja elitarna</Option>
+                        <Option value="Sukcesja_ruletkowa">Sukcesja ruletkowa</Option>
                         
-                        camera: {
-                            
-                            eye: {
-                                x: 0,
-                                y: 0,
-                                z: 2
-                            },
-                            
+                    </Select>           
+                </div>
+                
+                
+                {this.state.sukcesjaElitarna?
+                    <div>
+                    <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderGElite} text={"Współczynnik sukcesji elitarnej"} passValueToParent={this.onChangeSliderGElite}></MySlider>
+                    </div>
+                    :
+                    <div/>
+                    
+                }
+                <h3>
+                    populacja: {currentGenerationsCount}
+                </h3>
+            </div> 
+            <div className="col-4">
+                <Plot
+                    data={[
+                    {
+                        type: "surface",
+                        name: '3D',
+                        z: this.state.data,
+                        showscale: false,
+                    },
+                    {
+                        x: [...this.state.objectsPoints.x],
+                        y: [...this.state.objectsPoints.y],
+                        z: [...this.state.objectsPoints.z],
+                        mode: 'markers',
+                        type: 'scatter3d',
+                        name: "obiekty",
+                        marker: {
+                            color: 'yellow',
+                            size: 8,
+                            line: {
+                                color: 'rgb(204, 204, 204)',
+                                width: 1},
+                            // opacity: 1
+                        }
+                    },
+                    ]}
+                    config={{
+                        'displayModeBar': false, // wylaczenie kontrolek Plotly
+                        "scrollZoom": false      // wylaczenie zoomowania wykresu rolka myszki
+                    }}
+                    layout={{
+                        width: '100%',
+                        height: '100%',
+                        title: this.props.title,
+                        paper_bgcolor: '#d3d3d3',
+                        plot_bgcolor: '#343a40',
+                        xaxis: {
+                            showgrid: false,
+                            // zeroline: False
+                            visible: false
                         },
-                    }
+                        yaxis: {
+                            showgrid: false,
+                            // zeroline: False
+                            visible: false
+                        },
+                        margin: {
+                            l: CHART_MARGIN,
+                            r: CHART_MARGIN,
+                            b: CHART_MARGIN,
+                            t: CHART_MARGIN * 8,
+                            pad: 4
+                        },
+                        autosize: true,
+                        scene: {
+                            
+                            camera: {
+                                
+                                eye: {
+                                    x: 0,
+                                    y: 0,
+                                    z: 2
+                                },
+                                
+                            },
+                        }
 
-                }}
-            />
-            <h3>
-                populacja: {currentGenerationsCount}
-            </h3>
+                    }}
+                />
+            </div>
         </div>  
         );
     }
