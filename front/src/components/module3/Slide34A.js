@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_3_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Description34 from "./Description34";
+import { InputNumber } from 'antd';
 import '../../css/Slide21A.css';
 var Latex = require('react-latex');
 
@@ -16,8 +17,6 @@ function bin2dec(binStr) {
         (currValue === '1') ? total + (2 ** (lastIndex - index)) : total
     ), 0);
 }
-
-const delay = ms => new Promise(res => setTimeout(res, ms));
 
 
 // ALGO FUNCTIONS
@@ -279,6 +278,7 @@ class Slide34A extends Component {
 
         this.generateButton = React.createRef()
         this.navigationButtons = React.createRef();
+        this.algoStepIntervalInput = React.createRef();
 
         let tmpIndividuals = []
 
@@ -308,6 +308,7 @@ class Slide34A extends Component {
             individuals: tmpIndividuals,
             currentAlgoStepIndex: 0,
             currentIndividualIndex: 0,
+            algoStepInterval: Slide34A_ALGO_STEP_TIMEOUT,
             stepEnded: false
         }
     }
@@ -331,7 +332,7 @@ class Slide34A extends Component {
 
             this.timerId = setInterval(() => {
                 this.algoStep()
-            }, Slide34A_ALGO_STEP_TIMEOUT);
+            }, this.state.algoStepInterval);
         }
     }
 
@@ -535,6 +536,12 @@ class Slide34A extends Component {
         this.generatePopulation()
     }
 
+    
+    onChangeAlgoStepInterval = value => {
+        this.setState({
+          algoStepInterval: value,
+        })
+    }
 
     render(){
         
@@ -558,7 +565,19 @@ class Slide34A extends Component {
                 </div>
 
                 <div className="col-5">
-                    <h5><div style={{marginLeft: 80, borderStyle: "double", display: "inline-block", padding:8}}>Algorytm</div><br></br>
+                    <h5><div style={{marginLeft: 80, borderStyle: "double", display: "inline-block", padding:8}}>Algorytm</div>
+                    <InputNumber
+                        min={200}
+                        max={5000}
+                        defaultValue={200}
+                        style={{ margin: '6px' }}
+                        value={typeof algoStepInterval === 'number' ? this.state.algoStepInterval : this.state.algoStepInterval}
+                        onChange={this.onChangeAlgoStepInterval}
+                        step={this.step ? this.step : 1}
+                        ref={this.algoStepIntervalInput}
+                    />
+                    odstęp czasowy (ms)
+                    <br></br>
                         {this.state.chosenReproductionType.algoText}
                     </h5>
                 </div>
