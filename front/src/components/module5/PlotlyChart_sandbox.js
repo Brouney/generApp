@@ -27,8 +27,9 @@ export let areaPoints = AREA_POINTS_DEFAULT // obszar, ktory bladzi po wykresie 
 export let maximum = -9999
 
 var genfunctions = {
-    rastrigin: false,
-    beale: true,
+    rastrigin: true,
+    beale: false,
+    goldstein_price: false
 }
 class PlotlyChart_sandbox extends React.Component {
 
@@ -39,7 +40,7 @@ class PlotlyChart_sandbox extends React.Component {
         this.state = {
             data: this.generateData(),
             squareArea: areaPoints,
-            numOfObjects : 5,// aktualna wielkosc populacji
+            numOfObjects : 15,// aktualna wielkosc populacji
             objectsPoints: {
                 x:[],
                 y:[],
@@ -180,6 +181,8 @@ class PlotlyChart_sandbox extends React.Component {
 
     genBealeFunc = (x, y) => {return Math.pow(1.5 - x + x*y,2) + Math.pow(2.25 - x + x*y*y, 2) + Math.pow(2.625 - x + x*y*y*y,2) } 
 
+    genGoldstein_Price = (X, Y) => {return (1+(X+Y+1)**2*(19-14*X+3*X**2-14*Y+6*X*Y+3*Y**2))*(30+(2*X-3*Y)**2*(18-32*X+12*X**2+48*Y-36*X*Y+27*Y**2))}
+
     generateData = (dataFunction3d = 'Rastrigin') => {
         this.setDefaultGlobalVariables()
         console.log("XDDD")
@@ -205,6 +208,9 @@ class PlotlyChart_sandbox extends React.Component {
                 else if (genfunctions.beale === true) {
                     // computedValue = saddleFormula(xxx, yyy)
                     computedValue = this.genBealeFunc(xxx, yyy)
+                }
+                else if(genfunctions.goldstein_price ===true){
+                    computedValue = this.genGoldstein_Price(xxx, yyy)
                 }
                 // else if (dataFunction3d === 'paraboloid') {
                 //     computedValue = paraboloidFormula(xxx, yyy)
@@ -349,6 +355,9 @@ class PlotlyChart_sandbox extends React.Component {
             else if (genfunctions.beale) {
                 newZ.push(this.genBealeFunc(values.get(temp_pop[i][0]), values.get(temp_pop[i][1]))) 
             }
+            else if(genfunctions.goldstein_price){
+                newZ.push(this.genGoldstein_Price(values.get(temp_pop[i][0]), values.get(temp_pop[i][1]))) 
+            }
             
         }
 
@@ -416,12 +425,12 @@ class PlotlyChart_sandbox extends React.Component {
                     type: 'scatter3d',
                     name: "obiekty",
                     marker: {
-                    color: 'yellow',
-                    size: 8,
-                    line: {
-                        color: 'rgb(204, 204, 204)',
-                        width: 1},
-                    opacity: 1
+                        color: 'yellow',
+                        size: 8,
+                        line: {
+                            color: 'rgb(204, 204, 204)',
+                            width: 1},
+                        // opacity: 1
                     }
                 },
                 ]}
