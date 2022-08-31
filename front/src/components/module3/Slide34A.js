@@ -50,6 +50,8 @@ function create_int_n_A(oldIndividual) {
             var tmpIndividual = Object.assign({}, oldIndividual);
             tmpIndividual.LP = Slide34A_create_int_n_A.length + 1
             Slide34A_create_int_n_A.push(tmpIndividual)
+
+            Slide34A_create_int_n_A_TOTAL++
         }
     }
 }
@@ -72,6 +74,8 @@ function calibrate_frac_n_A_roulette(oldIndividual) {
     if (tmpIndividual.Genotyp !== undefined && !Slide34A_calibrate_frac_n_A_roulette.hasOwnProperty(tmpIndividual.Genotyp)) {
         Slide34A_calibrate_frac_n_A_roulette[tmpIndividual.Genotyp] = tmpIndividual.frac_n_A 
     }
+
+    // console.log(Slide34A_calibrate_frac_n_A_roulette)
 }
 
 function generate_new_individuals_using_roulette(oldIndividual) {
@@ -133,9 +137,95 @@ function generate_new_individuals_using_roulette(oldIndividual) {
     }
 }
 
-function bernoulli_frac_n_A() {
-    //TODO
+function bernoulli_frac_n_A(oldIndividual) {
+    var tmpIndividual = Object.assign({}, oldIndividual)
+    // (n nad k) = (10 osobników nad 1 wylosowanym)
+    var n = Slide34A_POPULATION_SIZE - Slide34A_create_int_n_A_TOTAL // próby losowania
+    var k = 1
+
+    if (tmpIndividual.Genotyp !== undefined && !Slide34A_bernoulli_frac_n_A.hasOwnProperty(tmpIndividual.Genotyp)) {
+        Slide34A_bernoulli_frac_n_A[tmpIndividual.Genotyp] = newton(n, k) * ((1 - tmpIndividual.frac_n_A / 100) ** k) * ((tmpIndividual.frac_n_A / 100) ** (n - k)) // hacked wzor
+    }
+
+    // console.log(Slide34A_bernoulli_frac_n_A)
 }
+
+function generate_new_individuals_using_bernoulli() {
+    let sumProbabilities = 0;
+    for (let prob of Object.values(Slide34A_bernoulli_frac_n_A)) {
+        sumProbabilities += prob;
+    }
+
+    var probabilities = []
+    var genotypesToDraw = []
+    var chosenGenotype = null
+
+    Object.entries(Slide34A_bernoulli_frac_n_A).forEach(([genotype, genotypeProb]) => {
+        probabilities.push(genotypeProb / sumProbabilities)
+        genotypesToDraw.push(genotype)
+    })
+
+    
+    var randomRouletteDraw = Math.random()
+    var sumProb = 0
+    var lastIndex = probabilities.length - 1;
+
+    for (var i = 0; i < lastIndex; ++i) {
+        sumProb += probabilities[i];
+        if (randomRouletteDraw < sumProb) {
+            chosenGenotype = genotypesToDraw[i]
+        }
+    }
+    
+    if (chosenGenotype == null) {
+        chosenGenotype = genotypesToDraw[lastIndex]
+    }
+    
+    var currentSumFitness = Slide34A_create_int_n_A.reduce((total, obj) => obj.Dostosowanie + total, 0)
+    
+    if (Slide34A_create_int_n_A.length < Slide34A_POPULATION_SIZE) {
+        var fenotype = bin2dec(chosenGenotype)
+        var fitness = Slide34A_FITNESS_FUNCTION(fenotype)
+        var tmpIndividual = new Individual(Slide34A_create_int_n_A.length + 1, chosenGenotype, fenotype, fitness)
+
+
+        tmpIndividual.p_r_A = calculate_p_r_A(tmpIndividual)
+        tmpIndividual.n_A = calculate_n_A(tmpIndividual)
+        tmpIndividual.int_n_A = calculate_int_n_A(tmpIndividual)
+        tmpIndividual.frac_n_A = calculate_frac_n_A(tmpIndividual)
+
+        tmpIndividual.indicators = [
+            tmpIndividual.p_r_A,
+            tmpIndividual.n_A,
+            tmpIndividual.int_n_A,
+            tmpIndividual.frac_n_A
+        ]
+
+        Slide34A_create_int_n_A.push(tmpIndividual)
+    }
+
+    if (Slide34A_create_int_n_A.length == Slide34A_POPULATION_SIZE) {
+        calculateAllIndicatorsForPopulation(currentSumFitness)
+    }
+}
+
+function newton(n, k) {  // zwraca wartosc dwumianu Newtona dla (n/k)
+    if ((typeof n !== 'number') || (typeof k !== 'number')) {
+        return false;
+    }
+
+    var result = 1;
+
+    for (var x = n-k+1; x <= n; x++) {
+        result *= x;
+    }
+    for (x = 1; x <= k; x++) {
+        result /= x;
+    }
+
+    return result;
+}
+
 // END ALGO FUNCTIONS
 
 
@@ -245,7 +335,7 @@ var Slide34A_RANDOM_WITHOUT_REPETITIONS = new ReproductionType(Slide34A_RANDOM_W
     calculate_frac_n_A,
     create_int_n_A,
     bernoulli_frac_n_A,
-    generate_new_individuals_using_roulette // TODO czy na pewno tez ruletka dla losowej bez powtorzen
+    generate_new_individuals_using_bernoulli
 )
 
 var Slide34A_RANK = new ReproductionType(Slide34A_RANK_ALGO_TEXT)
@@ -264,7 +354,9 @@ const Slide34A_FITNESS_FUNCTION = (x) => x*x
 var Slide34A_sum_f_i = 0
 var Slide34A_sum_f_i_onLoad = 0
 var Slide34A_create_int_n_A = []
+var Slide34A_create_int_n_A_TOTAL = 0
 var Slide34A_calibrate_frac_n_A_roulette = {} // slownik --> genotyp: frac_n_A
+var Slide34A_bernoulli_frac_n_A = {} // slownik --> genotyp: prawdopodobienstwo
 
 
 class Slide34A extends Component {
@@ -285,7 +377,9 @@ class Slide34A extends Component {
         Slide34A_sum_f_i = 0
         Slide34A_sum_f_i_onLoad = 0
         Slide34A_create_int_n_A = []
+        Slide34A_create_int_n_A_TOTAL = 0
         Slide34A_calibrate_frac_n_A_roulette = {}
+        Slide34A_bernoulli_frac_n_A = {}
 
         for (let i = 0; i < Slide34A_POPULATION_SIZE; ++i) {
             var genotype = randomBinary(0, Slide34A_INDIVIDUAL_MAX_FITNESS)
@@ -337,7 +431,7 @@ class Slide34A extends Component {
     }
 
     algoStep = () => {
-        console.log(this.state.chosenReproductionType.algoStepsList[this.state.currentAlgoStepIndex])
+        // console.log(this.state.chosenReproductionType.algoStepsList[this.state.currentAlgoStepIndex])
 
         if (this.state.currentAlgoStepIndex == this.state.chosenReproductionType.algoStepsCount) {
             this.onSimulationEnd()
@@ -381,7 +475,7 @@ class Slide34A extends Component {
                         currentIndividualIndex: prevState.currentIndividualIndex+1
                     }
                 });
-            } else {
+            } else { // kroki 5-7
                 func(this.state.individuals[idx])
 
                 this.setState(prevState => {
@@ -429,7 +523,9 @@ class Slide34A extends Component {
         this.handleStartStop(true)
         this.navigationButtons.current.enableNavigationButtons()
         Slide34A_create_int_n_A = []
+        Slide34A_create_int_n_A_TOTAL = 0
         Slide34A_calibrate_frac_n_A_roulette = {}
+        Slide34A_bernoulli_frac_n_A = {}
     }
 
     generatePopulation = () => {
@@ -437,6 +533,7 @@ class Slide34A extends Component {
         Slide34A_sum_f_i = 0
         Slide34A_sum_f_i_onLoad = 0
         Slide34A_create_int_n_A = []
+        Slide34A_create_int_n_A_TOTAL = 0
 
         for (let i = 0; i < this.state.chosenReproductionType.algoStepsCount; ++i) {
             document.getElementById(i).style = "" // wylaczenie podswietlen wszystkich krokow algorytmu

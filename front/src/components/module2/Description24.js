@@ -49,7 +49,7 @@ class Description24 extends Component {
                 Na kolejnym slajdzie obrazowo przedstawiono problem więzów.<br></br><br></br>
                 Za pomocą suwaków można zmienić rozmiar populacji, liczbę pokoleń symulacji, a także dopasować obszar kary, który jest zaznaczony na wykresie jako przezroczysty prostokąt.<br></br><br></br>
                 Jeżeli <input type="checkbox" name="penaltyOff"/><label for="penaltyOff"><span style={{color: "red"}}> Metoda kar WYŁĄCZONA</span></label>, osobniki znajdujące się poza obszarem giną i rozwiązanie może nie zostać znalezione.<br></br><br></br>
-                Jeżeli <input type="checkbox" name="penaltyOn" checked/> <label for="penaltyOn"><span style={{color: "lime"}}> Metoda kar WŁĄCZONA</span></label>, wartość funkcji dostosowania jest korygowana o określony <Latex>{"współczynnik kary ${r}$"}</Latex>.<br></br><br></br>
+                Jeżeli <input type="checkbox" name="penaltyOn" checked readOnly/> <label for="penaltyOn"><span style={{color: "lime"}}> Metoda kar WŁĄCZONA</span></label>, wartość funkcji dostosowania jest korygowana o określony <Latex>{"współczynnik kary ${r}$"}</Latex>.<br></br><br></br>
                 Symulacja kończy się, gdy liczba pokoleń osiągnie zadaną przez użytkownika wartość lub gdy wszystkie osobniki wyginą.
             </h5>
 

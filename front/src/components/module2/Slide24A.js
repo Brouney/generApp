@@ -10,10 +10,6 @@ var Latex = require('react-latex');
 
 const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
 
-function randomIntFromInterval(min, max) { // min and max included 
-    return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
 function randomFloatFromInterval(min, max) { // min and max included 
     return Math.random() * (max - min) + min
 }
