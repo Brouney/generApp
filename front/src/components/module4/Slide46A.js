@@ -121,7 +121,7 @@ class Slide46A extends Component {
             temp_table2.push(temp_table[i])    
         }  
              
-        console.log(temp_table2)
+        
         let new_table = []
         for(let i = 4; i<7;i++){
             new_table.push(temp_table2[i])}
@@ -130,9 +130,43 @@ class Slide46A extends Component {
         for(let i = 0; i<4;i++){
             new_table.push(temp_table2[i])}
         
-        console.log(new_table)
+        
         this.setState({
             A_p: new_table
+        })
+
+
+    }
+
+    generateB_P = () => {
+        let temp_table = []
+        for(let i = 6; i<10;i++){
+            temp_table.push(this.state.A[i])}
+        for(let i = 0; i<6;i++){
+            temp_table.push(this.state.A[i])}
+
+        let temp_table2 = []
+        for(let i = 0; i<10;i++){
+            if(temp_table[i].value === this.state.B[3].value || 
+                temp_table[i].value === this.state.B[4].value ||
+                temp_table[i].value === this.state.B[5].value){
+                    continue;
+                }
+            temp_table2.push(temp_table[i])    
+        }  
+             
+        
+        let new_table = []
+        for(let i = 4; i<7;i++){
+            new_table.push(temp_table2[i])}
+        for(let i = 3; i<6;i++){
+            new_table.push(this.state.B[i])}   
+        for(let i = 0; i<4;i++){
+            new_table.push(temp_table2[i])}
+        
+        
+        this.setState({
+            B_p: new_table
         })
 
 
@@ -154,10 +188,15 @@ class Slide46A extends Component {
                     <Button type="primary" onClick={this.generateA_P}>Uzupełnij A' od 2 punktu podziału</Button>
                 </div>
                 <div>
+                    <Button type="primary" onClick={this.generateB_P}>Uzupełnij B' od 2 punktu podziału</Button>
+                </div>
+                <div>
                     <tr>
+                    <td style={{ fontSize:"50px"}}>A = </td>
                     {this.renderAB(this.state.A)}
                     </tr>
                     <tr>
+                    <td style={{ fontSize:"50px"}}>B = </td>
                     {this.renderAB(this.state.B)}
                     </tr>
                 </div>
@@ -168,7 +207,14 @@ class Slide46A extends Component {
                 </div>
                 <div>
                     <tr>
+                    <td style={{ fontSize:"50px"}}>A' = </td>
                     {this.renderAB(this.state.A_p)}
+                    </tr>
+                </div>
+                <div>
+                    <tr>
+                    <td style={{ fontSize:"50px"}}>B' = </td>
+                    {this.renderAB(this.state.B_p)}
                     </tr>
                 </div>
             </div>
