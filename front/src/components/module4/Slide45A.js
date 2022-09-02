@@ -27,19 +27,20 @@ class Slide45A extends Component {
             const { value, Color} = obj //destructuring
             return(
                 index == 3?
-                <td >
-                    <h3 style={{backgroundColor: Color, fontSize:"50px"}}>{"|"+ value}</h3>
-                </td>
-                :
-                index == 5?
-                <td>
-                    <h3 style={{backgroundColor: Color, fontSize:"50px"}}>{value+ "|"}</h3>
-                </td>
-                :
-                <td>
-                    <h3 style={{backgroundColor: Color, fontSize:"50px"}}>{value}</h3>
+                <td style={{backgroundColor: Color, textAlign: "center"}}>
+                    {<h3 style={{  fontSize:"50px"}}>{"| "+ value+"⁣ "}</h3>}
                 </td>
                 
+                :
+                index == 5?
+                <td style={{backgroundColor: Color, textAlign: "center"}}>
+                    <h3 style={{ fontSize:"50px"}}>{"⁣ "+value+ " |"}</h3>
+                </td>
+                :
+                <td style={{backgroundColor: Color, textAlign: "center"}}>
+                    <h3 style={{ fontSize:"50px"}}>{ "⁣ "+String(value) +" ⁣"}</h3> 
+                </td>
+                //tu jest ogólnie niewidzialny semarator zeby byly ladne spacje 
             )
             
         })
@@ -161,25 +162,29 @@ class Slide45A extends Component {
                 
                 <div>
                     <tr>
-                    <td style={{ fontSize:"50px"}}>A = </td>
-                    {this.renderAB(this.state.A)}
+                        <td style={{ fontSize:"50px"}}>A = </td>
+                        {this.renderAB(this.state.A)}
                     </tr>
+                    <br></br>
                     <tr>
                     <td style={{ fontSize:"50px"}}>B = </td>
                     {this.renderAB(this.state.B)}
                     </tr>
+                    <br></br>
                 </div>
                 <div>
-                <tr>
+                    <tr>
                     <td style={{ fontSize:"50px"}}>CHANGE = </td>
                     {this.renderAB(this.state.B_change)}
                     </tr>
+                    <br></br>
                 </div>
                 <div>
                     <tr>
                     <td style={{ fontSize:"50px"}}>A' = </td>
                     {this.renderAB(this.state.A_p)}
                     </tr>
+                    <br></br>
                 </div>
                 <div>
                     <tr>
