@@ -11,7 +11,7 @@ class Slide42A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide41A mainArea={this.mainArea}></Slide41A>;
         this.next = <Slide43A prev={<Slide42A></Slide42A>} mainArea={this.mainArea}></Slide43A>
-        this.title = 'Krzyżowanie proste (dwupunktowe) - Piotr'
+        this.title = 'Krzyżowanie proste (dwupunktowe)'
 
         this.navigationButtons = React.createRef()
 

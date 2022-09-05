@@ -159,7 +159,7 @@ class Slide45A extends Component {
                 <div>
                     <Button type="primary" onClick={this.generateA_B_P}>Uzupełnij A' B'</Button>
                 </div>
-                
+                <br></br>
                 <div>
                     <tr>
                         <td style={{ fontSize:"50px"}}>A = </td>

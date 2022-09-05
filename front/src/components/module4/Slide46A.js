@@ -191,6 +191,7 @@ class Slide46A extends Component {
                 <div>
                     <Button type="primary" onClick={this.generateB_P}>Uzupełnij B' od 2 punktu podziału</Button>
                 </div>
+                <br></br>
                 <div>
                     <tr>
                     <td style={{ fontSize:"50px"}}>A = </td>
