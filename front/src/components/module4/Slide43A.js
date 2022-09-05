@@ -1,24 +1,28 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_4_SLIDES_COUNT } from '../templates/ListExercisePanel'
-import Slide45A from "./Slide45A";
-import Slide43A from "./Slide43A";
+import Slide44A from "./Slide44A";
+import Slide42A from "./Slide42A";
 import { Line } from "react-lineto";
 import Draggable from "react-draggable";
 var Latex = require('react-latex');
 
-// TODO: red line better positioning after window resize
-// TODO: borders of parentsAndChildrenArea
+// TODO: align borders of parentsAndChildrenArea with color (canvas?)
 // TODO: childrens Y, Z on line dynamically updated
 // TODO: calculations of Y, Z position
 
-class Slide44A extends Component {
+const SLIDE43A_parentsAndChildrenArea_HEIGHT = 500
+const SLIDE43A_parentsAndChildrenArea_WIDTH = 500
+const SLIDE43A_parentsOffsetX = SLIDE43A_parentsAndChildrenArea_WIDTH - 100
+const SLIDE43A_parentsOffsetY = SLIDE43A_parentsAndChildrenArea_HEIGHT - 100
+
+class Slide43A extends Component {
 
     constructor(props){
         super(props)
         this.mainArea = props.mainArea
-        this.prev = <Slide43A mainArea={this.mainArea}></Slide43A>;
-        this.next = <Slide45A prev={<Slide44A></Slide44A>} mainArea={this.mainArea}></Slide45A>
+        this.prev = <Slide42A mainArea={this.mainArea}></Slide42A>;
+        this.next = <Slide44A prev={<Slide43A></Slide43A>} mainArea={this.mainArea}></Slide44A>
         this.title = 'Krzyżowanie uśredniające (wariant podstawowy)'
 
         this.parentX1ref = React.createRef();
@@ -27,17 +31,19 @@ class Slide44A extends Component {
         this.state = {
             parentPositionX1: {
               x: 0,
-              y: 0
+              y: 0,
+              isDragged: false
             },
             parentPositionX2: {
-              x: 50,
-              y: 50
+              x: 300,
+              y: 300,
+              isDragged: false
             },
             linePosition: {
               x0: 0,
               y0: 0,
-              x1: 50,
-              y1: 50,
+              x1: 300,
+              y1: 300,
             },
 
             parentsAndChildrenAreaDiv: {
@@ -74,7 +80,11 @@ class Slide44A extends Component {
 
         this.setState(prevState => {
             return {
-                parentPositionX1: { x, y },
+                parentPositionX1: {
+                    x: x,
+                    y: y,
+                    isDragged: true
+                },
                 linePosition: {
                     x0: newLinePosX0,
                     y0: newLinePosY0,
@@ -110,14 +120,23 @@ class Slide44A extends Component {
         }
 
 
-        const { x, y } = position;
+        var { x, y } = position;
+
+        // if (x > SLIDE43A_parentsAndChildrenArea_WIDTH) { x = SLIDE43A_parentsAndChildrenArea_WIDTH }
+        // if (x < 0) { x = 0 }
+        // if (y > SLIDE43A_parentsAndChildrenArea_HEIGHT) { y = SLIDE43A_parentsAndChildrenArea_HEIGHT }
+        // if (y < 0) { y = 0 }
 
         var newLinePosX1 = x + newAreaX
         var newLinePosY1 = y + newAreaY
 
         this.setState(prevState => {
             return {
-                parentPositionX2: { x, y },
+                parentPositionX2: {
+                    x: x,
+                    y: y,
+                    isDragged: true
+                },
                 linePosition: {
                     x0: prevState.linePosition.x0,
                     y0: prevState.linePosition.y0,
@@ -142,6 +161,16 @@ class Slide44A extends Component {
 
             this.setState(prevState => {
                 return {
+                    parentPositionX1: {
+                        x: prevState.parentPositionX1.x,
+                        y: prevState.parentPositionX1.y,
+                        isDragged: false
+                    },
+                    parentPositionX2: {
+                        x: prevState.parentPositionX2.x,
+                        y: prevState.parentPositionX2.y,
+                        isDragged: false
+                    },
                     parentsAndChildrenAreaDiv: {
                         x: newAreaX,
                         y: newAreaY,
@@ -149,7 +178,6 @@ class Slide44A extends Component {
                 }
             });
         }
-
     }
 
     componentDidMount() {
@@ -206,17 +234,19 @@ class Slide44A extends Component {
         var parentX1 = <Draggable
             position={parentPositionX1}
             onDrag={this.onDragParentX1}
+            bounds={{left: 0, top: 0, right: SLIDE43A_parentsOffsetX, bottom: SLIDE43A_parentsOffsetY}}
             ref = {this.parentX1ref}
         >
-            <h3><span style={{color: "yellow"}}><Latex>{"${X^1}$"}</Latex></span></h3>
+            <h3><span style={{color: "yellow"}}><Latex>{"${X^1}$"}</Latex> = ({parentPositionX1.x}, {parentPositionX1.y})</span></h3>
         </Draggable>
 
         var parentX2 = <Draggable
             position={parentPositionX2}
             onDrag={this.onDragParentX2}
+            bounds={{left: 0, top: 0, right: SLIDE43A_parentsOffsetX, bottom: SLIDE43A_parentsOffsetY}}
             ref = {this.parentX2ref}
         >
-            <h3><span style={{color: "yellow"}}><Latex>{"${X^2}$"}</Latex></span></h3>
+            <h3><span style={{color: "yellow"}}><Latex>{"${X^2}$"}</Latex> = ({parentPositionX2.x}, {parentPositionX2.y})</span></h3>
         </Draggable>
         
         return(
@@ -255,17 +285,26 @@ class Slide44A extends Component {
                 </div>
 
 
-                <div className="col-7" id="parentsAndChildrenArea">
-                    {parentX1}
-                    {parentX2}
+                <div
+                    className="col-7"
+                    id="parentsAndChildrenArea"
+                    style={{
+                        backgroundColor: "#767676",
+                        // height: SLIDE43A_parentsAndChildrenArea_HEIGHT,
+                        // width: SLIDE43A_parentsAndChildrenArea_WIDTH,
+                    }}>
+                        {parentX1}
+                        {parentX2}
 
-                    <Line
-                        className="line"
-                        x0={linePosition.x0 + 25}
-                        y0={linePosition.y0 + 25}
-                        x1={linePosition.x1 + 25}
-                        y1={linePosition.y1 + 60}
-                    />
+                        {parentPositionX1.isDragged && parentPositionX2.isDragged ?
+                        <Line
+                            className="line"
+                            x0={linePosition.x0 + 30}
+                            y0={linePosition.y0 + 30}
+                            x1={linePosition.x1 + 25}
+                            y1={linePosition.y1 + 60}
+                        />
+                        : <p></p>}
                 </div>
             </div>
             
@@ -279,4 +318,4 @@ class Slide44A extends Component {
 
 }
 
-export default Slide44A;
+export default Slide43A;
