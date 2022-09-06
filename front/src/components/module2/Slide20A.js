@@ -194,6 +194,10 @@ class Slide20A extends Component {
             
         }
         newSchemas = [...new Set(newSchemas)]
+        for(let i of tmpIndividuals){
+            if(i['Osobnik'])
+            newSchemas.push(i['Osobnik'])
+        }
         // console.log(newSchemas)
         Slide18A_allPossibleSchemasStrings = newSchemas
         // console.log(newSchemas)
@@ -270,32 +274,7 @@ class Slide20A extends Component {
         // this.setState({individuals: tmpIndividuals.sort((a,b) => (a.Przystosowanie < b.Przystosowanie) ? 1 : ((b.Przystosowanie < a.Przystosowanie) ? -1 : 0)), generation: 0})
     }
 
-    renderCrossoverIDs = () => {
-        return this.state.individuals.map((individual, index) => {
-            const { LP } = individual //destructuring
-            return (
-                <option value={LP}>{LP}</option>
-            )
-        })
-    }
 
-    renderMutationBits = () => {
-        let mutationBits = [...Array(this.state.sliderCodeLengthValue+1).keys()]
-        return mutationBits.slice(1).map((index) => {
-            return (
-                <option value={index}>{index}</option>
-            )
-        })
-    }
-
-    renderCrossoverPoint = () => {
-        let crossoverPoints = [...Array(this.state.sliderCodeLengthValue).keys()]
-        return crossoverPoints.slice(1).map((index) => {
-            return (
-                <option value={index}>{index}</option>
-            )
-        })
-    }
 
     renderTableHeader(array) {
         let header = Object.keys(array[0])
@@ -314,15 +293,11 @@ class Slide20A extends Component {
               (<tr key={LP}>
                   <td style={{backgroundColor: "gray"}}>{LP}</td>
                 <td><tt>{Osobnik}</tt></td>
-                 {/* <td><tt>{Przystosowanie}</tt></td>
-                 <td><tt>{(Procent * 100).toFixed(3)}</tt></td> */}
               </tr>)
               :
                 (<tr key={LP}>
                 <td>{LP}</td>
                 <td><tt>{Osobnik}</tt></td>
-                {/* <td><tt>{Przystosowanie}</tt></td>
-                <td><tt>{(Procent * 100).toFixed(3)}</tt></td> */}
             </tr>))
            )
         })
@@ -336,10 +311,7 @@ class Slide20A extends Component {
               <tr key={Schemat}>
                  <td><tt>{index}</tt></td>
                  <td><tt>{Schemat}</tt></td>
-                 {/* <td><tt>{Przystosowanie}</tt></td> */}
-                 {/* <td>{Reprezentanci[Reprezentanci.length - 1]}</td>
-                 <td>{Rozpietosc}</td>
-                 <td>{Rzad}</td> */}
+                 
               </tr>
            )
         })
@@ -347,7 +319,7 @@ class Slide20A extends Component {
 
     handleStartStop = (simulationStopped) => { // name = (param) => 
         if (simulationStopped) {
-            this.navigationButtons.current.enableAllButtons()
+            
 
         }
         else {
@@ -356,19 +328,7 @@ class Slide20A extends Component {
         
     }
 
-    computePlotData = () => {
-        Slide18A_plotData = []
 
-        for (let i = 0; i < this.state.schemasOnlyWithAsterisks.length; ++i) {
-            Slide18A_plotData.push({
-                type: "scatter",
-                name: this.state.schemasOnlyWithAsterisks[i]['Schemat'],
-                x: [...Array(this.state.generation).keys()],
-                y: this.state.schemasOnlyWithAsterisks[i]['Reprezentanci'],
-                colorscale: 'hsv',
-            },)
-        }
-    }
 
     filtrWithoutChar = (el) => {
         if (el !== '*'){
@@ -391,7 +351,6 @@ class Slide20A extends Component {
     }
 
     render() {
-        this.computePlotData()
         
         return(
             <div>
