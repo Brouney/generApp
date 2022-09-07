@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
+import MySlider from "../common/MySlider";
 import { MODULE_4_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import Slide44A from "./Slide44A";
 import Slide42A from "./Slide42A";
@@ -7,7 +8,6 @@ import { Line } from "react-lineto";
 import Draggable from "react-draggable";
 var Latex = require('react-latex');
 
-// TODO: align borders of parentsAndChildrenArea with color (canvas?)
 // TODO: childrens Y, Z on line dynamically updated
 // TODO: calculations of Y, Z position
 
@@ -27,8 +27,13 @@ class Slide43A extends Component {
 
         this.parentX1ref = React.createRef();
         this.parentX2ref = React.createRef();
+        this.childY = React.createRef();
+        this.childZ = React.createRef();
+        this.sliderPsiVariable = React.createRef();
+        this.drawPsiValueButton = React.createRef();
 
         this.state = {
+
             parentPositionX1: {
               x: 0,
               y: 0,
@@ -39,18 +44,74 @@ class Slide43A extends Component {
               y: 300,
               isDragged: false
             },
+
+            childPositionY: {
+                x: 100,
+                y: 100,
+            },
+            childPositionZ: {
+                x: 200,
+                y: 200,
+            },
+
+
             linePosition: {
-              x0: 0,
-              y0: 0,
-              x1: 300,
-              y1: 300,
+              x0: 30,
+              y0: 30,
+              x1: 330,
+              y1: 330,
             },
 
             parentsAndChildrenAreaDiv: {
                 x: null,
                 y: null
-            }
+            },
+
+            sliderPsiVariableValue: 0.6
         }
+    }
+    
+    onChangeSliderPsiVariable = (v) => {
+        this.setState({
+            sliderPsiVariableValue: v,
+        });
+
+        this.calculateChildrenPosition(v)
+    }
+
+    drawPsiValue = () => {
+        var newPsi = Math.random()
+        this.setState({
+            sliderPsiVariableValue: newPsi,
+        });
+
+        this.sliderPsiVariable.current.state.inputValue = newPsi
+
+        this.calculateChildrenPosition(newPsi)
+    }
+
+    calculateChildrenPosition = (psiValue) => {
+        const {
+            parentPositionX1,
+            parentPositionX2
+        } = this.state;
+
+        var newY_x = (parentPositionX1.x + psiValue * (parentPositionX2.x - parentPositionX1.x)).toFixed(2)
+        var newY_y = (parentPositionX1.y + psiValue * (parentPositionX2.y - parentPositionX1.y)).toFixed(2)
+
+        var newZ_x = (parentPositionX2.x - psiValue * (parentPositionX2.x - parentPositionX1.x)).toFixed(2)
+        var newZ_y = (parentPositionX2.y - psiValue * (parentPositionX2.y - parentPositionX1.y)).toFixed(2)
+
+        this.setState({
+            childPositionY: {
+                x: newY_x,
+                y: newY_y,
+            },
+            childPositionZ: {
+                x: newZ_x,
+                y: newZ_y,
+            },
+        });
     }
 
     onDragParentX1 = (e, position) => {
@@ -97,6 +158,8 @@ class Slide43A extends Component {
                 }
             }
         });
+
+        this.calculateChildrenPosition(this.state.sliderPsiVariableValue)
     };
 
     onDragParentX2 = (e, position) => {
@@ -119,14 +182,7 @@ class Slide43A extends Component {
             newAreaY = domElem.getBoundingClientRect().top
         }
 
-
         var { x, y } = position;
-
-        // if (x > SLIDE43A_parentsAndChildrenArea_WIDTH) { x = SLIDE43A_parentsAndChildrenArea_WIDTH }
-        // if (x < 0) { x = 0 }
-        // if (y > SLIDE43A_parentsAndChildrenArea_HEIGHT) { y = SLIDE43A_parentsAndChildrenArea_HEIGHT }
-        // if (y < 0) { y = 0 }
-
         var newLinePosX1 = x + newAreaX
         var newLinePosY1 = y + newAreaY
 
@@ -149,6 +205,8 @@ class Slide43A extends Component {
                 }
             }
         });
+
+        this.calculateChildrenPosition(this.state.sliderPsiVariableValue)
     };
 
     updateParentsAndChildrenAreaDiv = (e, position) => {
@@ -187,47 +245,13 @@ class Slide43A extends Component {
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateParentsAndChildrenAreaDiv);
     }
-
-    onControlledDragMidpoint = (e, position) => {
-
-        this.setState((state) => {
-            console.log(state);
-
-            const newRPositionX = state.parentPositionX2.x + position.deltaX;
-            const newRPositionY = state.parentPositionX2.y + position.deltaY;
-            const newLPositionX = state.parentPositionX1.x + position.deltaX;
-            const newLPositionY = state.parentPositionX1.y + position.deltaY;
-
-            console.log(state.parentPositionX2.x, position.deltaX);
-            console.log(newRPositionX, newRPositionY, newLPositionX, newLPositionY);
-
-            return {
-                parentPositionX2: {
-                    x: newRPositionX,
-                    y: newRPositionY
-                },
-                parentPositionX1: {
-                    x: newLPositionX,
-                    y: newLPositionY
-                }
-            };
-        });
-    }
-
-    getHalfwayPoint = () => {
-        let newX = (this.state.parentPositionX2.x + this.state.parentPositionX1.x) / 2;
-        let newY = (this.state.parentPositionX2.y + this.state.parentPositionX1.y) / 2;
-
-        return {
-            x: newX,
-            y: newY
-        };
-    }
     
     render(){
         const {
             parentPositionX1,
             parentPositionX2,
+            childPositionY,
+            childPositionZ,
             linePosition
         } = this.state;
 
@@ -237,7 +261,9 @@ class Slide43A extends Component {
             bounds={{left: 0, top: 0, right: SLIDE43A_parentsOffsetX, bottom: SLIDE43A_parentsOffsetY}}
             ref = {this.parentX1ref}
         >
-            <h3><span style={{color: "yellow"}}><Latex>{"${X^1}$"}</Latex> = ({parentPositionX1.x}, {parentPositionX1.y})</span></h3>
+            <h4><span style={{color: "yellow", position: "absolute", cursor: "pointer"}}>
+                <Latex>{"${X^1}$"}</Latex> = ({parentPositionX1.x}, {parentPositionX1.y})
+            </span></h4>
         </Draggable>
 
         var parentX2 = <Draggable
@@ -246,18 +272,45 @@ class Slide43A extends Component {
             bounds={{left: 0, top: 0, right: SLIDE43A_parentsOffsetX, bottom: SLIDE43A_parentsOffsetY}}
             ref = {this.parentX2ref}
         >
-            <h3><span style={{color: "yellow"}}><Latex>{"${X^2}$"}</Latex> = ({parentPositionX2.x}, {parentPositionX2.y})</span></h3>
+            <h4><span style={{color: "yellow", position: "absolute", cursor: "pointer"}}>
+                <Latex>{"${X^2}$"}</Latex> = ({parentPositionX2.x}, {parentPositionX2.y})
+            </span></h4>
         </Draggable>
+
+
+        var childY = <Draggable
+            position={childPositionY}
+            bounds={{left: 0, top: 0, right: SLIDE43A_parentsOffsetX, bottom: SLIDE43A_parentsOffsetY}}
+            ref = {this.childY}
+        >
+            <h5><span style={{color: "cyan", position: "absolute"}}><Latex>{"${Y}$"}</Latex> = ({childPositionY.x}, {childPositionY.y})</span></h5>
+        </Draggable>
+
+        var childZ = <Draggable
+            position={childPositionZ}
+            bounds={{left: 0, top: 0, right: SLIDE43A_parentsOffsetX, bottom: SLIDE43A_parentsOffsetY}}
+            ref = {this.childZ}
+        >
+            <h5><span style={{color: "cyan", position: "absolute"}}><Latex>{"${Z}$"}</Latex> = ({childPositionZ.x}, {childPositionZ.y})</span></h5>
+        </Draggable>
+
+        var connectingLine = <Line
+            style={{color: "lime", position: "absolute"}}
+            className="line"
+            x0={linePosition.x0 + 30}
+            y0={linePosition.y0 + 30}
+            x1={linePosition.x1 + 30}
+            y1={linePosition.y1 + 30}
+        />
         
         return(
         <div>
             <h1>{this.title}</h1>
 
             <div className="row">
-                <div className="col-5">
+                <div className="col-6">
                     <h5>
                         Krzyżowanie uśredniające dąży do znalezienia "środka ciężkości" wartości cechy między cechami rodziców. Znajduje zastosowanie w kodowaniu rzeczywistoliczbowym.<br></br><br></br>
-                        Metody losowe są bliższe algorytmom genetycznym z uwagi na błądzenie przypadkowe w przestrzeni rozwiązań.<br></br><br></br>
                         <ul>
                             <li>Rodzice: <span style={{color: "yellow"}}><Latex>{"${X^1}$"}</Latex>, <Latex>{"${X^2}$"}</Latex></span></li>
                             <li>Dzieci <span style={{color: "cyan"}}><Latex>{"${Y, Z}$"}</Latex></span><br></br></li><br></br>
@@ -286,25 +339,50 @@ class Slide43A extends Component {
 
 
                 <div
-                    className="col-7"
+                    className="col-5"
                     id="parentsAndChildrenArea"
                     style={{
-                        backgroundColor: "#767676",
-                        // height: SLIDE43A_parentsAndChildrenArea_HEIGHT,
+                        backgroundColor: "#454545",
+                        height: SLIDE43A_parentsAndChildrenArea_HEIGHT,
                         // width: SLIDE43A_parentsAndChildrenArea_WIDTH,
                     }}>
                         {parentX1}
+                        {childY}
+                        {childZ}
                         {parentX2}
 
-                        {parentPositionX1.isDragged && parentPositionX2.isDragged ?
-                        <Line
-                            className="line"
-                            x0={linePosition.x0 + 30}
-                            y0={linePosition.y0 + 30}
-                            x1={linePosition.x1 + 25}
-                            y1={linePosition.y1 + 60}
-                        />
-                        : <p></p>}
+                        {parentPositionX1.isDragged && parentPositionX2.isDragged
+                            ? connectingLine
+                            : <p></p>
+                        }
+                </div>
+            </div>
+
+            <div className="row">
+                <div className="col-6">
+                    <h5>
+                        Przeciąganie rodziców <span style={{color: "yellow"}}><Latex>{"${X^1}$"}</Latex>, <Latex>{"${X^2}$"}</Latex></span> za pomocą myszki aktualizuje wartości cech (położenie) dzieci <span style={{color: "cyan"}}><Latex>{"${Y, Z}$"}</Latex></span><br></br>
+                        Można również zmieniać suwakiem wartość zmiennej <Latex>{"${\\Psi_{U(0,1)}}$"}</Latex> lub wylosować ją przez kliknięcie przycisku.
+                    </h5>
+                </div>
+                <div className="col-6">
+                    <MySlider
+                        min={0}
+                        max={1}
+                        defaultValue={0.6}
+                        sliderSize={1}
+                        step={0.001}
+                        ref={this.sliderPsiVariable}
+                        text={<h5><Latex>{"Zmienna ${\\Psi_{U(0,1)}}$"}</Latex></h5>}
+                        passValueToParent={this.onChangeSliderPsiVariable}>
+                    </MySlider>
+
+                    <button
+                        ref={ref => this.drawPsiValueButton = ref}
+                        type="submit"
+                        className="btn btn-success m-1"
+                        onClick={this.drawPsiValue}><b>LOSUJ</b>
+                    </button>
                 </div>
             </div>
             
