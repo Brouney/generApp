@@ -8,6 +8,8 @@ import { Line } from "react-lineto";
 import Draggable from "react-draggable";
 var Latex = require('react-latex');
 
+// TODO alternatywny switch na dwie zmienne losowe
+
 const SLIDE43A_parentsAndChildrenArea_HEIGHT = 500
 const SLIDE43A_parentsAndChildrenArea_WIDTH = 500
 const SLIDE43A_parentsOffsetX = SLIDE43A_parentsAndChildrenArea_WIDTH - 100
@@ -20,7 +22,7 @@ class Slide43A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide42A mainArea={this.mainArea}></Slide42A>;
         this.next = <Slide44A prev={<Slide43A></Slide43A>} mainArea={this.mainArea}></Slide44A>
-        this.title = 'Krzyżowanie uśredniające (wariant podstawowy)'
+        this.title = 'Krzyżowanie uśredniające (wariant podstawowy i alternatywny)'
 
         this.parentX1ref = React.createRef();
         this.parentX2ref = React.createRef();

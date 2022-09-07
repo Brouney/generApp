@@ -10,7 +10,7 @@ import Description31 from "../module3/Description31";
 export let MODULE_1_SLIDES_COUNT = 12;
 export let MODULE_2_SLIDES_COUNT = 14;
 export let MODULE_3_SLIDES_COUNT = 8;
-export let MODULE_4_SLIDES_COUNT = 7;
+export let MODULE_4_SLIDES_COUNT = 6;
 export let MODULE_5_SLIDES_COUNT = 1;
 
 class ListExercisePanel extends Component {

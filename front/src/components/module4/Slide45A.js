@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_4_SLIDES_COUNT } from '../templates/ListExercisePanel'
-import Slide46A from "./Slide46A";
 import Slide44A from "./Slide44A";
+import Slide46A from "./Slide46A";
 import { Button } from "antd";
 
 class Slide45A extends Component {
@@ -12,16 +12,32 @@ class Slide45A extends Component {
         this.mainArea = props.mainArea
         this.prev = <Slide44A mainArea={this.mainArea}></Slide44A>;
         this.next = <Slide46A prev={<Slide45A></Slide45A>} mainArea={this.mainArea}></Slide46A>
-        this.title = 'Operacje rekonfiguracji Partially Matched Crossover'
+        this.title = 'Operacje rekonfiguracji Order Crossover'
+
         this.state = {
             A: [],
             B:[],
             B_p:[],
             A_p:[],
-            B_change: []
+            B2:[]
         }
-        this.quizTemplate = React.createRef()
+        
     }
+    
+    renderNormal = (array) => {
+        return array.map((obj, index) => {
+            const { value, Color} = obj //destructuring
+            return(
+                <td>
+                    <h3 style={{backgroundColor: Color, fontSize:"50px"}}>{value}</h3>
+                </td>
+                
+            )
+            
+        })
+
+    }
+
     renderAB = (array) => {
         return array.map((obj, index) => {
             const { value, Color} = obj //destructuring
@@ -67,28 +83,21 @@ class Slide45A extends Component {
 
     }
     generateB2 = () => {
-
-        let A3 = {value:this.state.A[3].value, Color:"magenta"}
-        let B3 = {value:this.state.B[3].value, Color:"magenta"}
-        let A4 = {value:this.state.A[4].value, Color:"coral"}
-        let B4 = {value:this.state.B[4].value, Color:"coral"}
-        let A5 = {value:this.state.A[5].value, Color:"darkcyan"}
-        let B5 = {value:this.state.B[5].value, Color:"darkcyan"}
         let temp_table = []
+        for(let i = 6; i<10;i++){
+            temp_table.push(this.state.B[i])}
+        for(let i = 0; i<6;i++){
+            temp_table.push(this.state.B[i])}
+        
         for(let i = 0; i<10;i++){
-            if(this.state.B[i].value === A3.value ){ temp_table.push(A3)}
-            else if(this.state.B[i].value === A4.value ){ temp_table.push(A4)}  
-            else if(this.state.B[i].value === A5.value ){ temp_table.push(A5)}
-            else if(this.state.B[i].value === B3.value ){ temp_table.push(B3)}
-            else if(this.state.B[i].value === B4.value ){ temp_table.push(B4)}  
-            else if(this.state.B[i].value === B5.value ){ temp_table.push(B5)}
-            else{
-                temp_table.push(this.state.B[i])
-            }
-        }
-           
+            if(temp_table[i].value === this.state.A[3].value || 
+                temp_table[i].value === this.state.A[4].value ||
+                temp_table[i].value === this.state.A[5].value){
+                    temp_table[i] = {value: temp_table[i].value, Color: "red"}
+                }
+        }   
         this.setState({
-            B_change: temp_table
+            B2: temp_table
         })
 
 
@@ -96,53 +105,73 @@ class Slide45A extends Component {
         
     }
 
-    generateA_B_P = () => {
-
-        let A3 = {value:this.state.A[3].value, Color:"magenta"}
-        let B3 = {value:this.state.B[3].value, Color:"magenta"}
-        let A4 = {value:this.state.A[4].value, Color:"coral"}
-        let B4 = {value:this.state.B[4].value, Color:"coral"}
-        let A5 = {value:this.state.A[5].value, Color:"darkcyan"}
-        let B5 = {value:this.state.B[5].value, Color:"darkcyan"}
+    generateA_P = () => {
         let temp_table = []
-        for(let i = 0; i<10;i++){
-            if(this.state.B[i].value === A3.value ){ temp_table.push(B3)}
-            else if(this.state.B[i].value === A4.value ){ temp_table.push(B4)}  
-            else if(this.state.B[i].value === A5.value ){ temp_table.push(B5)}
-            else if(this.state.B[i].value === B3.value ){ temp_table.push(A3)}
-            else if(this.state.B[i].value === B4.value ){ temp_table.push(A4)}  
-            else if(this.state.B[i].value === B5.value ){ temp_table.push(A5)}
-            else{
-                temp_table.push(this.state.B[i])
-            }
-        }
-           
-        this.setState({
-            A_p: temp_table
-        })
+        for(let i = 6; i<10;i++){
+            temp_table.push(this.state.B[i])}
+        for(let i = 0; i<6;i++){
+            temp_table.push(this.state.B[i])}
 
-        
-        temp_table = []
+        let temp_table2 = []
         for(let i = 0; i<10;i++){
-            if(this.state.A[i].value === A3.value ){ temp_table.push(B3)}
-            else if(this.state.A[i].value === A4.value ){ temp_table.push(B4)}  
-            else if(this.state.A[i].value === A5.value ){ temp_table.push(B5)}
-            else if(this.state.A[i].value === B3.value ){ temp_table.push(A3)}
-            else if(this.state.A[i].value === B4.value ){ temp_table.push(A4)}  
-            else if(this.state.A[i].value === B5.value ){ temp_table.push(A5)}
-            else{
-                temp_table.push(this.state.A[i])
-            }
-        }
+            if(temp_table[i].value === this.state.A[3].value || 
+                temp_table[i].value === this.state.A[4].value ||
+                temp_table[i].value === this.state.A[5].value){
+                    continue;
+                }
+            temp_table2.push(temp_table[i])    
+        }  
+             
+        
+        let new_table = []
+        for(let i = 4; i<7;i++){
+            new_table.push(temp_table2[i])}
+        for(let i = 3; i<6;i++){
+            new_table.push(this.state.A[i])}   
+        for(let i = 0; i<4;i++){
+            new_table.push(temp_table2[i])}
         
         
         this.setState({
-            B_p: temp_table
+            A_p: new_table
         })
 
 
     }
 
+    generateB_P = () => {
+        let temp_table = []
+        for(let i = 6; i<10;i++){
+            temp_table.push(this.state.A[i])}
+        for(let i = 0; i<6;i++){
+            temp_table.push(this.state.A[i])}
+
+        let temp_table2 = []
+        for(let i = 0; i<10;i++){
+            if(temp_table[i].value === this.state.B[3].value || 
+                temp_table[i].value === this.state.B[4].value ||
+                temp_table[i].value === this.state.B[5].value){
+                    continue;
+                }
+            temp_table2.push(temp_table[i])    
+        }  
+             
+        
+        let new_table = []
+        for(let i = 4; i<7;i++){
+            new_table.push(temp_table2[i])}
+        for(let i = 3; i<6;i++){
+            new_table.push(this.state.B[i])}   
+        for(let i = 0; i<4;i++){
+            new_table.push(temp_table2[i])}
+        
+        
+        this.setState({
+            B_p: new_table
+        })
+
+
+    }
 
     render(){
         
@@ -157,13 +186,16 @@ class Slide45A extends Component {
                     <Button type="primary" onClick={this.generateB2}>Kolejność genów w B od 2-go punktu podziału:</Button>
                 </div>
                 <div>
-                    <Button type="primary" onClick={this.generateA_B_P}>Uzupełnij A' B'</Button>
+                    <Button type="primary" onClick={this.generateA_P}>Uzupełnij A' od 2 punktu podziału</Button>
+                </div>
+                <div>
+                    <Button type="primary" onClick={this.generateB_P}>Uzupełnij B' od 2 punktu podziału</Button>
                 </div>
                 <br></br>
                 <div>
                     <tr>
-                        <td style={{ fontSize:"50px"}}>A = </td>
-                        {this.renderAB(this.state.A)}
+                    <td style={{ fontSize:"50px"}}>A = </td>
+                    {this.renderAB(this.state.A)}
                     </tr>
                     <br></br>
                     <tr>
@@ -174,8 +206,7 @@ class Slide45A extends Component {
                 </div>
                 <div>
                     <tr>
-                    <td style={{ fontSize:"50px"}}>CHANGE = </td>
-                    {this.renderAB(this.state.B_change)}
+                    {this.renderNormal(this.state.B2)}
                     </tr>
                     <br></br>
                 </div>
@@ -192,7 +223,7 @@ class Slide45A extends Component {
                     {this.renderAB(this.state.B_p)}
                     </tr>
                 </div>
-            </div>  
+            </div>
 
             <NavigationButtons mainArea={this.mainArea} prev={this.prev} next={this.next} currentSlideCounter={5} slidesInModuleCounter={MODULE_4_SLIDES_COUNT}
                                current={this}
