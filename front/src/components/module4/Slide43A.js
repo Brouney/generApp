@@ -8,9 +8,6 @@ import { Line } from "react-lineto";
 import Draggable from "react-draggable";
 var Latex = require('react-latex');
 
-// TODO: childrens Y, Z on line dynamically updated
-// TODO: calculations of Y, Z position
-
 const SLIDE43A_parentsAndChildrenArea_HEIGHT = 500
 const SLIDE43A_parentsAndChildrenArea_WIDTH = 500
 const SLIDE43A_parentsOffsetX = SLIDE43A_parentsAndChildrenArea_WIDTH - 100
