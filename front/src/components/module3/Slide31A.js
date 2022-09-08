@@ -24,7 +24,7 @@ function printAllKLengthRec(set,prefix,n,k)
     // print prefix
     if (k == 0)
     {
-        Slide18A_allPossibleSchemasStrings.push(prefix)
+        Slide31A_allPossibleSchemasStrings.push(prefix)
         return;
     }
     
@@ -43,13 +43,13 @@ function printAllKLengthRec(set,prefix,n,k)
                                 n, k - 1);
     }
 }
-const Slide18A_SLIDER_POPSIZE_MIN_DEFAULT = 10
-const Slide18A_SLIDER_POPSIZE_MAX_DEFAULT = 100
-const Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT = 4
-const Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT = 6
+const Slide31A_SLIDER_POPSIZE_MIN_DEFAULT = 10
+const Slide31A_SLIDER_POPSIZE_MAX_DEFAULT = 100
+const Slide31A_SLIDER_CODELENGTH_MIN_DEFAULT = 4
+const Slide31A_SLIDER_CODELENGTH_MAX_DEFAULT = 6
 
-var Slide18A_allPossibleSchemasStrings = [];
-var Slide18A_plotData = [];
+var Slide31A_allPossibleSchemasStrings = [];
+var Slide31A_plotData = [];
 class Slide31A extends Component {
 
     constructor(props){
@@ -78,8 +78,8 @@ class Slide31A extends Component {
 
         this.state = {
             inputValue:'013',
-            sliderPopSizeValue: Slide18A_SLIDER_POPSIZE_MIN_DEFAULT,
-            sliderCodeLengthValue: Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT,
+            sliderPopSizeValue: Slide31A_SLIDER_POPSIZE_MIN_DEFAULT,
+            sliderCodeLengthValue: Slide31A_SLIDER_CODELENGTH_MIN_DEFAULT,
             individuals: [
                 { LP: 1, Osobnik: '0000' },
                
@@ -105,13 +105,13 @@ class Slide31A extends Component {
         var schema           = '';
         var alphabet       = this.state.inputValue;
 
-        Slide18A_allPossibleSchemasStrings = [];
+        Slide31A_allPossibleSchemasStrings = [];
         var n = alphabet.length;
         var i = 1;
         var s = 1;
         while (i <= n) s *= i++;
         printAllKLength(alphabet,i)
-        Slide18A_allPossibleSchemasStrings = [...new Set(Slide18A_allPossibleSchemasStrings)]
+        Slide31A_allPossibleSchemasStrings = [...new Set(Slide31A_allPossibleSchemasStrings)]
 
 
     }
@@ -159,14 +159,14 @@ class Slide31A extends Component {
 
         let tmpnewschema = []
         for (let i = 0; i <this.state.sliderPopSizeValue; ++i) {
-            let random_obj = Math.floor(Math.random() * Slide18A_allPossibleSchemasStrings.length);
-            tmpnewschema.push({ LP: i+1, Osobnik: Slide18A_allPossibleSchemasStrings[random_obj] })
+            let random_obj = Math.floor(Math.random() * Slide31A_allPossibleSchemasStrings.length);
+            tmpnewschema.push({ LP: i+1, Osobnik: Slide31A_allPossibleSchemasStrings[random_obj] })
 
         }
         let tmpschemasasterix = []
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-            let random_obj = Math.floor(Math.random() * Slide18A_allPossibleSchemasStrings.length);
-            tmpschemasasterix.push({ LP: i+1, Osobnik: Slide18A_allPossibleSchemasStrings[random_obj] })
+            let random_obj = Math.floor(Math.random() * Slide31A_allPossibleSchemasStrings.length);
+            tmpschemasasterix.push({ LP: i+1, Osobnik: Slide31A_allPossibleSchemasStrings[random_obj] })
 
         }
         this.setState({
@@ -192,7 +192,7 @@ class Slide31A extends Component {
         this.generateAllPossibleSchemasStrings()
         this.enableOperatorsButtons()
         let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-        let filteredwithoutstar = Slide18A_allPossibleSchemasStrings.filter(function(schema) {
+        let filteredwithoutstar = Slide31A_allPossibleSchemasStrings.filter(function(schema) {
             return !schema.includes('*')  // usuniecie schematu *** samych gwiazdek
         });
         
@@ -270,7 +270,7 @@ class Slide31A extends Component {
     }
 
     changeValueInComponent = (evt) => {
-        // console.log(Slide18A_allPossibleSchemasStrings)
+        // console.log(Slide31A_allPossibleSchemasStrings)
         let value = evt.target.value;
         // value = value==='' || value.length < 2 ? '01*' : value;
         value = [...new Set(value)].filter(this.filtrWithoutChar).join('');
@@ -298,8 +298,8 @@ class Slide31A extends Component {
                 <h1>{this.title}</h1>
                 <div className="row">
                     <div className="col-8">
-                        <MySlider min={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT} max={Slide18A_SLIDER_POPSIZE_MAX_DEFAULT} defaultValue={Slide18A_SLIDER_POPSIZE_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Liczebność populacji"} passValueToParent={this.onChangeSliderPopSize}></MySlider>
-                        <MySlider min={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT} max={Slide18A_SLIDER_CODELENGTH_MAX_DEFAULT} defaultValue={Slide18A_SLIDER_CODELENGTH_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderCodeLength} text={"Długość ciągu kodowego"} passValueToParent={this.onChangeSliderCodeLengthValue}></MySlider>
+                        <MySlider min={Slide31A_SLIDER_POPSIZE_MIN_DEFAULT} max={Slide31A_SLIDER_POPSIZE_MAX_DEFAULT} defaultValue={Slide31A_SLIDER_POPSIZE_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Liczebność populacji"} passValueToParent={this.onChangeSliderPopSize}></MySlider>
+                        <MySlider min={Slide31A_SLIDER_CODELENGTH_MIN_DEFAULT} max={Slide31A_SLIDER_CODELENGTH_MAX_DEFAULT} defaultValue={Slide31A_SLIDER_CODELENGTH_MIN_DEFAULT} sliderSize={4} step={1} ref={this.sliderCodeLength} text={"Długość ciągu kodowego"} passValueToParent={this.onChangeSliderCodeLengthValue}></MySlider>
                         <h4></h4>
                         <h4>alfabet k elementowy</h4>
                         <input ref = {this.inputString} style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_slide17A" value={this.state.inputValue} onChange={evt =>this.changeValueInComponent(evt)} ></input>
