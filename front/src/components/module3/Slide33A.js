@@ -157,39 +157,10 @@ class Slide33A extends Component {
         let newSchemas = []
         let replacement = ''
         
-        // szukanie ustalonych pozycji z lewej i prawej
-        // for (let i = 0; i < tmpIndividuals.length; ++i) {
-        //     replacement = ''
-        //     if (tmpIndividuals[i] && tmpIndividuals[i]['Osobnik'] && tmpIndividuals[i]['Osobnik'].length){
-        //         for(let lengthofstar = 1; lengthofstar <= tmpIndividuals[i]['Osobnik'].length; ++lengthofstar ){
-        //             replacement += '*'
-        //             for(let charatof = 0; charatof < tmpIndividuals[i]['Osobnik'].length; ++charatof ){
-        //                 if(charatof + lengthofstar <= tmpIndividuals[i]['Osobnik'].length){
-        //                     newSchemas.push(tmpIndividuals[i]['Osobnik'].replaceAt(charatof, replacement));
-        //                 }
-        //                 // console.log(newSchemas)
-        //             }
-                    
-        //         }
-        //     }
-            
-        // }
-        // newSchemas = [...new Set(newSchemas)]
-        // Slide33A_allPossibleSchemasStrings = newSchemas
 
         let sliderCodeLengthValue = this.state.sliderCodeLengthValue
 
-        // let tmpschemasPopulation2 = newSchemas.filter(function(schema) {
-        //     return schema.includes('*')  // usuniecie schematu *** samych gwiazdek
-        // });
-        // tmpschemasPopulation2 = tmpschemasPopulation2.splice(this.state.sliderPopSizeValue)
-        // console.log(tmpschemasPopulation2)
-        // let tmpnewschema = []
-        // for (let i = 0; i <newSchemas.length; ++i) {
-        //     tmpnewschema.push({ LP: i+1, Schemat: newSchemas[i] })
-
-        // }
-        // tutaj taki maly algorytm -> jezeli jest gwiazdka, to doliczamy 2x jej wartosc int z chara
+        
         let tmpschemasasterix = []
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
             let przystosowanieSum = 0;
@@ -242,26 +213,9 @@ class Slide33A extends Component {
         }
         this.generateAllPossibleSchemasStrings()
         this.enableOperatorsButtons()
-        // let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-        // let filteredwithoutstar = Slide33A_allPossibleSchemasStrings.filter(function(schema) {
-        //     return !schema.includes('*')  // usuniecie schematu *** samych gwiazdek
-        // });
-        
+
         
         let tmpIndividuals = []
-        // for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
-        //     let przystosowanieSum = 0;
-        //     for (let obj of filteredwithoutstar[i].split("")) {
-        //         przystosowanieSum += obj.charCodeAt(0);
-        //     }
-        //     if(filteredwithoutstar[i] * 1){
-        //         przystosowanieSum += filteredwithoutstar[i] * 1
-        //     }
-        //     tmpIndividuals.push({ LP: i+1, Osobnik: filteredwithoutstar[i], Przystosowanie: przystosowanieSum})
-
-        // }
-        // this.setState({individuals:tmpIndividuals})
-        
 
         this.computeSchemas(tmpIndividuals)
     }

@@ -156,15 +156,15 @@ class Slide31A extends Component {
             tmpnewschema.push({ LP: i+1, Osobnik: Slide31A_allPossibleSchemasStrings[random_obj] })
 
         }
-        let tmpschemasasterix = []
+        let tmpschemapop2 = []
         for (let i = 0; i < this.state.sliderPopSizeValue; ++i) {
             let random_obj = Math.floor(Math.random() * Slide31A_allPossibleSchemasStrings.length);
-            tmpschemasasterix.push({ LP: i+1, Osobnik: Slide31A_allPossibleSchemasStrings[random_obj] })
+            tmpschemapop2.push({ LP: i+1, Osobnik: Slide31A_allPossibleSchemasStrings[random_obj] })
 
         }
         this.setState({
             individuals: tmpnewschema,
-            schemasPopulation2: tmpschemasasterix})
+            schemasPopulation2: tmpschemapop2})
     }
 
     clearRepresentants = () => {
