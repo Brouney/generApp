@@ -65,8 +65,8 @@ class Slide32A extends Component {
 
         this.crossoverIndividualsIDs1 = React.createRef(); 
         this.crossoverIndividualsIDs2 = React.createRef(); 
-        this.crosspoint = React.createRef(); 
-        this.mutationBit = React.createRef(); 
+        
+        
         this.mutationIndividual = React.createRef(); 
 
         this.inputString = React.createRef();
@@ -83,7 +83,7 @@ class Slide32A extends Component {
             schemas: [
                 { LP: 1, Osobnik: '0000', Przystosowanie: 0.0, Color: "yellow" },
             ],
-            schemasOnlyWithAsterisks: [
+            schemasPopulation2: [
                 { LP: 1, Osobnik: '0000', Przystosowanie: 0.0, Color: "green" },
             ],
             schemasFinal: [
@@ -191,7 +191,7 @@ class Slide32A extends Component {
 
         this.setState({
             individuals: tmpnewschema,
-            schemasOnlyWithAsterisks: tmpschemasasterix})
+            schemasPopulation2: tmpschemasasterix})
     }
 
     clearRepresentants = () => {
@@ -317,7 +317,7 @@ class Slide32A extends Component {
         sortedPopulation1.sort( function(a,b) {
             return a.Przystosowanie - b.Przystosowanie
         })
-        let sortedPopulation2 = this.state.schemasOnlyWithAsterisks
+        let sortedPopulation2 = this.state.schemasPopulation2
         sortedPopulation2.sort( function(a,b) {
             return a.Przystosowanie - b.Przystosowanie
         })
@@ -370,7 +370,7 @@ class Slide32A extends Component {
         })
         let sortedPopulation1 = [...this.state.individuals]
        
-        let sortedPopulation2 = [...this.state.schemasOnlyWithAsterisks]
+        let sortedPopulation2 = [...this.state.schemasPopulation2]
        
 
         let finalPopulation = [...sortedPopulation2]
@@ -438,7 +438,7 @@ class Slide32A extends Component {
                             </thead>
                             <tbody>
                                 {
-                                this.renderIndividualTableData(this.state.schemasOnlyWithAsterisks)  
+                                this.renderIndividualTableData(this.state.schemasPopulation2)  
                                 }
                             </tbody>
                         </table>

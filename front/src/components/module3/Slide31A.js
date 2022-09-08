@@ -87,14 +87,13 @@ class Slide31A extends Component {
             schemas: [
                 { LP: 1, Osobnik: '0000' },
             ],
-            schemasOnlyWithAsterisks: [
+            schemasPopulation2: [
                 { LP: 1, Osobnik: '0000' },
             ],
             schemasFinal: [
                 { LP: 1, Osobnik: '0000' },
             ],
-            filterSchemasChecked: false,
-            generation: 0
+           
         }
 
 
@@ -114,12 +113,6 @@ class Slide31A extends Component {
         Slide31A_allPossibleSchemasStrings = [...new Set(Slide31A_allPossibleSchemasStrings)]
 
 
-    }
-        
-    filterSchemas = () => {
-        this.setState({
-            filterSchemasChecked: !this.state.filterSchemasChecked,
-        });
     }
 
     disableOperatorsButtons() {
@@ -171,7 +164,7 @@ class Slide31A extends Component {
         }
         this.setState({
             individuals: tmpnewschema,
-            schemasOnlyWithAsterisks: tmpschemasasterix})
+            schemasPopulation2: tmpschemasasterix})
     }
 
     clearRepresentants = () => {
@@ -191,10 +184,7 @@ class Slide31A extends Component {
         }
         this.generateAllPossibleSchemasStrings()
         this.enableOperatorsButtons()
-        let sliderCodeLengthValue = this.state.sliderCodeLengthValue
-        let filteredwithoutstar = Slide31A_allPossibleSchemasStrings.filter(function(schema) {
-            return !schema.includes('*')  // usuniecie schematu *** samych gwiazdek
-        });
+
         
         
         let tmpIndividuals = []
@@ -284,7 +274,7 @@ class Slide31A extends Component {
     generateFinalPopulation = () => {
 
         this.setState({
-            schemasFinal : this.state.schemasOnlyWithAsterisks
+            schemasFinal : this.state.schemasPopulation2
         })
 
 
@@ -335,7 +325,7 @@ class Slide31A extends Component {
                             </thead>
                             <tbody>
                                 {
-                                this.renderIndividualTableData(this.state.schemasOnlyWithAsterisks)  
+                                this.renderIndividualTableData(this.state.schemasPopulation2)  
                                 }
                             </tbody>
                         </table>
