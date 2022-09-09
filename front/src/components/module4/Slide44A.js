@@ -150,6 +150,15 @@ class Slide44A extends Component {
         <div>
             <h1>{this.title}</h1>
             <div>
+                <h2>
+                    A oraz B są to chromosomy generowane losowo, nie powtarzające się.
+                </h2>
+                <h2>
+                    CHANGE zawiera zaznaczenie które części należy zamienić ze sobą - w tym przypadku środkowe wartości B z A.
+                </h2>
+                <h2>
+                    Wyjściowe obiekty A' oraz B' to odpowiednie zamiany wskazane kolorami.
+                </h2>
                 <div>
                     <Button type="primary" onClick={this.randomAB}>Wylosuj A oraz B</Button>
                 </div>

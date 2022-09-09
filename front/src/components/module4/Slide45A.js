@@ -193,6 +193,9 @@ class Slide45A extends Component {
                 </div>
                 <br></br>
                 <div>
+                    <h2>
+                        Chromosomy A oraz B
+                    </h2>
                     <tr>
                     <td style={{ fontSize:"50px"}}>A = </td>
                     {this.renderAB(this.state.A)}
@@ -205,12 +208,18 @@ class Slide45A extends Component {
                     <br></br>
                 </div>
                 <div>
+                <h2>
+                        Kolejność genów B od 2-go punktu podziału, na czerwono wykorzystane
+                    </h2>
                     <tr>
                     {this.renderNormal(this.state.B2)}
                     </tr>
                     <br></br>
                 </div>
                 <div>
+                    <h2>
+                        Uzupełniane A' od drugiego punktu podziału.
+                    </h2>
                     <tr>
                     <td style={{ fontSize:"50px"}}>A' = </td>
                     {this.renderAB(this.state.A_p)}
