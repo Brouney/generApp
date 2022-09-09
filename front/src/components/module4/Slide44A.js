@@ -157,7 +157,7 @@ class Slide44A extends Component {
                     CHANGE zawiera zaznaczenie które części należy zamienić ze sobą - w tym przypadku środkowe wartości B z A.
                 </h2>
                 <h2>
-                    Wyjściowe obiekty A' oraz B' to odpowiednie zamiany wskazane kolorami.
+                    Wyjściowe obiekty A' oraz B' to odpowiednie zamiany genów wskazane kolorami.
                 </h2>
                 <div>
                     <Button type="primary" onClick={this.randomAB}>Wylosuj A oraz B</Button>
