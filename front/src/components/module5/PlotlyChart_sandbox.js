@@ -458,10 +458,10 @@ class PlotlyChart_sandbox extends React.Component {
                 <MySlider min={0} max={40} defaultValue={15} sliderSize={4} step={1} ref={this.sliderPopSizeObj} text={"Ilość populacji"} passValueToParent={this.onChangePopSizeAmountObj}></MySlider>   
                 </div>
                 <div>
-                <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"Prawdopodobnieństwo mutacji"} passValueToParent={this.onChangeProbabilityMutation}></MySlider>
+                <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePT} text={"Prawdo-\npodobnieństwo mutacji"} passValueToParent={this.onChangeProbabilityMutation}></MySlider>
                 </div>
                 <div>
-                <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"Prawdopobieństwo krzyżowania"} passValueToParent={this.onChangeProbabilityKrzyzowanie}></MySlider>
+                <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderPopSizePCross} text={"Prawdo-\npobieństwo krzyżowania"} passValueToParent={this.onChangeProbabilityKrzyzowanie}></MySlider>
                 </div>
                 <div>
                     <Select
