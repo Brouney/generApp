@@ -56,9 +56,9 @@ class PlotlyChart_sandbox extends React.Component {
             // Dwie zmienne ponizej, nie sa potrzebne do pracy programu. Moga sie jednak przydac podczas debugowania.
             n_mutation: 0,  // liczba mutacji w ostatnim pokoleniu                    
             n_cross: 0,    // liczba krzyz
-            sukcesjaElitarna: true, //checkbox rodzaju selekcji
-            sukcesjaRuletkowa: false,
-            GsukcesjiElitarnej: 0.5, //współczynnik selekcji
+            eliteSuccession: true, //checkbox rodzaju selekcji
+            rouletteSuccession: false,
+            GEliteSuccession: 0.5, //współczynnik selekcji
             timerID: null,
         }
         this.sliderPopSize = React.createRef()
@@ -188,7 +188,6 @@ class PlotlyChart_sandbox extends React.Component {
 
     generateData = (dataFunction3d = 'Rastrigin') => {
         this.setDefaultGlobalVariables()
-        console.log("XDDD")
         // let genRastriginsFunc = (x, y) => 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)
         let xymin = -5.12
         let xymax = 5.12
@@ -264,20 +263,20 @@ class PlotlyChart_sandbox extends React.Component {
     sukcesja_onChange = (e) => {
         if(e === "Sukcesja_elitarna")
         this.setState({
-            sukcesjaElitarna: true,
-            sukcesjaRuletkowa: false
+            eliteSuccession: true,
+            rouletteSuccession: false
         })
         else{
             this.setState({
-                sukcesjaElitarna: false,
-                sukcesjaRuletkowa: true
+                eliteSuccession: false,
+                rouletteSuccession: true
             })
         }
     }
 
     onChangeSliderGElite = (v) =>{
         this.setState({
-            GsukcesjiElitarnej: v
+            GEliteSuccession: v
         })
 
     }
@@ -304,15 +303,15 @@ class PlotlyChart_sandbox extends React.Component {
             let temp_pop = []
 
             //przypisanie odpowiednich przystosowan, posortowanie i odrzucenie najmniejszych
-            let stare_przystosowanie = this.state.objectsPoints.z
-            let stare_posortowane = stare_przystosowanie.sort(this.sortNum)
+            let old_adaptation = this.state.objectsPoints.z
+            let old_sorted = old_adaptation.sort(this.sortNum)
 
-            if(this.sukcesjaElitarna){
-                stare_przystosowanie = stare_posortowane.slice( Math.floor(this.state.GsukcesjiElitarnej * stare_posortowane.length),
-                stare_posortowane.length)
+            if(this.eliteSuccession){
+                old_adaptation = old_sorted.slice( Math.floor(this.state.GEliteSuccession * old_sorted.length),
+                old_sorted.length)
                 //wybrac temp population - najmocniejszych - sortowanie i wywalenie najslabszych paru
                 
-                for(let el of stare_przystosowanie){
+                for(let el of old_adaptation){
                     let index_z = this.state.objectsPoints.z.findIndex(element => element === el)
                     temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
                 }
@@ -320,23 +319,23 @@ class PlotlyChart_sandbox extends React.Component {
             else{
                 let prop_sum = 0
                 let propabilities = []
-                for(let el of stare_posortowane){
+                for(let el of old_sorted){
                     prop_sum += el
                 }
-                for(let el of stare_posortowane){
+                for(let el of old_sorted){
                     propabilities.push(el/prop_sum)
                 }
                 
-                for(let i = 0; i<stare_posortowane.length;i++){
+                for(let i = 0; i<old_sorted.length;i++){
                     let ran =  Math.floor(Math.random() * (100 - 0 + 1) ) + 0;
-                    for(let j = 0; j<stare_posortowane.length;j++){
+                    for(let j = 0; j<old_sorted.length;j++){
                         if(propabilities[j] > ran){
-                            let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_posortowane[j])
+                            let index_z = this.state.objectsPoints.z.findIndex(element => element === old_sorted[j])
                             temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
                             break;
                         }
-                        if(j === (stare_posortowane.length-1) ){
-                            let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_posortowane[j])
+                        if(j === (old_sorted.length-1) ){
+                            let index_z = this.state.objectsPoints.z.findIndex(element => element === old_sorted[j])
                             temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
                         }
                     }
@@ -367,9 +366,9 @@ class PlotlyChart_sandbox extends React.Component {
             }
             
             //dodanie najlepszych bez krzyzowania obiektow ze starej populacji
-            if(this.sukcesjaElitarna){
-                for(let el = 0; el< Math.floor(this.state.GsukcesjiElitarnej * this.state.objectsPoints.z.length); ++el){
-                    let index_z = this.state.objectsPoints.z.findIndex(element => element === stare_posortowane[stare_posortowane.length - el - 1])
+            if(this.eliteSuccession){
+                for(let el = 0; el< Math.floor(this.state.GEliteSuccession * this.state.objectsPoints.z.length); ++el){
+                    let index_z = this.state.objectsPoints.z.findIndex(element => element === old_sorted[old_sorted.length - el - 1])
                     temp_pop.push([this.state.objectsPoints.x[index_z], this.state.objectsPoints.y[index_z]])
                 }
             }
@@ -493,7 +492,7 @@ class PlotlyChart_sandbox extends React.Component {
                 </div>
                 
                 
-                {this.state.sukcesjaElitarna?
+                {this.state.eliteSuccession?
                     <div>
                     <MySlider min={0} max={1} defaultValue={0.5} sliderSize={4} step={0.1} ref={this.sliderGElite} text={"Współczynnik sukcesji elitarnej"} passValueToParent={this.onChangeSliderGElite}></MySlider>
                     </div>
@@ -502,7 +501,7 @@ class PlotlyChart_sandbox extends React.Component {
                     
                 }
                 <h3>
-                    populacja: {currentGenerationsCount}
+                    Pokolenie: {currentGenerationsCount}
                 </h3>
             </div> 
             <div className="col-4">
