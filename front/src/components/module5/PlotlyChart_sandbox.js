@@ -40,7 +40,6 @@ class PlotlyChart_sandbox extends React.Component {
         this.simulationRunning = false
         this.state = {
             data: this.generateData(),
-            squareArea: areaPoints,
             numOfObjects : 15,// aktualna wielkosc populacji
             objectsPoints: {
                 x:[],
@@ -49,7 +48,7 @@ class PlotlyChart_sandbox extends React.Component {
             },
             
             sliderPopSizeValuePMutation: 0.5,//prawd mutacji 
-            sliderPopSizeValuePKrzyzowanie: 0.5,// prawdopodobienstwo krzyzowania 
+            sliderPopSizeValuePCross: 0.5,// prawdopodobienstwo krzyzowania 
             gen_num: 0,  // numeruje kolejne pokolenia                                                           
             sum_fitness: 0, // suma funkcji dostosowania wszystkich osobnikow, potrzebna przy selekcji do nowej populacji
 
@@ -135,7 +134,7 @@ class PlotlyChart_sandbox extends React.Component {
         let random_cross = Math.random()
         let ob12_listX = [ob1X, ob2X]
         let ob12_listY = [ob1Y, ob2Y]
-        if(random_cross < this.state.sliderPopSizeValuePKrzyzowanie ){
+        if(random_cross < this.state.sliderPopSizeValuePCross ){
             let min = 1
             let max = 8
             // [min, max)
@@ -143,7 +142,7 @@ class PlotlyChart_sandbox extends React.Component {
             ob12_listX = this.krzyzowanieJednopunktBin(this.dec2bin(ob1X), this.dec2bin(ob2X), random_point)
         }
         random_cross = Math.random()
-        if(random_cross < this.state.sliderPopSizeValuePKrzyzowanie ){
+        if(random_cross < this.state.sliderPopSizeValuePCross ){
             let min = 1
             let max = 8
             // [min, max)
@@ -158,7 +157,7 @@ class PlotlyChart_sandbox extends React.Component {
         // this.disableOperatorsButtons()
 
         this.setState({
-            sliderPopSizeValuePKrzyzowanie: v,
+            sliderPopSizeValuePCross: v,
         });
     }
 
@@ -171,7 +170,7 @@ class PlotlyChart_sandbox extends React.Component {
         // areaPoints = AREA_POINTS_DEFAULT
         // maximum = -9999
         squareCenterPosition = [randValue + 0.5, randValue + 0.5]
-        areaPoints = [[randValue, randValue],[randValue, randValue+1],[randValue+1, randValue],[randValue+1,randValue+1]]
+        // areaPoints = [[randValue, randValue],[randValue, randValue+1],[randValue+1, randValue],[randValue+1,randValue+1]]
         maximum = -9999
     }
 
@@ -187,8 +186,6 @@ class PlotlyChart_sandbox extends React.Component {
     genGoldstein_Price = (X, Y) => {return (1+(X+Y+1)**2*(19-14*X+3*X**2-14*Y+6*X*Y+3*Y**2))*(30+(2*X-3*Y)**2*(18-32*X+12*X**2+48*Y-36*X*Y+27*Y**2))}
 
     generateData = (dataFunction3d = 'Rastrigin') => {
-        this.setDefaultGlobalVariables()
-        // let genRastriginsFunc = (x, y) => 10 * 2 + x*x + y*y - 10 * Math.cos(2*Math.PI*x)  - 10 * Math.cos(2*Math.PI*y)
         let xymin = -5.12
         let xymax = 5.12
         let dis = (xymax - xymin )/this.GRID_DENSITY
@@ -197,27 +194,19 @@ class PlotlyChart_sandbox extends React.Component {
         var randomNumbers = Array.from(Array(this.GRID_DENSITY), () => new Array(this.GRID_DENSITY*this.GRID_DENSITY))
         for (let x = 0; x < this.GRID_DENSITY; x++) {
             for (let y = 0; y < this.GRID_DENSITY ; y++) {
-                // let yyy = y - this.GRID_DENSITY / 2
-                // let xxx = x - this.GRID_DENSITY / 2
                 let yyy = values.get(x)
                 let xxx = values.get(y)
                 let computedValue
 
                 if (genfunctions.rastrigin === true) {
-                    // computedValue = saddleFormula(xxx, yyy)
                     computedValue = this.genRastriginsFunc(xxx, yyy)
                 }
                 else if (genfunctions.bukin === true) {
-                    // computedValue = saddleFormula(xxx, yyy)
                     computedValue = this.genbukinFunc(xxx, yyy)
                 }
                 else if(genfunctions.goldstein_price ===true){
                     computedValue = this.genGoldstein_Price(xxx, yyy)
                 }
-                // else if (dataFunction3d === 'paraboloid') {
-                //     computedValue = paraboloidFormula(xxx, yyy)
-                // }
-
                 randomNumbers[x][y] = computedValue
             }
         }
