@@ -28,8 +28,10 @@ class Slide43A extends Component {
         this.parentX2ref = React.createRef();
         this.childY = React.createRef();
         this.childZ = React.createRef();
-        this.sliderPsiVariable = React.createRef();
         this.drawPsiValueButton = React.createRef();
+        this.sliderPsiVariable = React.createRef();
+        this.sliderPsiVariableAlternativeX = React.createRef();
+        this.sliderPsiVariableAlternativeY = React.createRef();
 
         this.state = {
 
@@ -66,7 +68,11 @@ class Slide43A extends Component {
                 y: null
             },
 
-            sliderPsiVariableValue: 0.6
+            sliderPsiVariableValue: 0.6,
+            sliderPsiVariableValueAlternativeX: 0.6,
+            sliderPsiVariableValueAlternativeY: 0.6,
+
+            chosenVariant: "Podstawowy"
         }
     }
     
@@ -75,31 +81,72 @@ class Slide43A extends Component {
             sliderPsiVariableValue: v,
         });
 
-        this.calculateChildrenPosition(v)
+        this.calculateChildrenPosition()
+    }
+
+    onChangeSliderPsiVariableInAlternativeVariantY = (v) => {
+        this.setState({
+            sliderPsiVariableValueAlternativeY: v
+        });
+
+        this.calculateChildrenPosition()
+    }
+
+    onChangeSliderPsiVariableInAlternativeVariantX = (v) => {
+        this.setState({
+            sliderPsiVariableValueAlternativeX: v
+        });
+
+        this.calculateChildrenPosition()
     }
 
     drawPsiValue = () => {
-        var newPsi = Math.random()
-        this.setState({
-            sliderPsiVariableValue: newPsi,
-        });
+        var newPsiX = Math.random().toFixed(2)
+        var newPsiY = Math.random().toFixed(2)
 
-        this.sliderPsiVariable.current.state.inputValue = newPsi
+        if (this.state.chosenVariant == "Podstawowy") {
+            this.setState({
+                sliderPsiVariableValue: newPsiX,
+            });
+    
+            this.sliderPsiVariable.current.state.inputValue = newPsiX
+        }
+        else if (this.state.chosenVariant == "Alternatywny") {
+            this.setState({
+                sliderPsiVariableValueAlternativeX: newPsiX,
+                sliderPsiVariableValueAlternativeY: newPsiY
+            });
+    
+            this.sliderPsiVariableAlternativeX.current.state.inputValue = newPsiX
+            this.sliderPsiVariableAlternativeY.current.state.inputValue = newPsiY
+        }
 
-        this.calculateChildrenPosition(newPsi)
+        this.calculateChildrenPosition()
     }
 
-    calculateChildrenPosition = (psiValue) => {
+    calculateChildrenPosition = () => {
         const {
             parentPositionX1,
-            parentPositionX2
+            parentPositionX2,
+            sliderPsiVariableValue,
+            sliderPsiVariableValueAlternativeX,
+            sliderPsiVariableValueAlternativeY
         } = this.state;
 
-        var newY_x = (parentPositionX1.x + psiValue * (parentPositionX2.x - parentPositionX1.x)).toFixed(2)
-        var newY_y = (parentPositionX1.y + psiValue * (parentPositionX2.y - parentPositionX1.y)).toFixed(2)
-
-        var newZ_x = (parentPositionX2.x - psiValue * (parentPositionX2.x - parentPositionX1.x)).toFixed(2)
-        var newZ_y = (parentPositionX2.y - psiValue * (parentPositionX2.y - parentPositionX1.y)).toFixed(2)
+        if (this.state.chosenVariant == "Podstawowy") { 
+            var newY_x = (parentPositionX1.x + sliderPsiVariableValue * (parentPositionX2.x - parentPositionX1.x)).toFixed(2)
+            var newY_y = (parentPositionX1.y + sliderPsiVariableValue * (parentPositionX2.y - parentPositionX1.y)).toFixed(2)
+    
+            var newZ_x = (parentPositionX2.x - sliderPsiVariableValue * (parentPositionX2.x - parentPositionX1.x)).toFixed(2)
+            var newZ_y = (parentPositionX2.y - sliderPsiVariableValue * (parentPositionX2.y - parentPositionX1.y)).toFixed(2)
+        }
+        else if (this.state.chosenVariant == "Alternatywny") { 
+            var newY_x = (parentPositionX1.x + sliderPsiVariableValueAlternativeX * (parentPositionX2.x - parentPositionX1.x)).toFixed(2)
+            var newY_y = (parentPositionX1.y + sliderPsiVariableValueAlternativeY * (parentPositionX2.y - parentPositionX1.y)).toFixed(2)
+    
+            var newZ_x = (parentPositionX2.x - sliderPsiVariableValueAlternativeX * (parentPositionX2.x - parentPositionX1.x)).toFixed(2)
+            var newZ_y = (parentPositionX2.y - sliderPsiVariableValueAlternativeY * (parentPositionX2.y - parentPositionX1.y)).toFixed(2)
+        }
 
         this.setState({
             childPositionY: {
@@ -111,6 +158,17 @@ class Slide43A extends Component {
                 y: newZ_y,
             },
         });
+    }
+
+    onVariantChange = (event) => {
+        switch (event.target.value) {
+            case 'Podstawowy':
+                this.setState({chosenVariant: 'Podstawowy'})
+                break
+            case 'Alternatywny':
+                this.setState({chosenVariant: 'Alternatywny'})
+                break
+        }
     }
 
     onDragParentX1 = (e, position) => {
@@ -158,7 +216,7 @@ class Slide43A extends Component {
             }
         });
 
-        this.calculateChildrenPosition(this.state.sliderPsiVariableValue)
+        this.calculateChildrenPosition()
     };
 
     onDragParentX2 = (e, position) => {
@@ -205,7 +263,7 @@ class Slide43A extends Component {
             }
         });
 
-        this.calculateChildrenPosition(this.state.sliderPsiVariableValue)
+        this.calculateChildrenPosition()
     };
 
     updateParentsAndChildrenAreaDiv = (e, position) => {
@@ -365,16 +423,47 @@ class Slide43A extends Component {
                     </h5>
                 </div>
                 <div className="col-6">
-                    <MySlider
-                        min={0}
-                        max={1}
-                        defaultValue={0.6}
-                        sliderSize={1}
-                        step={0.001}
-                        ref={this.sliderPsiVariable}
-                        text={<h5><Latex>{"Zmienna ${\\Psi_{U(0,1)}}$"}</Latex></h5>}
-                        passValueToParent={this.onChangeSliderPsiVariable}>
-                    </MySlider>
+                    {this.state.chosenVariant == 'Podstawowy' 
+                        ? <MySlider
+                            min={0}
+                            max={1}
+                            defaultValue={0.6}
+                            sliderSize={1}
+                            step={0.001}
+                            ref={this.sliderPsiVariable}
+                            text={<h6><Latex>{"Zmienna ${\\Psi_{U(0,1)}}$"}</Latex></h6>}
+                            passValueToParent={this.onChangeSliderPsiVariable}>
+                            </MySlider>
+                        : <p></p>
+                    }
+
+                    {this.state.chosenVariant == 'Alternatywny' 
+                        ? <MySlider
+                            min={0}
+                            max={1}
+                            defaultValue={0.6}
+                            sliderSize={1}
+                            step={0.001}
+                            ref={this.sliderPsiVariableAlternativeX}
+                            text={<h6><Latex>{"Zmienna ${\\Psi_{U_x(0,1)}}$"}</Latex></h6>}
+                            passValueToParent={this.onChangeSliderPsiVariableInAlternativeVariantX}>
+                            </MySlider>
+                        : <p></p>
+                    }
+
+                    {this.state.chosenVariant == 'Alternatywny' 
+                        ? <MySlider
+                            min={0}
+                            max={1}
+                            defaultValue={0.6}
+                            sliderSize={1}
+                            step={0.001}
+                            ref={this.sliderPsiVariableAlternativeY}
+                            text={<h6><Latex>{"Zmienna ${\\Psi_{U_y(0,1)}}$"}</Latex></h6>}
+                            passValueToParent={this.onChangeSliderPsiVariableInAlternativeVariantY}>
+                            </MySlider>
+                        : <p></p>
+                    }   
 
                     <button
                         ref={ref => this.drawPsiValueButton = ref}
@@ -382,6 +471,15 @@ class Slide43A extends Component {
                         className="btn btn-success m-1"
                         onClick={this.drawPsiValue}><b>LOSUJ</b>
                     </button>
+
+                    <div onChange={this.onVariantChange}>
+                        <h6>
+                            <input type="radio" id="podstawowy" name="chosenVariant" value="Podstawowy" />
+                            <label for="podstawowy">Podstawowy</label><br></br>
+                            <input type="radio" id="alternatywny" name="chosenVariant" value="Alternatywny" />
+                            <label for="alternatywny">Alternatywny</label>
+                        </h6>
+                    </div>
                 </div>
             </div>
             
