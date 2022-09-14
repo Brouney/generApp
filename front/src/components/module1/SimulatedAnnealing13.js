@@ -40,8 +40,8 @@ class BallTemperature {
 
         p5.textSize(30)
         p5.text('Poprzednie maksimum: ' + Math.round(- this.prevMax * 100) / 100,
-        SimulatedAnnealing13_WIDTH / 2,
-        SimulatedAnnealing13_HEIGHT + SimulatedAnnealing13_CANVAS_OFFSET - 10)
+                 SimulatedAnnealing13_WIDTH / 2,
+                 SimulatedAnnealing13_HEIGHT + SimulatedAnnealing13_CANVAS_OFFSET - 10)
 
         p5.text(Math.round(- this.y * 100) / 100, this.x + SimulatedAnnealing13_CANVAS_OFFSET / 4, this.y + SimulatedAnnealing13_CANVAS_OFFSET / 4) // this.y - aktualna wartosc temperatury kropki na wykresie
     }
@@ -55,7 +55,7 @@ class BallTemperature {
                 this.x++
             }
             else {
-                this.x+=2  
+                this.x += 2  
             }
         } 
         else if (this.targetX < this.x) {
@@ -124,21 +124,18 @@ class TemperatureChart {
     }
 
     create = () => {
-        // parameters - change to your liking
         const HEIGHT_MAX = SimulatedAnnealing13_HEIGHT
         const HEIGHT_MIN = 0
-        
-        // starting conditions
+
         let chartValue = Math.random() * HEIGHT_MAX
         let slope = Math.random() * SimulatedAnnealing13_STEP_MAX * 2 - SimulatedAnnealing13_STEP_MAX
 
         // creating the landscape
         for (let x = 0; x < SimulatedAnnealing13_WIDTH; x++) {
-            // change SimulatedAnnealing13_HEIGHT and slope
+
             chartValue += slope
             slope += Math.random() * SimulatedAnnealing13_STEP_CHANGE * 2 - SimulatedAnnealing13_STEP_CHANGE
 
-            // clip SimulatedAnnealing13_HEIGHT and slope to maximum
             if (slope > SimulatedAnnealing13_STEP_MAX) {
                 slope = SimulatedAnnealing13_STEP_MAX
             }
@@ -232,14 +229,13 @@ class SimulatedAnnealing13 extends React.Component {
     }
 
     keyPressed = (p5) => {
-        // console.log(p5.keyCode)
-        if (p5.keyCode === 32) { //spacja
+        if (p5.keyCode === 32) { // space
             this.ballTemperature.maxFound = !this.ballTemperature.maxFound
-        } else if (p5.keyCode === 37) { //<-
+        } else if (p5.keyCode === 37) { // <-
             this.ballTemperature.moveLeft()
-        } else if (p5.keyCode === 39) { //->
+        } else if (p5.keyCode === 39) { // ->
             this.ballTemperature.moveRight()
-        } else if (p5.keyCode === 78) { //n
+        } else if (p5.keyCode === 78) { // N
             this.temperatureChart = new TemperatureChart()
             this.ballTemperature = new BallTemperature(this.temperatureChart.points)
         }

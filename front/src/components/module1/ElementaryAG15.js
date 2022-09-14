@@ -4,7 +4,6 @@ import Sketch from 'react-p5'
 const ElementaryAG15_WIDTH = 900
 const ElementaryAG15_HEIGHT = 600
 
-
 const ElementaryAG15_ALGO_RECTANGLE_WIDTH = 200
 const ElementaryAG15_ALGO_RECTANGLE_HEIGHT = 80
 const ElementaryAG15_ALGO_RECTANGLE_START_POINT = 30
@@ -64,12 +63,11 @@ function randomIntFromInterval(min, max) { // min and max included
 }
 
 function probability(n) {
-    return !!n && Math.random() <= n;
+    return !!n && Math.random() <= n
 }
 
-function sleep(time){
-    return new Promise((resolve)=>setTimeout(resolve,time)
-  )
+function sleep(time) {
+    return new Promise( (resolve) => setTimeout(resolve, time) )
 }
 
 class Individual {
@@ -132,12 +130,10 @@ class ElementaryAG15 extends React.Component {
                 this.individuals[i].labelColour[1] = randomIntFromInterval(0, 254)
                 this.individuals[i].labelColour[2] = randomIntFromInterval(0, 254)
             }
-
         }
         this.animationStepInPopulationEnded = true
         this.windowCurrentStepY += 2 // zwiekszenie zeby switch wpadl do kolejnej etykiety case: this.rectanglesYCoords[x]
         this.textFlashingRepetitions = 0
-
     }
 
     collissionDetected = (i1, i2) => {
@@ -149,7 +145,7 @@ class ElementaryAG15 extends React.Component {
         
             )
         {
-            console.log('collision detected!')
+            // console.log('collision detected!')
             return true
         }
     }
@@ -308,7 +304,7 @@ class ElementaryAG15 extends React.Component {
                     this.isWindowCurrentStepMoving = true
                     this.windowCurrentStepY += 2
                 }
-                else { // trwa animacja populacji z prawej strony slajdu 1/10
+                else { // trwa animacja populacji z prawej strony slajdu
                     
                     switch (this.windowCurrentStepY) {
                         case this.rectanglesYCoords[0]: // 1 krok
@@ -365,9 +361,6 @@ class ElementaryAG15 extends React.Component {
                             break
                 }
 
-                // if (false) { // warunek konca animacji danego kroku
-                //     this.animationStepInPopulationEnded = true
-                // }
                 }
             }
         }

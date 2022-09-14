@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import Slide12A from "./Slide12A";
-import Slide13T from "./Slide13T";
 import NavigationButtons from "../templates/NavigationButtons";
 import { MODULE_1_SLIDES_COUNT } from '../templates/ListExercisePanel'
 import 'antd/dist/antd.css';
@@ -20,20 +19,6 @@ class Slide11T extends Component {
 
         this.plotlyChart3d = React.createRef();
         this.navigationButtons = React.createRef();
-
-        this.incrementProgressBar = this.incrementProgressBar.bind(this);
-
-        this.state = {
-            percent: 0
-        }
-    }
-
-    incrementProgressBar() {
-        this.setState(prevState => {
-            return {
-                percent: prevState.percent + 10
-            }
-        });
     }
 
     handleStartStop = (simulationStopped) => { // name = (param) => 
@@ -68,7 +53,6 @@ class Slide11T extends Component {
     
 
     render(){
-        
         return(
         <div>
             <h1>{this.title}</h1>
@@ -100,7 +84,6 @@ class Slide11T extends Component {
                 onStartStop={this.handleStartStop}
             ></NavigationButtons>
 
-            {/* <Progress type="circle" percent={this.state.percent} format={percent => `${percent} czas`} /> */}
         </div>
         )
     }

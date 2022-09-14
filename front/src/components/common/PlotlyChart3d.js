@@ -1,22 +1,12 @@
 import React from "react";
 import Plot from "react-plotly.js";
 
-const graphData = {
-  masterGraph: {
-    xAxis: "X-Axis",
-    yAxis: "Y-Axis",
-    zAxis: "Z-Axis"
-  }
-};
-
-const GRID_DISTANCE_BETWEEN_POINTS = 0.5
 const SQUARE_CENTER_POSITION_DEFAULT = [5.5, 5.5] // chcac miec obszar najpierw na srodku, trzeba to ustawic (props.gridDensity / 2)
 const AREA_POINTS_DEFAULT = [[5,5],[5,6],[6,5],[6,6]]
 
-export let squareCenterPosition = SQUARE_CENTER_POSITION_DEFAULT      // punkt X,Y - srodek obszaru, ktory bladzi po wykresie szukajac ekstremum
+export let squareCenterPosition = SQUARE_CENTER_POSITION_DEFAULT    // punkt X,Y - srodek obszaru, ktory bladzi po wykresie szukajac ekstremum
 export let areaPoints = AREA_POINTS_DEFAULT // obszar, ktory bladzi po wykresie szukajac ekstremum
 export let maximum = -9999
-
 
 class PlotlyChart3d extends React.Component {
 
@@ -38,9 +28,6 @@ class PlotlyChart3d extends React.Component {
         let maxValue = Math.floor(this.GRID_DENSITY - 1)
         let randValue = Math.floor(Math.random() * (maxValue - minValue)) + minValue
 
-        // squareCenterPosition = SQUARE_CENTER_POSITION_DEFAULT
-        // areaPoints = AREA_POINTS_DEFAULT
-        // maximum = -9999
         squareCenterPosition = [randValue + 0.5, randValue + 0.5]
         areaPoints = [[randValue, randValue],[randValue, randValue+1],[randValue+1, randValue],[randValue+1,randValue+1]]
         maximum = -9999
@@ -56,7 +43,6 @@ class PlotlyChart3d extends React.Component {
         //     // randomNumbers.push(Array(this.GRID_DENSITY).fill().map(() => 1 - i*0.1))  // plaska powierzchnia
         //     randomNumbers.push(Array(this.GRID_DENSITY).fill().map(() => Math.random())) // losowa powierzchnia
         // }
-        // console.log(areaPoints)
 
         this.setDefaultGlobalVariables()
 
@@ -90,17 +76,17 @@ class PlotlyChart3d extends React.Component {
         let neighbors = []
         for (let i = x-1; i < x+2; i++) {
             for (let j = y-1; j < y+2; j++) {
-                if ((-1 < x && x <= this.GRID_DENSITY)    &&
-                    (-1 < y && y <= this.GRID_DENSITY)    &&
-                    (x != i || y != j)              &&
-                    (0 <= i && i <= this.GRID_DENSITY) &&
+                if ((-1 < x && x <= this.GRID_DENSITY)  &&
+                    (-1 < y && y <= this.GRID_DENSITY)  &&
+                    (x != i || y != j)                  &&
+                    (0 <= i && i <= this.GRID_DENSITY)  &&
                     (0 <= j && j <= this.GRID_DENSITY)) {
-                        // console.log(i, j)
+
                         neighbors.push([i, j])
                 }
             }
         }
-        // console.log(neighbors)
+
         return neighbors
     }
 
@@ -111,7 +97,7 @@ class PlotlyChart3d extends React.Component {
             [Math.abs(Math.round(x + 0.5)), Math.abs(Math.round(y - 0.5))],
             [Math.abs(Math.round(x - 0.5)), Math.abs(Math.round(y - 0.5))],
         ]
-        // console.log('findFourPointsOfCenter:', points)
+
         return points
     }
 
@@ -137,7 +123,6 @@ class PlotlyChart3d extends React.Component {
                 squareCenterPosition = [neighbor[0], neighbor[1]]
                 areaPoints = [...points]
                 maximum = sumOfPoints
-                console.log(maximum)
             }
         }
 
@@ -146,18 +131,11 @@ class PlotlyChart3d extends React.Component {
             return
         }
 
-        // console.log(areaPoints)
-        // console.log(this.state.data)
-
         let zValues = [] // tablica czterech wartosci z wykresu 3D, na ktorych aktualnie jest malowany obszar poszukujacy ekstremum
         for (const point of areaPoints) {
             zValues.push(this.state.data[point[0]][point[1]] + 0.1) // dodaje 0.1 zeby obszar nie nachodzil na wykres
         }
 
-        // console.log('zValues:', zValues)
-        // while (zValues.length) {
-        //     newww.push(zValues.splice(0,2))
-        // }
         let newww = new Array(4).fill(0).map(() => new Array(4).fill(0)) // tablica 4x4, aby dobrze rysowal sie obszar szukajacy ekstremum
     
         for (let i = 0; i < newww.length; i++) {
@@ -166,7 +144,6 @@ class PlotlyChart3d extends React.Component {
             }
         }
 
-        // console.log(newww)
         this.setState({squareArea: newww})
     }
 
@@ -184,9 +161,6 @@ class PlotlyChart3d extends React.Component {
             areaPoints[2][0],
             areaPoints[3][0],
         ]
-
-        // console.log(xOnChart)
-        // console.log(yOnChart)
 
         return (
         <Plot
@@ -233,32 +207,6 @@ class PlotlyChart3d extends React.Component {
                     t: CHART_MARGIN * 8,
                     pad: 4
                 },
-            //   scene: {
-            //     xaxis: {
-            //       title: graphData.masterGraph.xAxis,
-            //       titlefont: {
-            //         family: "Courier New, monospace",
-            //         size: 12,
-            //         color: "#444444"
-            //       }
-            //     },
-            //     yaxis: {
-            //       title: graphData.masterGraph.yAxis,
-            //       titlefont: {
-            //         family: "Courier New, monospace",
-            //         size: 12,
-            //         color: "#444444"
-            //       }
-            //     },
-            //     zaxis: {
-            //       title: graphData.masterGraph.zAxis,
-            //       titlefont: {
-            //         family: "Courier New, monospace",
-            //         size: 12,
-            //         color: "#444444"
-            //       }
-            //     }
-            //   }
             }}
         />
         );
