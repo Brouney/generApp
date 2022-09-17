@@ -685,10 +685,10 @@ class Slide34A extends Component {
                         <input type="radio" value="1" name="reproductionType" /> deterministyczna <br></br>
                         <input type="radio" value="2" name="reproductionType" /> losowa według reszt z powtórzeniami <br></br>
                         <input type="radio" value="3" name="reproductionType" /> losowa według reszt bez powtórzeń <br></br>
-                        <input type="radio" value="4" name="reproductionType" /> rankingowa <br></br>
+                        {/* <input type="radio" value="4" name="reproductionType" /> rankingowa <br></br>
                         <input type="radio" value="5" name="reproductionType" /> turniejowa <br></br>
                         <input type="radio" value="6" name="reproductionType" /> pojedynkowa <br></br>
-                        <input type="radio" value="7" name="reproductionType" /> progowa <br></br>
+                        <input type="radio" value="7" name="reproductionType" /> progowa <br></br> */}
                     </span></h4>
                 </div>
             </div>

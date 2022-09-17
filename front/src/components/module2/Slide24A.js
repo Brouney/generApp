@@ -355,7 +355,7 @@ class Slide24A extends Component {
                     </div>
                     <div className="col-4">
                         <Button type="primary" onClick={this.generateRandomObjects}>Wygeneruj populację</Button>
-                        <MySlider min={5} max={50} defaultValue={10} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Rozmiar populacji"} passValueToParent={this.onChangeSliderPopulationSize}></MySlider>
+                        <MySlider min={3} max={50} defaultValue={3} sliderSize={4} step={1} ref={this.sliderPopSize} text={"Rozmiar populacji"} passValueToParent={this.onChangeSliderPopulationSize}></MySlider>
                         <MySlider min={10} max={Slide24A_MAX_GENERATIONS_COUNT} defaultValue={this.state.generationsCount} sliderSize={4} step={1} ref={this.sliderGenerationsCount} text={"Liczba pokoleń"} passValueToParent={this.onChangeSliderGenerationsCount}></MySlider>
                         <MySlider min={0.01} max={1} defaultValue={this.state.penaltyRatio} sliderSize={4} step={0.01} ref={this.sliderPenaltyRatio} text={Slide24A_penaltyRatioText} passValueToParent={this.onChangeSliderPenaltyRatio}></MySlider>
                         
