@@ -3,14 +3,14 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Progress, message } from 'antd'
 
 const itemsFromBackend = [
-    {id:'1', content:'Woda 15', value: 15},
-    {id:'2', content:'Sok 20', value: 20},
-    {id:'3', content:'Książka 30', value: 30},
-    {id:'4', content:'Batonik 10', value: 10},
-    {id:'5', content:'Piórnik 15', value: 15},
-    {id:'6', content:'Teczka 20', value: 20},
-    {id:'7', content:'Długopis 5', value: 5},
-    {id:'8', content:'Piłka 40', value: 40}
+    {id:'1', content:'Woda 15|20', weight: 15, value: 20},
+    {id:'2', content:'Sok 20|25', weight: 20, value: 25},
+    {id:'3', content:'Książka 30|35', weight: 30, value: 35},
+    {id:'4', content:'Batonik 10|25', weight: 10, value: 15},
+    {id:'5', content:'Piórnik 15|20', weight: 15, value: 20},
+    {id:'6', content:'Teczka 20|25', weight: 20, value: 25},
+    {id:'7', content:'Długopis 5|10', weight: 5, value: 10},
+    {id:'8', content:'Piłka 40|45', weight: 40, value: 45}
 ];
 
 const columnsFromBackend = {
@@ -28,9 +28,13 @@ const setBackpackCurrentWeight = (columns, parentObj) => {
     let weightsInBackpackSum = 0
 
     for (const e in [...columns['12'].items]) {
-            weightsInBackpackSum += columns['12'].items[e].value
+            weightsInBackpackSum += columns['12'].items[e].weight
     }
-    parentObj.parent.setState({backpackCurrentWeight: weightsInBackpackSum})
+    let valuesInBackpackSum = 0
+    for (const e in [...columns['12'].items]) {
+        valuesInBackpackSum += columns['12'].items[e].value;
+    }
+    parentObj.parent.setState({backpackCurrentWeight: weightsInBackpackSum, backpackCurrentValues: valuesInBackpackSum})
 }
 
 const onDragEnd = (result, columns, setColumns, parentObj) => {
@@ -51,7 +55,7 @@ const onDragEnd = (result, columns, setColumns, parentObj) => {
         if(destination.droppableId === "12"){
             console.log(destItems)
             for (const e in [...destItems]) {
-                    weightsInBackpackSum += destItems[e].value
+                    weightsInBackpackSum += destItems[e].weight
             }
         }
         if(weightsInBackpackSum<=100){
@@ -84,9 +88,13 @@ const onDragEnd = (result, columns, setColumns, parentObj) => {
 
     let weightsInBackpackSum = 0;
     for (const e in [...columns['12'].items]) {
-        weightsInBackpackSum += columns['12'].items[e].value;
+        weightsInBackpackSum += columns['12'].items[e].weight;
     }
-    parentObj.parent.setState({backpackCurrentWeight: weightsInBackpackSum})
+    let valuesInBackpackSum = 0
+    for (const e in [...columns['12'].items]) {
+        valuesInBackpackSum += columns['12'].items[e].value;
+    }
+    parentObj.parent.setState({backpackCurrentWeight: weightsInBackpackSum, backpackCurrentValues: valuesInBackpackSum})
 }
 
 
