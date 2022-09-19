@@ -24,10 +24,20 @@ class Slide12A extends Component {
         return(
             <div>
                 <h1>{this.title}</h1>
-                <h2>Pamiętaj, aby nie przekroczyć wagi 100 - kółko z kolorem niebieskim, jednocześnie z największą liczbą wartości - kółko fioletowe.</h2>
-                <Progress type="circle" percent={this.state.backpackCurrentWeight} format={backpackCapacity => `${backpackCapacity}/100`} />
-                <Progress type="circle" strokeColor={"purple"} percent={this.state.backpackCurrentValues} format={backpackCapacity => `${backpackCapacity}/100`} />
-                <BackpackProblem parent={this}></BackpackProblem>
+                 <h3>
+                    Optymalizacja polega na takim doborze przedmiotów, żeby wartość plecaka była jak największa,
+                    a waga nie przekraczała zadanej wagi maksymalnej <b>(100)</b> - kółko z kolorem niebieskim, jednocześnie z największą wartością - kółko fioletowe.
+                </h3>
+
+                <div className="row">
+                    <div className="col-4">
+                        <Progress width={150} className="m-3" type="circle" percent={this.state.backpackCurrentWeight} format={backpackCapacity => `Waga ${backpackCapacity}/100`} />
+                        <Progress width={150} className="m-3" type="circle" strokeColor={"purple"} percent={this.state.backpackCurrentValues} format={backpackCapacity => `Wartość ${backpackCapacity}/100`} />
+                    </div>
+                    <div className="col-8">
+                        <BackpackProblem parent={this}></BackpackProblem>
+                    </div>
+                </div>
 
                 <NavigationButtons
                     mainArea={this.mainArea}
