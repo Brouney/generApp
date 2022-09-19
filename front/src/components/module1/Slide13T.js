@@ -20,11 +20,11 @@ class Slide13T extends Component {
 
     handleStartStop = (simulationStopped) => {
         if (simulationStopped) {
-            this.simulatedAnnealing13.current.ballTemperature.maxFound = true
+            this.simulatedAnnealing13.current.ballSearchingSolution.maxFound = true
             this.navigationButtons.current.enableNavigationButtons()
         }
         else {
-            this.simulatedAnnealing13.current.ballTemperature.maxFound = false
+            this.simulatedAnnealing13.current.ballSearchingSolution.maxFound = false
         }
     }
     

@@ -1,5 +1,7 @@
 import React from 'react'
 import Sketch from 'react-p5'
+import MySlider from "../common/MySlider";
+var Latex = require('react-latex');
 
 const SimulatedAnnealing13_STEP_MAX = 3
 const SimulatedAnnealing13_STEP_CHANGE = 3
@@ -7,8 +9,10 @@ const SimulatedAnnealing13_WIDTH = 800
 const SimulatedAnnealing13_HEIGHT = 273
 const SimulatedAnnealing13_CANVAS_OFFSET = 150
 
+var SimulatedAnnealing13_sliderTemperatureValue = 5
 
-class BallTemperature {
+
+class BallSearchingSolution {
 
     constructor(points) {
         this.x = this.lowestPoint(points)
@@ -43,13 +47,13 @@ class BallTemperature {
                  SimulatedAnnealing13_WIDTH / 2,
                  SimulatedAnnealing13_HEIGHT + SimulatedAnnealing13_CANVAS_OFFSET - 10)
 
-        p5.text(Math.round(- this.y * 100) / 100, this.x + SimulatedAnnealing13_CANVAS_OFFSET / 4, this.y + SimulatedAnnealing13_CANVAS_OFFSET / 4) // this.y - aktualna wartosc temperatury kropki na wykresie
+        p5.text(Math.round(- this.y * 100) / 100, this.x + SimulatedAnnealing13_CANVAS_OFFSET / 4, this.y + SimulatedAnnealing13_CANVAS_OFFSET / 4) // this.y - aktualna wartosc funkcji dla czerwonej kulki
     }
     
     updateBallPosition() {
         let xPrev = this.x
 
-        this.temperature = SimulatedAnnealing13_HEIGHT - this.y
+        this.functionValue = SimulatedAnnealing13_HEIGHT - this.y
         if (this.targetX > this.x) {
             if (this.targetX == this.x + 1) {
                 this.x++
@@ -81,14 +85,14 @@ class BallTemperature {
         this.targetX = this.x
         for (let i = -SimulatedAnnealing13_WIDTH; i < SimulatedAnnealing13_WIDTH; i++) {
             let neighbourX = this.targetX + i
-            let newTemperature = SimulatedAnnealing13_HEIGHT - this.points[neighbourX]
+            let newFunctionValue = SimulatedAnnealing13_HEIGHT - this.points[neighbourX]
 
-            if (newTemperature > this.temperature) {
+            if (newFunctionValue > this.functionValue) {
                 this.targetX = neighbourX
             }
             else {
-                const prob = Math.exp(this.temperature - newTemperature)
-                if (Math.random(1) >= prob) {
+                const prob = Math.exp(-Math.abs(this.y - newFunctionValue) / SimulatedAnnealing13_sliderTemperatureValue)
+                if (prob <= Math.random(1)) {
                     this.targetX = neighbourX
                 }
             }
@@ -116,7 +120,7 @@ class BallTemperature {
     } 
 }
 
-class TemperatureChart {
+class FunctionChart {
 
     constructor(props) {
         this.points = []
@@ -201,8 +205,10 @@ class SimulatedAnnealing13 extends React.Component {
     constructor(props) {
         super(props)
 
-        this.temperatureChart = new TemperatureChart()
-        this.ballTemperature = new BallTemperature(this.temperatureChart.points)
+        this.functionChart = new FunctionChart()
+        this.ballSearchingSolution = new BallSearchingSolution(this.functionChart.points)
+
+        this.sliderTemperature = React.createRef(); 
     }
 
     setup = (p5, parentRef) => {
@@ -213,40 +219,54 @@ class SimulatedAnnealing13 extends React.Component {
     draw = (p5) => {
         p5.background('#454b51')
 
-        this.temperatureChart.draw(p5)
+        this.functionChart.draw(p5)
 
-        if (this.ballTemperature.counterToEndSimulation > 50) { // TODO: workaround na stop symulacji
+        if (this.ballSearchingSolution.counterToEndSimulation > 50) { // workaround
             this.props.onStartStop(true)
         }
 
-        if (!this.ballTemperature.maxFound) {
-            this.ballTemperature.updateBallPosition(p5)
+        if (!this.ballSearchingSolution.maxFound) {
+            this.ballSearchingSolution.updateBallPosition(p5)
         } else {
             this.props.onStartStop(true)
         }
 
-        this.ballTemperature.draw(p5)
+        this.ballSearchingSolution.draw(p5)
     }
 
     keyPressed = (p5) => {
         if (p5.keyCode === 32) { // space
-            this.ballTemperature.maxFound = !this.ballTemperature.maxFound
+            this.ballSearchingSolution.maxFound = !this.ballSearchingSolution.maxFound
         } else if (p5.keyCode === 37) { // <-
-            this.ballTemperature.moveLeft()
+            this.ballSearchingSolution.moveLeft()
         } else if (p5.keyCode === 39) { // ->
-            this.ballTemperature.moveRight()
+            this.ballSearchingSolution.moveRight()
         } else if (p5.keyCode === 78) { // N
-            this.temperatureChart = new TemperatureChart()
-            this.ballTemperature = new BallTemperature(this.temperatureChart.points)
+            this.functionChart = new FunctionChart()
+            this.ballSearchingSolution = new BallSearchingSolution(this.functionChart.points)
         }
+    }
+
+    onChangeSliderTemperature = (v) => {
+        SimulatedAnnealing13_sliderTemperatureValue = -v
     }
 
         
     render() {
         return(
         <div>
-            Symulowane wyżarzanie
             <Sketch setup={this.setup} draw={this.draw} keyPressed={this.keyPressed}/><br></br>
+
+            <MySlider
+                min={1}
+                max={100}
+                defaultValue={5}
+                sliderSize={5}
+                step={1}
+                ref={this.sliderTemperature}
+                text={<Latex>{"Temperatura ${T}$"}</Latex>}
+                passValueToParent={this.onChangeSliderTemperature}>
+            </MySlider>
 
             <h3>
                 <ul>
