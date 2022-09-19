@@ -58,13 +58,13 @@ class Slide42A extends Component {
         <div>
             <h1>{this.title}</h1>
             <h2>
-                • Losowo wybieramy z populacji parę osobników do krzyżowania
+                • Losowo wybieramy z populacji parę osobników do krzyżowania.
             </h2>
             <h2>
-                • Losowo wybieramy 2  miejsca krzyżowania. Dla ciągów k-pozycyjnych mamy k-1 możliwości
+                • Losowo wybieramy 2  miejsca krzyżowania. Dla ciągów k-pozycyjnych mamy k-1 możliwości.
             </h2>
             <h2>
-                • Jeśli miejsce krzyżowania to n, wymieniamy miejscami bity od pozycji n+1 do końca ciągu
+                • Jeśli lewe miejsce krzyżowania wynosi n, prawe m , wymieniamy miejscami bity w pozycjach (n,m) licząc od 1.
             </h2>
                 <input style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_Slide41A" value={this.state.crossLeft} onChange={evt =>this.changeValueInComponentLeft(evt)} ></input>
                 <input style={{background:"black",fontSize:"30px" } } type={"text"} size={"50"} className="input_Slide41A" value={this.state.crossRight} onChange={evt =>this.changeValueInComponentRight(evt)} ></input>
