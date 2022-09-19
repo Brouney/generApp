@@ -47,6 +47,7 @@ const Slide24A_penaltyAreaMaxY_DEFAULT = 3
 const Slide24A_MAX_GENERATIONS_COUNT = 1000
 
 var Slide24A_currentGenerationsCount = 0
+var Slide24A_killedIndividualsCount = 0
 
 class Slide24A extends Component {
 
@@ -112,6 +113,7 @@ class Slide24A extends Component {
         Slide24A_Z_ON_MAP = []
 
         Slide24A_currentGenerationsCount = 0
+        Slide24A_killedIndividualsCount = 0
     }
 
     generate2Dmap = () => {
@@ -169,10 +171,20 @@ class Slide24A extends Component {
             var newY = []
             var newZ = []
             for (let i = 0; i < newPopulationIfKilled.length; i++) {
-                if (newPopulationIfKilled[i] == false) {
+                if (newPopulationIfKilled[i] == false) { // osobnik przetrwal, kopiujemy go do nowego pokolenia
                     newX.push(xxx[i])
                     newY.push(yyy[i])
                     newZ.push(rastrigin(xxx[i], yyy[i]))
+                } else { // osobnik zginal, zastepujemy go nowym osobnikiem w kolejnym pokoleniu
+                    console.log(i)
+                    let randomX = randomFloatFromInterval(Slide24A_X_MIN+Slide24A_INDIVIDUALS_OFFSET, Slide24A_X_MAX-Slide24A_INDIVIDUALS_OFFSET)
+                    let randomY = randomFloatFromInterval(Slide24A_Y_MIN+Slide24A_INDIVIDUALS_OFFSET, Slide24A_Y_MAX-Slide24A_INDIVIDUALS_OFFSET)
+        
+                    newX.push(randomX)
+                    newY.push(randomY)
+                    newZ.push(rastrigin(randomX, randomY))
+                    
+                    Slide24A_killedIndividualsCount++
                 }
             }
     
@@ -260,6 +272,7 @@ class Slide24A extends Component {
         })
 
         Slide24A_currentGenerationsCount = 0
+        Slide24A_killedIndividualsCount = 0
     }
 
     penaltyOnOff = () => {
@@ -370,7 +383,7 @@ class Slide24A extends Component {
                         <MySlider min={Slide24A_Y_MIN} max={-0.05} defaultValue={Slide24A_penaltyAreaMinY_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMinY} text={Slide24A_y_minText} passValueToParent={this.onChangeSliderPenaltyAreaMinY}></MySlider>
                         <MySlider min={0.05} max={Slide24A_Y_MAX} defaultValue={Slide24A_penaltyAreaMaxY_DEFAULT} sliderSize={4} step={0.05} ref={this.penaltyAreaSliderMaxY} text={Slide24A_y_maxText} passValueToParent={this.onChangeSliderPenaltyAreaMaxY}></MySlider>
                         <br></br>
-                        <h3>Pokolenie: {Slide24A_currentGenerationsCount+1}<br></br></h3><h3>{this.state.populationXcoord.length ? <span style={{color: "lime"}}>Pozostałe osobniki:  {this.state.populationXcoord.length}</span> : <span style={{color: "red"}}> Wszystkie osobniki wymarły</span>}<br></br><br></br>
+                        <h3>Pokolenie: {Slide24A_currentGenerationsCount+1}<br></br></h3><h3>{this.state.populationXcoord.length ? <span style={{color: "red"}}>Wyginęło osobników: {Slide24A_killedIndividualsCount}</span> : <span style={{color: "red"}}> Wszystkie osobniki wymarły</span>}<br></br><br></br>
                         Najlepszy osobnik: {this.state.populationXcoord.length ? Math.min(...this.state.populationZcoord).toFixed(3) : <span style={{color: "red"}}></span>}
                         </h3>
                     </div>

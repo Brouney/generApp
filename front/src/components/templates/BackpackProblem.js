@@ -3,14 +3,14 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Progress, message } from 'antd'
 
 const itemsFromBackend = [
-    {id:'1', content:'Woda 15|10', weight: 15, value: 10},
-    {id:'2', content:'Sok 20|15', weight: 20, value: 15},
-    {id:'3', content:'Książka 30|25', weight: 30, value: 25},
-    {id:'4', content:'Batonik 10|5', weight: 10, value: 5},
-    {id:'5', content:'Piórnik 15|10', weight: 15, value: 10},
-    {id:'6', content:'Teczka 20|15', weight: 20, value: 15},
-    {id:'7', content:'Długopis 5|4', weight: 5, value: 4},
-    {id:'8', content:'Piłka 40|35', weight: 40, value: 35}
+    {id:'1', content:'WODA - waga: 15, wartość: 10', weight: 15, value: 10},
+    {id:'2', content:'SOK - waga: 20, wartość: 15', weight: 20, value: 15},
+    {id:'3', content:'KSIĄŻKA - waga: 30, wartość: 25', weight: 30, value: 25},
+    {id:'4', content:'BATONIK - waga: 10, wartość: 5', weight: 10, value: 5},
+    {id:'5', content:'PIÓRNIK - waga: 15, wartość: 10', weight: 15, value: 10},
+    {id:'6', content:'TECZKA - waga: 20, wartość: 15', weight: 20, value: 15},
+    {id:'7', content:'DŁUGOPIS - waga: 5, wartość: 4', weight: 5, value: 4},
+    {id:'8', content:'PIŁKA - waga: 40, wartość: 35', weight: 40, value: 35}
 ];
 
 const columnsFromBackend = {
@@ -122,8 +122,8 @@ function BackpackProblem(parent) {
                                                 style={{
                                                     background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
                                                     padding: 4,
-                                                    width: 250,
-                                                    minHeight: 500,
+                                                    width: 350,
+                                                    minHeight: 400,
                                                     bottom: 20
                                                 }}
                                             >
@@ -153,7 +153,7 @@ function BackpackProblem(parent) {
                                                                 ...provided.draggableProps.style
                                                                 }}
                                                             >
-                                                                {item.content}
+                                                                <h5>{item.content}</h5>
                                                             </div>
                                                             );
                                                         }}

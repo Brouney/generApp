@@ -56,7 +56,7 @@ class PlotlyChart_sandbox extends React.Component {
             n_mutation: 0,  // liczba mutacji w ostatnim pokoleniu                    
             n_cross: 0,    // liczba krzyz
             eliteSuccession: true, //checkbox rodzaju selekcji
-            rouletteSuccession: false,
+            rouletteSelection: false,
             GEliteSuccession: 0.5, //współczynnik selekcji
             timerID: null,
         }
@@ -253,12 +253,12 @@ class PlotlyChart_sandbox extends React.Component {
         if(e === "Sukcesja_elitarna")
         this.setState({
             eliteSuccession: true,
-            rouletteSuccession: false
+            rouletteSelection: false
         })
         else{
             this.setState({
                 eliteSuccession: false,
-                rouletteSuccession: true
+                rouletteSelection: true
             })
         }
     }
