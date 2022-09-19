@@ -1,9 +1,12 @@
 # generapp
 
 Chcąc uruchomić aplikację należy zainstalować wersje:
+
 npm - 8.1.0
+
 node - 16.13.0
-w innym przypadku mogą występować błędy
+
+W przypadku wystąpienia błędu należy odświeżyć stronę.
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
