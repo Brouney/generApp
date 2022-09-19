@@ -3,14 +3,14 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Progress, message } from 'antd'
 
 const itemsFromBackend = [
-    {id:'1', content:'Woda 15|20', weight: 15, value: 20},
-    {id:'2', content:'Sok 20|25', weight: 20, value: 25},
-    {id:'3', content:'Książka 30|35', weight: 30, value: 35},
-    {id:'4', content:'Batonik 10|25', weight: 10, value: 15},
-    {id:'5', content:'Piórnik 15|20', weight: 15, value: 20},
-    {id:'6', content:'Teczka 20|25', weight: 20, value: 25},
-    {id:'7', content:'Długopis 5|10', weight: 5, value: 10},
-    {id:'8', content:'Piłka 40|45', weight: 40, value: 45}
+    {id:'1', content:'Woda 15|10', weight: 15, value: 10},
+    {id:'2', content:'Sok 20|15', weight: 20, value: 15},
+    {id:'3', content:'Książka 30|25', weight: 30, value: 25},
+    {id:'4', content:'Batonik 10|5', weight: 10, value: 5},
+    {id:'5', content:'Piórnik 15|10', weight: 15, value: 10},
+    {id:'6', content:'Teczka 20|15', weight: 20, value: 15},
+    {id:'7', content:'Długopis 5|4', weight: 5, value: 4},
+    {id:'8', content:'Piłka 40|35', weight: 40, value: 35}
 ];
 
 const columnsFromBackend = {

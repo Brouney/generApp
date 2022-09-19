@@ -24,7 +24,7 @@ class Slide12A extends Component {
         return(
             <div>
                 <h1>{this.title}</h1>
-                <h2>Pamiętaj, aby nie przekroczyć wagi 100. O to chodzi w problemie plecakowym</h2>
+                <h2>Pamiętaj, aby nie przekroczyć wagi 100 - kółko z kolorem niebieskim, jednocześnie z największą liczbą wartości - kółko fioletowe.</h2>
                 <Progress type="circle" percent={this.state.backpackCurrentWeight} format={backpackCapacity => `${backpackCapacity}/100`} />
                 <Progress type="circle" strokeColor={"purple"} percent={this.state.backpackCurrentValues} format={backpackCapacity => `${backpackCapacity}/100`} />
                 <BackpackProblem parent={this}></BackpackProblem>

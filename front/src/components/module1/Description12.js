@@ -58,12 +58,13 @@ class Description12 extends Component {
         <div>
             <h1>{this.title}</h1>
             <h3>Następna interakcja dotyczy problemu plecakowego.</h3>
-            <h3>W skrócie: jest to maksymalizacyjny problem wyboru przedmiotów o określonej pojemności w taki sposób, aby ich sumaryczna wartość była jak największa.</h3>
-            <h3>Zadaniem użytkownika jest dobranie takiej ilości elementów do plecaka, aby waga była jak największa.</h3>
-            <h3>Obok nazwy przedmiotu zamieszczono jego wagę.</h3>
-            <h3>Wkładanie lub wyjmowanie przedmiotów na bieżąco aktualizuje obecną wagę plecaka.</h3>
+            <h3>W skrócie: jest to maksymalizacyjny problem wyboru przedmiotów o określonej pojemności w taki sposób, aby ich sumaryczna wartość była jak największa jednocześnie nie przekraczając wagi 100.</h3>
+            <h3>Zadaniem użytkownika jest dobranie takiej ilości elementów do plecaka, aby suma wartości była jak największa.</h3>
+            <h3>Obok nazwy przedmiotu zamieszczono jego wagę oraz wartość oddzieloną pionową kreską.</h3>
+            <h3>Wkładanie lub wyjmowanie przedmiotów na bieżąco aktualizuje obecną wagę plecaka </h3>
             <Progress type="circle" percent={this.state.percent} format={percent => `${percent}/100`} />
-
+            <h3>oraz wartości</h3>
+            <Progress type="circle" strokeColor={"purple"} percent={this.state.percent} format={backpackCapacity => `${backpackCapacity}/100`} />
             <NavigationButtons
                 ref={this.navigationButtons}
                 mainArea={this.mainArea}
