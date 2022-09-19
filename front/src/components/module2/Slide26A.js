@@ -32,7 +32,7 @@ class Slide26A extends Component {
         this.setState(prevState => ({
             parameters: [...prevState.parameters, tmp ],
             level: this.state.level + 1,
-            references : [...prevState.references, React.createRef() ],
+            references: [...prevState.references, React.createRef() ],
         }))
 
     }
@@ -40,12 +40,25 @@ class Slide26A extends Component {
     onClickDeleteParameter = () => {
         var parametersAfterDeletion = [...this.state.parameters];
         var lastElement = parametersAfterDeletion.length-1
-
+        var newReferences = [...this.state.references];
         parametersAfterDeletion.splice(parametersAfterDeletion[lastElement], 1);
-        this.setState({parameters: parametersAfterDeletion,
-                       level: this.state.level - 1
-        });
+
+        if (newReferences.length > 0) {
+            var lastReference = newReferences.length-1
+            newReferences.splice(newReferences[lastReference], 1);
+
+            this.setState({parameters: parametersAfterDeletion,
+                level: this.state.level - 1,
+                references: newReferences,
+            });
+        }
+        else {
+            this.setState({parameters: parametersAfterDeletion,
+                level: this.state.level - 1,
+            });
+        }
     }
+
     render(){
         let x = Array.from(Array(this.state.parameters.length).keys())
         let plotData = [{
