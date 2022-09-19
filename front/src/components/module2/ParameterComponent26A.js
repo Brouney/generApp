@@ -66,6 +66,12 @@ class ParameterComponent26A extends Component {
         })
     }
     changeEonEoffAfter = (f,ft) => {
+        for (let i = this.mylevel; i<this.main.state.parameters.length; ++i){
+            if(ft > this.main.state.references[i].current.state.ft)
+            this.main.state.references[i].current.setState({
+                ft: ft
+            })
+        }
         // console.log(this.main.table[0].current.state.f)
         for (let i = this.mylevel; i<this.main.state.parameters.length; ++i){
             this.main.state.references[i].current.changeEonEoffWithoutBefore(f,ft)
@@ -74,7 +80,7 @@ class ParameterComponent26A extends Component {
                 main_eoff: [...prevState.main_eoff, this.main.state.references[i].current.state.eoff]
             }))
         }
-
+        
     }
     handleChange_n1 = value => {
         if (value == null) {
@@ -83,6 +89,10 @@ class ParameterComponent26A extends Component {
         value = Number.isInteger(value) ? value : Math.floor(value)
         let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
         let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
+        for (let i = 0; i<this.mylevel-1; ++i){
+            if(ft_<this.main.state.references[i].current.state.ft){
+            ft_ = this.main.state.references[i].current.state.ft;}
+        }
         this.setState({
             n1: value,
         });
@@ -102,6 +112,10 @@ class ParameterComponent26A extends Component {
         value = Number.isInteger(value) ? value : Math.floor(value)
         let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
         let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
+        for (let i = 0; i<this.mylevel-1; ++i){
+            if(ft_<this.main.state.references[i].current.state.ft){
+            ft_ = this.main.state.references[i].current.state.ft;}
+        }
         this.setState({
             n2: value,
         });
@@ -121,6 +135,10 @@ class ParameterComponent26A extends Component {
         value = Number.isInteger(value) ? value : Math.floor(value)
         let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
         let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
+        for (let i = 0; i<this.mylevel-1; ++i){
+            if(ft_<this.main.state.references[i].current.state.ft){
+            ft_ = this.main.state.references[i].current.state.ft;}
+        }
         this.setState({
             n3: value,
         });
@@ -141,6 +159,10 @@ class ParameterComponent26A extends Component {
         value = Number.isInteger(value) ? value : Math.floor(value)
         let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
         let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
+        for (let i = 0; i<this.mylevel-1; ++i){
+            if(ft_<this.main.state.references[i].current.state.ft){
+            ft_ = this.main.state.references[i].current.state.ft;}
+        }
         this.setState({
             n4: value,
         });
@@ -160,6 +182,10 @@ class ParameterComponent26A extends Component {
         value = Number.isInteger(value) ? value : Math.floor(value)
         let f_ = ((value + this.state.n2 + this.state.n3 + this.state.n4 + this.state.n5) / 5)
         let ft_ = Math.max(value, this.state.n2, this.state.n3, this.state.n4, this.state.n5)
+        for (let i = 0; i<this.mylevel-1; ++i){
+            if(ft_<this.main.state.references[i].current.state.ft){
+            ft_ = this.main.state.references[i].current.state.ft;}
+        }
         this.setState({
             n5: value,
         });
