@@ -34,13 +34,13 @@ class Slide42A extends Component {
 
     changeValueInComponentLeft = (evt) => {
         let value = evt.target.value;
-        value = isNaN(value) ? this.state.crossRight-1 : value > 10 ? 0 : value < this.state.crossRight ? value : this.state.crossRight-1;
+        value = isNaN(value) ? 1:value;
         this.setState({crossLeft: value});
     }
 
     changeValueInComponentRight = (evt) => {
         let value = evt.target.value;
-        value = isNaN(value) ? this.state.crossLeft+1 : value > 10 ? 5 : value > this.state.crossLeft ? value : this.state.crossLeft+1;
+        value = isNaN(value) ? 5:value;
         this.setState({crossRight: value});
     }
 
